@@ -25,6 +25,7 @@ import {
 import { Plus, Search, Edit, Trash2, Download, Copy, EyeOff, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BulkUploadDialog } from "@/components/BulkUploadDialog";
+import { ConvocatoriaDetailDialog } from "@/components/ConvocatoriaDetailDialog";
 
 interface Convocatoria {
   id: number;
@@ -71,6 +72,8 @@ export default function Convocatorias() {
   const [selectedConvocatoria, setSelectedConvocatoria] = useState<Convocatoria | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [showBulkUpload, setShowBulkUpload] = useState(false);
+  const [showDetailDialog, setShowDetailDialog] = useState(false);
+  const [detailConvocatoria, setDetailConvocatoria] = useState<Convocatoria | null>(null);
   const [formMode, setFormMode] = useState<"create" | "edit" | "clone">("create");
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
@@ -182,6 +185,11 @@ export default function Convocatorias() {
     setSelectedConvocatoria({ ...convocatoria, id: 0 });
     setFormMode("clone");
     setShowForm(true);
+  };
+
+  const handleViewDetail = (convocatoria: Convocatoria) => {
+    setDetailConvocatoria(convocatoria);
+    setShowDetailDialog(true);
   };
 
   const handleDelete = async (id: number) => {
@@ -355,7 +363,11 @@ export default function Convocatorias() {
           {/* Mobile Card View */}
           <div className="block lg:hidden">
             {filteredConvocatorias.map((convocatoria) => (
-              <div key={convocatoria.id} className="border-b border-border/50 p-4 hover:bg-muted/30 transition-colors">
+              <div 
+                key={convocatoria.id} 
+                className="border-b border-border/50 p-4 hover:bg-muted/30 transition-colors cursor-pointer"
+                onClick={() => handleViewDetail(convocatoria)}
+              >
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
                     <div className="flex-1 min-w-0">
@@ -398,18 +410,42 @@ export default function Convocatorias() {
                   <div className="flex gap-2 justify-end">
                     {canManage ? (
                       <>
-                        <Button size="sm" variant="outline" onClick={() => handleEdit(convocatoria)} className="hover-scale">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(convocatoria);
+                          }} 
+                          className="hover-scale"
+                        >
                           <Edit className="h-3 w-3" />
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleClone(convocatoria)} className="hover-scale">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleClone(convocatoria);
+                          }} 
+                          className="hover-scale"
+                        >
                           <Copy className="h-3 w-3" />
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleDelete(convocatoria.id)} className="hover-scale">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(convocatoria.id);
+                          }} 
+                          className="hover-scale"
+                        >
                           <Trash2 className="h-3 w-3" />
                         </Button>
                       </>
                     ) : (
-                      <span className="text-xs text-muted-foreground">Solo lectura</span>
+                      <span className="text-xs text-muted-foreground">Clic para ver detalles</span>
                     )}
                   </div>
                 </div>
@@ -435,8 +471,9 @@ export default function Convocatorias() {
                 {filteredConvocatorias.map((convocatoria, index) => (
                   <TableRow 
                     key={convocatoria.id} 
-                    className="hover:bg-muted/30 transition-colors"
+                    className="hover:bg-muted/30 transition-colors cursor-pointer"
                     style={{animationDelay: `${index * 50}ms`}}
+                    onClick={() => handleViewDetail(convocatoria)}
                   >
                     <TableCell>
                       <div className="space-y-1">
@@ -481,22 +518,46 @@ export default function Convocatorias() {
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       <div className="flex gap-1 justify-center">
                         {canManage ? (
                           <>
-                            <Button size="sm" variant="outline" onClick={() => handleEdit(convocatoria)} className="hover-scale">
-                              <Edit className="h-4 w-4" />
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEdit(convocatoria);
+                              }} 
+                              className="hover-scale"
+                            >
+                              <Edit className="h-3 w-3" />
                             </Button>
-                            <Button size="sm" variant="outline" onClick={() => handleClone(convocatoria)} className="hover-scale">
-                              <Copy className="h-4 w-4" />
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleClone(convocatoria);
+                              }} 
+                              className="hover-scale"
+                            >
+                              <Copy className="h-3 w-3" />
                             </Button>
-                            <Button size="sm" variant="outline" onClick={() => handleDelete(convocatoria.id)} className="hover-scale">
-                              <Trash2 className="h-4 w-4" />
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(convocatoria.id);
+                              }} 
+                              className="hover-scale"
+                            >
+                              <Trash2 className="h-3 w-3" />
                             </Button>
                           </>
                         ) : (
-                          <span className="text-sm text-muted-foreground">Solo lectura</span>
+                          <span className="text-xs text-muted-foreground">Clic para detalles</span>
                         )}
                       </div>
                     </TableCell>
@@ -517,6 +578,13 @@ export default function Convocatorias() {
           )}
         </CardContent>
       </Card>
+
+      {/* Detail Dialog - Available for all users */}
+      <ConvocatoriaDetailDialog
+        convocatoria={detailConvocatoria}
+        isOpen={showDetailDialog}
+        onClose={() => setShowDetailDialog(false)}
+      />
 
       {/* Bulk Upload Dialog */}
       {canManage && (
