@@ -230,6 +230,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">Sin especificar</SelectItem>
+                  <SelectItem value="Local">Local</SelectItem>
                   <SelectItem value="Nacional">Nacional</SelectItem>
                   <SelectItem value="Internacional">Internacional</SelectItem>
                 </SelectContent>
