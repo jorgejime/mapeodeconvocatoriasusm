@@ -50,9 +50,9 @@ const ESTADOS_USM = [
 const FILTROS_RAPIDOS = [
   {
     id: "urgentes",
-    label: "🔥 Urgentes (vencen en 7 días)",
+    label: "🔥 Urgentes (vencen en 30 días)",
     icon: AlertTriangle,
-    description: "Convocatorias que vencen en los próximos 7 días",
+    description: "Convocatorias que vencen en los próximos 30 días",
     filters: { urgencia: "urgentes" }
   },
   {
@@ -68,13 +68,6 @@ const FILTROS_RAPIDOS = [
     icon: Clock,
     description: "Abiertas y en preparación interna",
     filters: { estadoConvocatoria: ["Abierta"], estadoUSM: ["En preparación"] }
-  },
-  {
-    id: "alto-valor",
-    label: "💰 Alto valor (+$100M)",
-    icon: DollarSign,
-    description: "Convocatorias con valor superior a $100.000.000",
-    filters: { valorMinimo: "100000000" }
   },
 ];
 

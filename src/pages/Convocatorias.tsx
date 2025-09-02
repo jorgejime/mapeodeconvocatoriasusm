@@ -196,12 +196,12 @@ export default function Convocatorias() {
     // Filtro por urgencia
     if (advancedFilters.urgencia === "urgentes") {
       const today = new Date();
-      const sevenDaysFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const thirtyDaysFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
       
       filtered = filtered.filter((c) => {
         if (!c.fecha_limite_aplicacion) return false;
         const deadline = new Date(c.fecha_limite_aplicacion);
-        return deadline >= today && deadline <= sevenDaysFromNow;
+        return deadline >= today && deadline <= thirtyDaysFromNow;
       });
     }
 
