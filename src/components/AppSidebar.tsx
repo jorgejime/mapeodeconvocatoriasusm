@@ -78,14 +78,14 @@ export function AppSidebar() {
       
       <SidebarHeader>
         <div className="px-4 py-4 space-y-3">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-center gap-2">
             <img 
               src={logoUsm} 
               alt="Logo USM" 
-              className={collapsed ? "h-8 w-8 mx-auto" : "h-10 w-10"} 
+              className={collapsed ? "h-8 w-8" : "h-12 w-12"} 
             />
             {!collapsed && (
-              <div>
+              <div className="text-center">
                 <h2 className="text-sm font-bold text-foreground leading-tight">
                   MAPEO DE CONVOCATORIAS USM
                 </h2>
