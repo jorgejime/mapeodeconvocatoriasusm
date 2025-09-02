@@ -22,8 +22,9 @@ import {
   DialogHeader, 
   DialogTitle 
 } from "@/components/ui/dialog";
-import { Plus, Search, Edit, Trash2, Download, Copy, EyeOff } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Download, Copy, EyeOff, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { BulkUploadDialog } from "@/components/BulkUploadDialog";
 
 interface Convocatoria {
   id: number;
@@ -69,6 +70,7 @@ export default function Convocatorias() {
   });
   const [selectedConvocatoria, setSelectedConvocatoria] = useState<Convocatoria | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
   const [formMode, setFormMode] = useState<"create" | "edit" | "clone">("create");
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
@@ -275,44 +277,57 @@ export default function Convocatorias() {
   }
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Convocatorias</h1>
-          <p className="text-muted-foreground">
+    <div className="space-y-6 p-4 md:p-6 animate-fade-in">
+      {/* Header Section - Improved responsive design */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+        <div className="space-y-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Convocatorias</h1>
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
             {canManage ? "Gestiona todas las convocatorias del sistema" : "Consulta y filtra las convocatorias disponibles"}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={handleExport} variant="outline">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <Button onClick={handleExport} variant="outline" className="w-full sm:w-auto hover-scale">
             <Download className="h-4 w-4 mr-2" />
-            Exportar CSV
+            <span className="hidden sm:inline">Exportar CSV</span>
+            <span className="sm:hidden">Exportar</span>
           </Button>
           {canManage && (
-            <Button onClick={handleCreate}>
-              <Plus className="h-4 w-4 mr-2" />
-              Nueva Convocatoria
-            </Button>
+            <>
+              <Button onClick={() => setShowBulkUpload(true)} variant="outline" className="w-full sm:w-auto hover-scale">
+                <Upload className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Carga Masiva</span>
+                <span className="sm:hidden">Carga</span>
+              </Button>
+              <Button onClick={handleCreate} className="w-full sm:w-auto hover-scale">
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Nueva Convocatoria</span>
+                <span className="sm:hidden">Nueva</span>
+              </Button>
+            </>
           )}
         </div>
       </div>
 
-      {/* Filters and Search */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Filtros y Búsqueda</CardTitle>
+      {/* Filters and Search - Enhanced responsive design */}
+      <Card className="shadow-sm border-border/50 animate-scale-in">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+            <Search className="h-5 w-5 text-primary" />
+            Filtros y Búsqueda
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
               <Input
                 placeholder="Buscar por nombre o entidad..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm"
+                className="w-full transition-all duration-200 focus:ring-2 focus:ring-primary/20"
               />
             </div>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className="hover-scale self-end sm:self-auto">
               <Search className="h-4 w-4" />
             </Button>
           </div>
@@ -321,40 +336,120 @@ export default function Convocatorias() {
         </CardContent>
       </Card>
 
-      {/* Results */}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Resultados ({filteredConvocatorias.length})
+      {/* Results - Enhanced responsive table */}
+      <Card className="shadow-sm border-border/50 animate-scale-in">
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              {filteredConvocatorias.length}
+            </span>
+            Resultados
           </CardTitle>
+          {filteredConvocatorias.length > 0 && (
+            <Badge variant="secondary" className="hidden sm:inline-flex">
+              {filteredConvocatorias.length} de {convocatorias.length}
+            </Badge>
+          )}
         </CardHeader>
-        <CardContent>
-          <div className="rounded-md border">
+        <CardContent className="p-0">
+          {/* Mobile Card View */}
+          <div className="block lg:hidden">
+            {filteredConvocatorias.map((convocatoria) => (
+              <div key={convocatoria.id} className="border-b border-border/50 p-4 hover:bg-muted/30 transition-colors">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-foreground truncate">{convocatoria.nombre_convocatoria}</h3>
+                      <p className="text-sm text-muted-foreground">{convocatoria.entidad}</p>
+                      {convocatoria.tipo && (
+                        <Badge variant="outline" className="mt-1 text-xs">{convocatoria.tipo}</Badge>
+                      )}
+                    </div>
+                    {convocatoria.valor && (
+                      <div className="text-right ml-2">
+                        <p className="text-sm font-medium">
+                          {convocatoria.tipo_moneda} ${convocatoria.valor.toLocaleString()}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {convocatoria.estado_convocatoria && (
+                      <Badge variant={convocatoria.estado_convocatoria === "Abierta" ? "default" : "secondary"}>
+                        {convocatoria.estado_convocatoria}
+                      </Badge>
+                    )}
+                    {convocatoria.fecha_limite_aplicacion && (
+                      <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)}>
+                        {getStatusText(convocatoria.fecha_limite_aplicacion)}
+                      </StatusBadge>
+                    )}
+                    {convocatoria.cumplimos_requisitos !== null && (
+                      <Badge 
+                        variant={convocatoria.cumplimos_requisitos ? "default" : "secondary"}
+                        className={convocatoria.cumplimos_requisitos ? "bg-success text-success-foreground" : ""}
+                      >
+                        {convocatoria.cumplimos_requisitos ? "Cumple" : "No cumple"}
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <div className="flex gap-2 justify-end">
+                    {canManage ? (
+                      <>
+                        <Button size="sm" variant="outline" onClick={() => handleEdit(convocatoria)} className="hover-scale">
+                          <Edit className="h-3 w-3" />
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => handleClone(convocatoria)} className="hover-scale">
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => handleDelete(convocatoria.id)} className="hover-scale">
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">Solo lectura</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden lg:block overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Entidad</TableHead>
-                  <TableHead>Valor</TableHead>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Fecha Límite</TableHead>
-                  <TableHead>Cumple Req.</TableHead>
-                  <TableHead>Acciones</TableHead>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="font-semibold">Nombre</TableHead>
+                  <TableHead className="font-semibold">Entidad</TableHead>
+                  <TableHead className="font-semibold">Valor</TableHead>
+                  <TableHead className="font-semibold">Estado</TableHead>
+                  <TableHead className="font-semibold">Fecha Límite</TableHead>
+                  <TableHead className="font-semibold">Cumple Req.</TableHead>
+                  <TableHead className="font-semibold text-center">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredConvocatorias.map((convocatoria) => (
-                  <TableRow key={convocatoria.id}>
+                {filteredConvocatorias.map((convocatoria, index) => (
+                  <TableRow 
+                    key={convocatoria.id} 
+                    className="hover:bg-muted/30 transition-colors"
+                    style={{animationDelay: `${index * 50}ms`}}
+                  >
                     <TableCell>
-                      <div>
-                        <p className="font-medium">{convocatoria.nombre_convocatoria}</p>
-                        <p className="text-sm text-muted-foreground">{convocatoria.tipo}</p>
+                      <div className="space-y-1">
+                        <p className="font-medium text-foreground">{convocatoria.nombre_convocatoria}</p>
+                        {convocatoria.tipo && (
+                          <Badge variant="outline" className="text-xs">{convocatoria.tipo}</Badge>
+                        )}
                       </div>
                     </TableCell>
-                    <TableCell>{convocatoria.entidad}</TableCell>
+                    <TableCell className="text-muted-foreground">{convocatoria.entidad}</TableCell>
                     <TableCell>
                       {convocatoria.valor && (
-                        <span>
+                        <span className="font-medium">
                           {convocatoria.tipo_moneda} ${convocatoria.valor.toLocaleString()}
                         </span>
                       )}
@@ -363,6 +458,7 @@ export default function Convocatorias() {
                       {convocatoria.estado_convocatoria && (
                         <Badge 
                           variant={convocatoria.estado_convocatoria === "Abierta" ? "default" : "secondary"}
+                          className="hover-scale"
                         >
                           {convocatoria.estado_convocatoria}
                         </Badge>
@@ -370,7 +466,7 @@ export default function Convocatorias() {
                     </TableCell>
                     <TableCell>
                       {convocatoria.fecha_limite_aplicacion && (
-                        <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)}>
+                        <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)} className="hover-scale">
                           {getStatusText(convocatoria.fecha_limite_aplicacion)}
                         </StatusBadge>
                       )}
@@ -379,40 +475,27 @@ export default function Convocatorias() {
                       {convocatoria.cumplimos_requisitos !== null && (
                         <Badge 
                           variant={convocatoria.cumplimos_requisitos ? "default" : "secondary"}
-                          className={convocatoria.cumplimos_requisitos ? "bg-success text-success-foreground" : ""}
+                          className={`hover-scale ${convocatoria.cumplimos_requisitos ? "bg-success text-success-foreground" : ""}`}
                         >
                           {convocatoria.cumplimos_requisitos ? "Sí" : "No"}
                         </Badge>
                       )}
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
-                        {canManage && (
+                      <div className="flex gap-1 justify-center">
+                        {canManage ? (
                           <>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleEdit(convocatoria)}
-                            >
+                            <Button size="sm" variant="outline" onClick={() => handleEdit(convocatoria)} className="hover-scale">
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleClone(convocatoria)}
-                            >
+                            <Button size="sm" variant="outline" onClick={() => handleClone(convocatoria)} className="hover-scale">
                               <Copy className="h-4 w-4" />
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleDelete(convocatoria.id)}
-                            >
+                            <Button size="sm" variant="outline" onClick={() => handleDelete(convocatoria.id)} className="hover-scale">
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </>
-                        )}
-                        {!canManage && (
+                        ) : (
                           <span className="text-sm text-muted-foreground">Solo lectura</span>
                         )}
                       </div>
@@ -424,12 +507,28 @@ export default function Convocatorias() {
           </div>
 
           {filteredConvocatorias.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">No se encontraron convocatorias</p>
+            <div className="text-center py-12 animate-fade-in">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+                <Search className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-medium text-foreground mb-2">No se encontraron convocatorias</h3>
+              <p className="text-muted-foreground">Intenta ajustar los filtros de búsqueda</p>
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Bulk Upload Dialog */}
+      {canManage && (
+        <BulkUploadDialog 
+          open={showBulkUpload} 
+          onOpenChange={setShowBulkUpload}
+          onSuccess={() => {
+            setShowBulkUpload(false);
+            fetchConvocatorias();
+          }}
+        />
+      )}
 
       {/* Form Dialog - Only show for admins */}
       {canManage && (

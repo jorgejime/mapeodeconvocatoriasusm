@@ -32,11 +32,11 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
       <div className="space-y-2">
-        <Label>Estado</Label>
+        <Label className="text-sm font-medium">Estado</Label>
         <Select value={filters.estado} onValueChange={(value) => updateFilter("estado", value)}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
           <SelectContent>
@@ -48,9 +48,9 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
       </div>
 
       <div className="space-y-2">
-        <Label>Sector/Tema</Label>
+        <Label className="text-sm font-medium">Sector/Tema</Label>
         <Select value={filters.sector} onValueChange={(value) => updateFilter("sector", value)}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
           <SelectContent>
@@ -67,9 +67,9 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
       </div>
 
       <div className="space-y-2">
-        <Label>Orden</Label>
+        <Label className="text-sm font-medium">Orden</Label>
         <Select value={filters.orden} onValueChange={(value) => updateFilter("orden", value)}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
           <SelectContent>
@@ -82,24 +82,30 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
       </div>
 
       <div className="space-y-2">
-        <Label>Fecha Desde</Label>
+        <Label className="text-sm font-medium">Fecha Desde</Label>
         <Input
           type="date"
           value={filters.dateFrom}
           onChange={(e) => updateFilter("dateFrom", e.target.value)}
+          className="w-full"
         />
       </div>
 
       <div className="space-y-2 flex flex-col">
-        <Label>Fecha Hasta</Label>
+        <Label className="text-sm font-medium">Fecha Hasta</Label>
         <Input
           type="date"
           value={filters.dateTo}
           onChange={(e) => updateFilter("dateTo", e.target.value)}
-          className="mb-2"
+          className="w-full mb-2"
         />
-        <Button variant="outline" onClick={clearFilters} className="mt-auto">
-          Limpiar
+        <Button 
+          variant="outline" 
+          onClick={clearFilters} 
+          className="mt-auto hover-scale text-sm"
+          size="sm"
+        >
+          Limpiar Filtros
         </Button>
       </div>
     </div>
