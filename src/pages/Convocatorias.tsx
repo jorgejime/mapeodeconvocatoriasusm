@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ConvocatoriaForm } from "@/components/ConvocatoriaForm";
-import { ConvocatoriaFilters } from "@/components/ConvocatoriaFilters";
+import { ConvocatoriaAdvancedFilters, FilterState } from "@/components/ConvocatoriaAdvancedFilters";
 import { 
   Table, 
   TableBody, 
@@ -48,26 +48,23 @@ interface Convocatoria {
   updated_at: string;
 }
 
-interface Filters {
-  estado: string;
-  sector: string;
-  orden: string;
-  dateFrom: string;
-  dateTo: string;
-}
 
 export default function Convocatorias() {
   console.log("Convocatorias: Rendering convocatorias page");
   const [convocatorias, setConvocatorias] = useState<Convocatoria[]>([]);
   const [filteredConvocatorias, setFilteredConvocatorias] = useState<Convocatoria[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<Filters>({
-    estado: "all",
-    sector: "all",
-    orden: "all",
-    dateFrom: "",
-    dateTo: "",
+  const [advancedFilters, setAdvancedFilters] = useState<FilterState>({
+    busqueda: "",
+    estadoConvocatoria: [],
+    estadoUSM: [],
+    cumpleRequisitos: "",
+    valorMinimo: "",
+    valorMaximo: "",
+    entidades: [],
+    fechaLimiteDesde: null,
+    fechaLimiteHasta: null,
+    urgencia: "",
   });
   const [selectedConvocatoria, setSelectedConvocatoria] = useState<Convocatoria | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -101,8 +98,8 @@ export default function Convocatorias() {
   }, []);
 
   useEffect(() => {
-    applyFilters();
-  }, [convocatorias, searchTerm, filters]);
+    applyAdvancedFilters();
+  }, [convocatorias, advancedFilters]);
 
   const fetchConvocatorias = async () => {
     try {
@@ -125,48 +122,132 @@ export default function Convocatorias() {
     }
   };
 
-  const applyFilters = () => {
+  const applyAdvancedFilters = () => {
     let filtered = convocatorias;
 
-    // Search filter
-    if (searchTerm) {
+    // Filtro por búsqueda de texto
+    if (advancedFilters.busqueda) {
+      const searchLower = advancedFilters.busqueda.toLowerCase();
       filtered = filtered.filter(
         (c) =>
-          c.nombre_convocatoria.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          c.entidad.toLowerCase().includes(searchTerm.toLowerCase())
+          c.nombre_convocatoria.toLowerCase().includes(searchLower) ||
+          c.entidad.toLowerCase().includes(searchLower) ||
+          (c.sector_tema && c.sector_tema.toLowerCase().includes(searchLower)) ||
+          (c.componentes_transversales && c.componentes_transversales.toLowerCase().includes(searchLower))
       );
     }
 
-    // Estado filter
-    if (filters.estado && filters.estado !== "all") {
-      filtered = filtered.filter((c) => c.estado_convocatoria === filters.estado);
+    // Filtro por estado de convocatoria
+    if (advancedFilters.estadoConvocatoria.length > 0) {
+      filtered = filtered.filter((c) => 
+        advancedFilters.estadoConvocatoria.includes(c.estado_convocatoria || "")
+      );
     }
 
-    // Sector filter
-    if (filters.sector && filters.sector !== "all") {
-      filtered = filtered.filter((c) => c.sector_tema === filters.sector);
+    // Filtro por estado USM
+    if (advancedFilters.estadoUSM.length > 0) {
+      filtered = filtered.filter((c) => 
+        advancedFilters.estadoUSM.includes(c.estado_usm || "")
+      );
     }
 
-    // Orden filter
-    if (filters.orden && filters.orden !== "all") {
-      filtered = filtered.filter((c) => c.orden === filters.orden);
+    // Filtro por cumplimiento de requisitos
+    if (advancedFilters.cumpleRequisitos) {
+      if (advancedFilters.cumpleRequisitos === "si") {
+        filtered = filtered.filter((c) => c.cumplimos_requisitos === true);
+      } else if (advancedFilters.cumpleRequisitos === "no") {
+        filtered = filtered.filter((c) => c.cumplimos_requisitos === false);
+      } else if (advancedFilters.cumpleRequisitos === "pendiente") {
+        filtered = filtered.filter((c) => c.cumplimos_requisitos === null);
+      }
     }
 
-    // Date filters
-    if (filters.dateFrom || filters.dateTo) {
+    // Filtro por rango de valor
+    if (advancedFilters.valorMinimo || advancedFilters.valorMaximo) {
+      const minValue = advancedFilters.valorMinimo ? parseFloat(advancedFilters.valorMinimo) : 0;
+      const maxValue = advancedFilters.valorMaximo ? parseFloat(advancedFilters.valorMaximo) : Infinity;
+      
+      filtered = filtered.filter((c) => {
+        if (c.valor === null) return false;
+        return c.valor >= minValue && c.valor <= maxValue;
+      });
+    }
+
+    // Filtro por entidades
+    if (advancedFilters.entidades.length > 0) {
+      filtered = filtered.filter((c) => 
+        advancedFilters.entidades.includes(c.entidad)
+      );
+    }
+
+    // Filtro por fechas límite
+    if (advancedFilters.fechaLimiteDesde || advancedFilters.fechaLimiteHasta) {
       filtered = filtered.filter((c) => {
         if (!c.fecha_limite_aplicacion) return false;
         const date = new Date(c.fecha_limite_aplicacion);
-        const fromDate = filters.dateFrom ? new Date(filters.dateFrom) : null;
-        const toDate = filters.dateTo ? new Date(filters.dateTo) : null;
-
-        if (fromDate && date < fromDate) return false;
-        if (toDate && date > toDate) return false;
+        
+        if (advancedFilters.fechaLimiteDesde && date < advancedFilters.fechaLimiteDesde) return false;
+        if (advancedFilters.fechaLimiteHasta && date > advancedFilters.fechaLimiteHasta) return false;
+        
         return true;
       });
     }
 
+    // Filtro por urgencia
+    if (advancedFilters.urgencia === "urgentes") {
+      const today = new Date();
+      const sevenDaysFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+      
+      filtered = filtered.filter((c) => {
+        if (!c.fecha_limite_aplicacion) return false;
+        const deadline = new Date(c.fecha_limite_aplicacion);
+        return deadline >= today && deadline <= sevenDaysFromNow;
+      });
+    }
+
     setFilteredConvocatorias(filtered);
+  };
+
+  // Obtener entidades únicas disponibles
+  const getAvailableEntidades = (): string[] => {
+    const entidades = Array.from(new Set(convocatorias.map(c => c.entidad)))
+      .filter(entidad => entidad && entidad.trim() !== "")
+      .sort();
+    return entidades;
+  };
+
+  // Contar filtros activos
+  const getActiveFiltersCount = (): number => {
+    let count = 0;
+    
+    if (advancedFilters.busqueda) count++;
+    if (advancedFilters.estadoConvocatoria.length > 0) count++;
+    if (advancedFilters.estadoUSM.length > 0) count++;
+    if (advancedFilters.cumpleRequisitos) count++;
+    if (advancedFilters.valorMinimo) count++;
+    if (advancedFilters.valorMaximo) count++;
+    if (advancedFilters.entidades.length > 0) count++;
+    if (advancedFilters.fechaLimiteDesde) count++;
+    if (advancedFilters.fechaLimiteHasta) count++;
+    if (advancedFilters.urgencia) count++;
+    
+    return count;
+  };
+
+  // Limpiar todos los filtros
+  const clearAllFilters = () => {
+    setAdvancedFilters({
+      busqueda: "",
+      estadoConvocatoria: [],
+      estadoUSM: [],
+      cumpleRequisitos: "",
+      valorMinimo: "",
+      valorMaximo: "",
+      entidades: [],
+      fechaLimiteDesde: null,
+      fechaLimiteHasta: null,
+      urgencia: "",
+    });
   };
 
   const handleCreate = () => {
@@ -317,30 +398,22 @@ export default function Convocatorias() {
         </div>
       </div>
 
-      {/* Filters and Search - Enhanced responsive design */}
+      {/* Sistema de filtros avanzado */}
       <Card className="shadow-sm border-border/50 animate-scale-in">
         <CardHeader className="pb-4">
           <CardTitle className="text-lg md:text-xl flex items-center gap-2">
             <Search className="h-5 w-5 text-primary" />
-            Filtros y Búsqueda
+            Sistema de Filtrado Avanzado
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1">
-              <Input
-                placeholder="Buscar por nombre o entidad..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full transition-all duration-200 focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
-            <Button variant="outline" size="icon" className="hover-scale self-end sm:self-auto">
-              <Search className="h-4 w-4" />
-            </Button>
-          </div>
-          
-          <ConvocatoriaFilters filters={filters} onFiltersChange={setFilters} />
+        <CardContent>
+          <ConvocatoriaAdvancedFilters
+            filters={advancedFilters}
+            onFiltersChange={setAdvancedFilters}
+            availableEntidades={getAvailableEntidades()}
+            onClearFilters={clearAllFilters}
+            activeFiltersCount={getActiveFiltersCount()}
+          />
         </CardContent>
       </Card>
 
