@@ -118,6 +118,10 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
         valor: formData.valor ? parseFloat(formData.valor) : null,
         cumplimos_requisitos: formData.cumplimos_requisitos === "si",
         fecha_limite_aplicacion: formData.fecha_limite_aplicacion || null,
+        orden: formData.orden || null,
+        tipo: formData.tipo || null,
+        estado_convocatoria: formData.estado_convocatoria || null,
+        estado_usm: formData.estado_usm || null,
       };
 
       let error;
@@ -225,7 +229,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el orden" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Local">Local</SelectItem>
+                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Nacional">Nacional</SelectItem>
                   <SelectItem value="Internacional">Internacional</SelectItem>
                 </SelectContent>
@@ -239,10 +243,8 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el tipo" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Investigación">Investigación</SelectItem>
-                  <SelectItem value="Fortalecimiento institucional">Fortalecimiento institucional</SelectItem>
-                  <SelectItem value="Formación">Formación</SelectItem>
-                  <SelectItem value="Movilidad">Movilidad</SelectItem>
                   <SelectItem value="Otro">Otro</SelectItem>
                   <SelectItem value="Varios">Varios</SelectItem>
                 </SelectContent>
@@ -404,6 +406,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el estado" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Abierta">Abierta</SelectItem>
                   <SelectItem value="Cerrada">Cerrada</SelectItem>
                 </SelectContent>
