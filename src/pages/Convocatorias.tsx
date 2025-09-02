@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, Search, Edit, Trash2, Download, Copy, EyeOff, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useUserRole } from "@/hooks/useUserRole";
 import { BulkUploadDialog } from "@/components/BulkUploadDialog";
 import { ConvocatoriaDetailDialog } from "@/components/ConvocatoriaDetailDialog";
 
@@ -90,8 +91,7 @@ export default function Convocatorias() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const isAdmin = user?.email === "admin@usm.edu.co";
-  const canManage = isAdmin;
+  const { canManage } = useUserRole(user);
 
   useEffect(() => {
     fetchConvocatorias();
