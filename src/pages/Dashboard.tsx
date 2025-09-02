@@ -19,6 +19,7 @@ interface Convocatoria {
 }
 
 export default function Dashboard() {
+  console.log("Dashboard: Rendering dashboard");
   const [convocatorias, setConvocatorias] = useState<Convocatoria[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
