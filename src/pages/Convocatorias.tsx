@@ -61,9 +61,9 @@ export default function Convocatorias() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Filters>({
-    estado: "",
-    sector: "",
-    orden: "",
+    estado: "all",
+    sector: "all",
+    orden: "all",
     dateFrom: "",
     dateTo: "",
   });
@@ -133,17 +133,17 @@ export default function Convocatorias() {
     }
 
     // Estado filter
-    if (filters.estado) {
+    if (filters.estado && filters.estado !== "all") {
       filtered = filtered.filter((c) => c.estado_convocatoria === filters.estado);
     }
 
     // Sector filter
-    if (filters.sector) {
+    if (filters.sector && filters.sector !== "all") {
       filtered = filtered.filter((c) => c.sector_tema === filters.sector);
     }
 
     // Orden filter
-    if (filters.orden) {
+    if (filters.orden && filters.orden !== "all") {
       filtered = filtered.filter((c) => c.orden === filters.orden);
     }
 

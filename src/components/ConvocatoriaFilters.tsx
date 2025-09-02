@@ -23,9 +23,9 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
 
   const clearFilters = () => {
     onFiltersChange({
-      estado: "",
-      sector: "",
-      orden: "",
+      estado: "all",
+      sector: "all",
+      orden: "all",
       dateFrom: "",
       dateTo: "",
     });
@@ -40,7 +40,7 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="Abierta">Abierta</SelectItem>
             <SelectItem value="Cerrada">Cerrada</SelectItem>
           </SelectContent>
@@ -54,7 +54,7 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="Educación">Educación</SelectItem>
             <SelectItem value="Inclusión Social">Inclusión Social</SelectItem>
             <SelectItem value="Cultura">Cultura</SelectItem>
@@ -73,7 +73,7 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="Local">Local</SelectItem>
             <SelectItem value="Nacional">Nacional</SelectItem>
             <SelectItem value="Internacional">Internacional</SelectItem>
