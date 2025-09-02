@@ -17,17 +17,6 @@ export const AuthForm = () => {
     e.preventDefault();
     setLoading(true);
     
-    // Validate that only allowed emails can log in
-    if (email !== "admin@usm.edu.co" && email !== "rectoria@usm.edu.co") {
-      toast({
-        title: "Acceso no autorizado",
-        description: "Solo los usuarios autorizados pueden acceder al sistema",
-        variant: "destructive",
-      });
-      setLoading(false);
-      return;
-    }
-    
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -36,7 +25,7 @@ export const AuthForm = () => {
     if (error) {
       toast({
         title: "Error al iniciar sesión",
-        description: "Credenciales incorrectas. Verifica tu email y contraseña.",
+        description: error.message,
         variant: "destructive",
       });
     }
@@ -49,7 +38,7 @@ export const AuthForm = () => {
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Sistema de Convocatorias USM</CardTitle>
           <CardDescription>
-            Sistema de gestión de convocatorias para usuarios autorizados
+            Ingresa con tus credenciales institucionales
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -81,11 +70,12 @@ export const AuthForm = () => {
           </form>
           
           <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-            <h4 className="font-medium mb-2">Usuarios Autorizados:</h4>
-            <ul className="text-sm text-muted-foreground space-y-1">
-              <li>• admin@usm.edu.co - Administrador</li>
-              <li>• rectoria@usm.edu.co - Usuario Consulta</li>
-            </ul>
+            <h4 className="font-medium text-sm mb-2">Usuarios del Sistema:</h4>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p><strong>Administrador:</strong> admin@usm.edu.co</p>
+              <p><strong>Usuario:</strong> rectoria@usm.edu.co</p>
+              <p><strong>Contraseña:</strong> USM2025</p>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -22,7 +22,7 @@ import {
   DialogHeader, 
   DialogTitle 
 } from "@/components/ui/dialog";
-import { Plus, Search, Edit, Trash2, Download, Copy } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Download, Copy, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Convocatoria {

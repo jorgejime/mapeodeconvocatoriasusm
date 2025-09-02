@@ -28,11 +28,17 @@ export default function Dashboard() {
     cerradas: 0,
     cumplimos: 0,
   });
+  const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
     fetchConvocatorias();
   }, []);
+
+  const isAdmin = user?.email === "admin@usm.edu.co";
 
   const fetchConvocatorias = async () => {
     try {
@@ -100,7 +106,10 @@ export default function Dashboard() {
       <div>
         <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
         <p className="text-muted-foreground">
-          Resumen general de convocatorias y estadísticas
+          {isAdmin 
+            ? "Resumen general de convocatorias y estadísticas - Panel de Administrador"
+            : "Resumen general de convocatorias - Vista de Usuario"
+          }
         </p>
       </div>
 
