@@ -79,17 +79,19 @@ export function AppSidebar() {
       <SidebarHeader>
         <div className="px-4 py-4 space-y-3">
           <div className="flex flex-col items-center gap-2">
-            <img 
-              src={logoUsm} 
-              alt="Logo USM" 
-              className={collapsed ? "h-8 w-8" : "h-12 w-12"} 
-            />
+            <div className={collapsed ? "w-10 h-10" : "w-full max-w-[200px]"}>
+              <img 
+                src={logoUsm} 
+                alt="Logo USM" 
+                className={`w-full h-auto object-contain ${collapsed ? "max-h-10" : "max-h-16"}`}
+              />
+            </div>
             {!collapsed && (
-              <div className="text-center">
-                <h2 className="text-sm font-bold text-foreground leading-tight">
+              <div className="text-center w-full">
+                <h2 className="text-sm font-bold text-foreground leading-tight break-words">
                   MAPEO DE CONVOCATORIAS USM
                 </h2>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground break-words">
                   Institución Universitaria de Santa Marta
                 </p>
               </div>
@@ -98,9 +100,9 @@ export function AppSidebar() {
           
           {!collapsed && (
             <div className="flex items-center gap-2 pt-2 border-t">
-              <User className="h-4 w-4" />
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">{user?.email}</span>
+              <User className="h-4 w-4 flex-shrink-0" />
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-sm font-medium truncate">{user?.email}</span>
                 <Badge variant={isAdmin ? "default" : "secondary"} className="w-fit">
                   {role}
                 </Badge>
