@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,7 +47,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
     tipo_moneda: "COP",
     sector_tema: "",
     componentes_transversales: "",
-    cumplimos_requisitos: false,
+        cumplimos_requisitos: "no",
     que_nos_falta: "",
     fecha_limite_aplicacion: "",
     link_convocatoria: "",
@@ -85,7 +86,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
         tipo_moneda: convocatoria.tipo_moneda || "COP",
         sector_tema: convocatoria.sector_tema || "",
         componentes_transversales: convocatoria.componentes_transversales || "",
-        cumplimos_requisitos: convocatoria.cumplimos_requisitos || false,
+        cumplimos_requisitos: convocatoria.cumplimos_requisitos ? "si" : "no",
         que_nos_falta: convocatoria.que_nos_falta || "",
         fecha_limite_aplicacion: convocatoria.fecha_limite_aplicacion || "",
         link_convocatoria: convocatoria.link_convocatoria || "",
@@ -115,7 +116,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
       const dataToSubmit = {
         ...formData,
         valor: formData.valor ? parseFloat(formData.valor) : null,
-        cumplimos_requisitos: formData.cumplimos_requisitos,
+        cumplimos_requisitos: formData.cumplimos_requisitos === "si",
         fecha_limite_aplicacion: formData.fecha_limite_aplicacion || null,
       };
 
@@ -177,7 +178,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
         tipo_moneda: "COP",
         sector_tema: "",
         componentes_transversales: "",
-        cumplimos_requisitos: false,
+        cumplimos_requisitos: "no",
         que_nos_falta: "",
         fecha_limite_aplicacion: "",
         link_convocatoria: "",
@@ -337,24 +338,35 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
             <CardTitle>Requisitos y Estado</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="cumplimos_requisitos"
-                checked={formData.cumplimos_requisitos}
-                onCheckedChange={(checked) => updateField("cumplimos_requisitos", checked)}
-              />
-              <Label htmlFor="cumplimos_requisitos">¿Cumplimos los requisitos?</Label>
+            <div className="space-y-2">
+              <Label>¿Cumplimos los requisitos?</Label>
+              <RadioGroup 
+                value={formData.cumplimos_requisitos} 
+                onValueChange={(value) => updateField("cumplimos_requisitos", value)}
+                className="flex space-x-4"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="si" id="requisitos-si" />
+                  <Label htmlFor="requisitos-si">Sí</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="requisitos-no" />
+                  <Label htmlFor="requisitos-no">No</Label>
+                </div>
+              </RadioGroup>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="que_nos_falta">¿Qué nos falta para cumplir?</Label>
-              <Textarea
-                id="que_nos_falta"
-                value={formData.que_nos_falta}
-                onChange={(e) => updateField("que_nos_falta", e.target.value)}
-                placeholder="Describe qué requisitos faltan por cumplir..."
-              />
-            </div>
+            {formData.cumplimos_requisitos === "no" && (
+              <div className="space-y-2">
+                <Label htmlFor="que_nos_falta">¿Por qué no cumplimos los requisitos?</Label>
+                <Textarea
+                  id="que_nos_falta"
+                  value={formData.que_nos_falta}
+                  onChange={(e) => updateField("que_nos_falta", e.target.value)}
+                  placeholder="Describe qué requisitos faltan por cumplir..."
+                />
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="fecha_limite_aplicacion">Fecha Límite de Aplicación</Label>
