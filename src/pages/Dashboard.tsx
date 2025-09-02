@@ -174,41 +174,77 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="space-y-4">
-              {convocatorias.map((convocatoria) => (
-                <div
-                  key={convocatoria.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                >
-                  <div className="space-y-1">
-                    <h4 className="font-semibold">{convocatoria.nombre_convocatoria}</h4>
-                    <p className="text-sm text-muted-foreground">{convocatoria.entidad}</p>
-                    <div className="flex items-center gap-2">
-                      {convocatoria.estado_convocatoria && (
-                        <Badge variant={convocatoria.estado_convocatoria === "Abierta" ? "default" : "secondary"}>
-                          {convocatoria.estado_convocatoria}
-                        </Badge>
-                      )}
-                      {convocatoria.cumplimos_requisitos && (
-                        <Badge variant="outline" className="text-success border-success">
-                          Cumplimos requisitos
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                  <div className="text-right space-y-2">
-                    {convocatoria.valor && (
-                      <p className="font-semibold">
-                        ${convocatoria.valor.toLocaleString()}
+              {/* Grid de tarjetas de convocatorias */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {convocatorias.map((convocatoria) => (
+                  <Card 
+                    key={convocatoria.id} 
+                    className="h-fit hover:shadow-md transition-all duration-200 border-border/50 hover:border-border cursor-pointer group"
+                    onClick={() => navigate("/convocatorias")}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex justify-between items-start gap-2">
+                        <CardTitle className="text-sm font-semibold line-clamp-2 leading-5">
+                          {convocatoria.nombre_convocatoria}
+                        </CardTitle>
+                        {convocatoria.valor && (
+                          <div className="text-right shrink-0">
+                            <p className="text-xs font-medium text-primary">
+                              ${convocatoria.valor.toLocaleString()}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-1">
+                        {convocatoria.entidad}
                       </p>
-                    )}
-                    {convocatoria.fecha_limite_aplicacion && (
-                      <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)}>
-                        {getStatusText(convocatoria.fecha_limite_aplicacion)}
-                      </StatusBadge>
-                    )}
-                  </div>
-                </div>
-              ))}
+                    </CardHeader>
+                    
+                    <CardContent className="space-y-3 pb-3">
+                      {/* Estado */}
+                      <div className="flex flex-wrap gap-1">
+                        {convocatoria.estado_convocatoria && (
+                          <Badge 
+                            variant={convocatoria.estado_convocatoria === "Abierta" ? "default" : "secondary"}
+                            className="text-xs"
+                          >
+                            {convocatoria.estado_convocatoria}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      {/* Fecha límite */}
+                      {convocatoria.fecha_limite_aplicacion && (
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="text-muted-foreground">Fecha límite:</span>
+                          <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)}>
+                            {new Date(convocatoria.fecha_limite_aplicacion).toLocaleDateString()}
+                          </StatusBadge>
+                        </div>
+                      )}
+                      
+                      {/* Cumplimos requisitos */}
+                      {convocatoria.cumplimos_requisitos !== null && (
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="text-muted-foreground">Cumple requisitos:</span>
+                          <Badge 
+                            variant={convocatoria.cumplimos_requisitos ? "default" : "secondary"}
+                            className={`text-xs ${convocatoria.cumplimos_requisitos ? "bg-success text-success-foreground" : ""}`}
+                          >
+                            {convocatoria.cumplimos_requisitos ? "Sí" : "No"}
+                          </Badge>
+                        </div>
+                      )}
+                      
+                      {/* Fecha de creación */}
+                      <div className="text-xs text-muted-foreground">
+                        Agregada: {new Date(convocatoria.created_at).toLocaleDateString()}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
               <div className="pt-4">
                 <Button 
                   onClick={() => navigate("/convocatorias")} 
