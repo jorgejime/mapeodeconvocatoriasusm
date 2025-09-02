@@ -42,6 +42,7 @@ import {
   CheckCircle,
   AlertTriangle
 } from "lucide-react";
+import { DatabaseResetDialog } from "@/components/DatabaseResetDialog";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
@@ -521,6 +522,58 @@ export default function Configuracion() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Reset de Base de Datos - Zona de Peligro */}
+      <Card className="border-red-200 bg-red-50/50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-red-600">
+            <AlertTriangle className="h-5 w-5" />
+            🚨 Zona de Peligro - Reset de Base de Datos
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="bg-red-100 border border-red-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-red-800">⚠️ ADVERTENCIA CRÍTICA</h4>
+                  <p className="text-sm text-red-700">
+                    Esta acción eliminará <strong>TODOS</strong> los datos de la base de datos de forma permanente:
+                  </p>
+                  <ul className="text-sm text-red-700 list-disc list-inside space-y-1">
+                    <li>Todas las convocatorias registradas</li>
+                    <li>Toda la información y archivos asociados</li>
+                    <li>No se puede deshacer esta operación</li>
+                  </ul>
+                  <p className="text-sm text-red-700 font-semibold">
+                    Asegúrate de haber exportado un backup antes de continuar.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-medium">
+                Casos de uso para el reset completo:
+              </p>
+              <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
+                <li>Limpiar datos de prueba antes de producción</li>
+                <li>Resetear el sistema para un nuevo período académico</li>
+                <li>Solucionar problemas críticos de datos</li>
+                <li>Migración o reestructuración completa</li>
+              </ul>
+            </div>
+
+            <div className="pt-4 border-t border-red-200">
+              <DatabaseResetDialog 
+                userEmail={user?.email || ""} 
+                isAdmin={user?.email === "admin@usm.edu.co"} 
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Dialog para crear/editar usuario */}
       <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>

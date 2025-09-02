@@ -1,1 +1,4 @@
 project_id = "ljzbsuhdsqqsivesyzab"
+
+[functions.reset-database]
+verify_jwt = false
