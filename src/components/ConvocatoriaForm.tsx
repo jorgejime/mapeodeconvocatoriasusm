@@ -246,13 +246,26 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="componentes_transversales">Componentes que Financia</Label>
-              <Textarea
-                id="componentes_transversales"
-                value={formData.componentes_transversales}
-                onChange={(e) => updateField("componentes_transversales", e.target.value)}
-                placeholder="Ej: Infraestructura, Dotación, Servicios, Investigación..."
-              />
+              <Label>Componentes que Financia (múltiple)</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {["Infraestructura", "Dotación", "Servicios", "Investigación", "Otro", "Varios"].map((component) => (
+                  <div key={component} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`component-${component}`}
+                      checked={formData.componentes_transversales.includes(component)}
+                      onCheckedChange={(checked) => {
+                        const current = formData.componentes_transversales.split(", ").filter(c => c);
+                        if (checked) {
+                          updateField("componentes_transversales", [...current, component].join(", "));
+                        } else {
+                          updateField("componentes_transversales", current.filter(c => c !== component).join(", "));
+                        }
+                      }}
+                    />
+                    <Label htmlFor={`component-${component}`} className="text-sm">{component}</Label>
+                  </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
