@@ -246,6 +246,9 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                 <SelectContent>
                   <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Investigación">Investigación</SelectItem>
+                  <SelectItem value="Fortalecimiento institucional">Fortalecimiento institucional</SelectItem>
+                  <SelectItem value="Formación">Formación</SelectItem>
+                  <SelectItem value="Movilidad">Movilidad</SelectItem>
                   <SelectItem value="Otro">Otro</SelectItem>
                   <SelectItem value="Varios">Varios</SelectItem>
                 </SelectContent>
@@ -410,6 +413,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Abierta">Abierta</SelectItem>
                   <SelectItem value="Cerrada">Cerrada</SelectItem>
+                  <SelectItem value="Próxima">Próxima</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -421,6 +425,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el estado interno" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="En revisión">En revisión</SelectItem>
                   <SelectItem value="En preparación">En preparación</SelectItem>
                   <SelectItem value="Presentada">Presentada</SelectItem>
