@@ -138,21 +138,21 @@ export function ConvocatoriaAdvancedFilters({
       </div>
 
       {/* Filtros rápidos */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label className="text-sm font-medium">Filtros rápidos</Label>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {FILTROS_RAPIDOS.map((quickFilter) => (
             <Button
               key={quickFilter.id}
               variant="outline"
               size="sm"
               onClick={() => applyQuickFilter(quickFilter)}
-              className="justify-start h-auto p-3 text-left"
+              className="justify-start h-auto p-3 text-left min-h-[60px] hover:bg-muted transition-colors"
             >
               <quickFilter.icon className="h-4 w-4 mr-2 flex-shrink-0" />
-              <div>
-                <div className="font-medium text-xs">{quickFilter.label}</div>
-                <div className="text-xs text-muted-foreground">{quickFilter.description}</div>
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-xs truncate">{quickFilter.label}</div>
+                <div className="text-xs text-muted-foreground line-clamp-2">{quickFilter.description}</div>
               </div>
             </Button>
           ))}
@@ -185,56 +185,61 @@ export function ConvocatoriaAdvancedFilters({
 
       {/* Filtros activos */}
       {activeFiltersCount > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {filters.busqueda && (
-            <Badge variant="secondary" className="gap-1">
-              Búsqueda: "{filters.busqueda}"
-              <X 
-                className="h-3 w-3 cursor-pointer" 
-                onClick={() => removeFilter('busqueda')}
-              />
-            </Badge>
-          )}
-          
-          {filters.estadoConvocatoria.map(estado => (
-            <Badge key={estado} variant="secondary" className="gap-1">
-              Estado: {estado}
-              <X 
-                className="h-3 w-3 cursor-pointer"
-                onClick={() => removeFilter('estadoConvocatoria', estado)}
-              />
-            </Badge>
-          ))}
-          
-          {filters.estadoUSM.map(estado => (
-            <Badge key={estado} variant="secondary" className="gap-1">
-              USM: {estado}
-              <X 
-                className="h-3 w-3 cursor-pointer"
-                onClick={() => removeFilter('estadoUSM', estado)} 
-              />
-            </Badge>
-          ))}
-          
-          {filters.cumpleRequisitos && filters.cumpleRequisitos !== "todos" && (
-            <Badge variant="secondary" className="gap-1">
-              Requisitos: {filters.cumpleRequisitos === 'si' ? 'Cumple' : filters.cumpleRequisitos === 'no' ? 'No cumple' : 'Pendiente'}
-              <X 
-                className="h-3 w-3 cursor-pointer"
-                onClick={() => removeFilter('cumpleRequisitos')}
-              />
-            </Badge>
-          )}
-          
-          {filters.valorMinimo && (
-            <Badge variant="secondary" className="gap-1">
-              Valor mín: ${parseInt(filters.valorMinimo).toLocaleString()}
-              <X 
-                className="h-3 w-3 cursor-pointer"
-                onClick={() => removeFilter('valorMinimo')}
-              />
-            </Badge>
-          )}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">Filtros aplicados</Label>
+          <div className="flex flex-wrap gap-2 max-w-full">
+            {filters.busqueda && (
+              <Badge variant="secondary" className="gap-1 max-w-[200px]">
+                <span className="truncate">Búsqueda: "{filters.busqueda}"</span>
+                <X 
+                  className="h-3 w-3 cursor-pointer flex-shrink-0" 
+                  onClick={() => removeFilter('busqueda')}
+                />
+              </Badge>
+            )}
+            
+            {filters.estadoConvocatoria.map(estado => (
+              <Badge key={estado} variant="secondary" className="gap-1">
+                <span className="truncate">Estado: {estado}</span>
+                <X 
+                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  onClick={() => removeFilter('estadoConvocatoria', estado)}
+                />
+              </Badge>
+            ))}
+            
+            {filters.estadoUSM.map(estado => (
+              <Badge key={estado} variant="secondary" className="gap-1">
+                <span className="truncate">USM: {estado}</span>
+                <X 
+                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  onClick={() => removeFilter('estadoUSM', estado)} 
+                />
+              </Badge>
+            ))}
+            
+            {filters.cumpleRequisitos && filters.cumpleRequisitos !== "todos" && (
+              <Badge variant="secondary" className="gap-1">
+                <span className="truncate">
+                  Requisitos: {filters.cumpleRequisitos === 'si' ? 'Cumple' : filters.cumpleRequisitos === 'no' ? 'No cumple' : 'Pendiente'}
+                </span>
+                <X 
+                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  onClick={() => removeFilter('cumpleRequisitos')}
+                />
+              </Badge>
+            )}
+            
+            {filters.valorMinimo && (
+              <Badge variant="secondary" className="gap-1">
+                <span className="truncate">Valor mín: ${parseInt(filters.valorMinimo).toLocaleString()}</span>
+                <X 
+                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  onClick={() => removeFilter('valorMinimo')}
+                />
+              </Badge>
+            )}
+          </div>
         </div>
       )}
 
@@ -294,7 +299,7 @@ export function ConvocatoriaAdvancedFilters({
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border z-50">
                   <SelectItem value="todos">Todos</SelectItem>
                   <SelectItem value="si">✅ Cumplimos requisitos</SelectItem>
                   <SelectItem value="no">❌ No cumplimos requisitos</SelectItem>
@@ -335,31 +340,31 @@ export function ConvocatoriaAdvancedFilters({
             {/* Entidades */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">Entidades</Label>
-              <div className="max-h-40 overflow-y-auto border rounded-md p-2 space-y-2 bg-background">
+              <div className="max-h-40 overflow-y-auto border rounded-lg p-3 space-y-2 bg-background">
                 {availableEntidades.map(entidad => (
-                  <label key={entidad} className="flex items-center space-x-2 cursor-pointer hover:bg-muted/50 p-1 rounded">
+                  <label key={entidad} className="flex items-center space-x-3 cursor-pointer hover:bg-muted/50 p-2 rounded-md transition-colors">
                     <input
                       type="checkbox"
                       checked={filters.entidades.includes(entidad)}
                       onChange={() => toggleArrayFilter('entidades', entidad)}
-                      className="rounded border-gray-300"
+                      className="rounded border-gray-300 flex-shrink-0"
                     />
-                    <span className="text-sm">{entidad}</span>
+                    <span className="text-sm truncate flex-1">{entidad}</span>
                   </label>
                 ))}
                 {availableEntidades.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-2">
+                  <p className="text-sm text-muted-foreground text-center py-4">
                     No hay entidades disponibles
                   </p>
                 )}
               </div>
               {filters.entidades.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
+                <div className="flex flex-wrap gap-2 mt-3">
                   {filters.entidades.map(entidad => (
-                    <Badge key={entidad} variant="outline" className="gap-1">
-                      {entidad}
+                    <Badge key={entidad} variant="outline" className="gap-1 max-w-[200px]">
+                      <span className="truncate">{entidad}</span>
                       <X 
-                        className="h-3 w-3 cursor-pointer"
+                        className="h-3 w-3 cursor-pointer flex-shrink-0"
                         onClick={() => removeFilter('entidades', entidad)}
                       />
                     </Badge>

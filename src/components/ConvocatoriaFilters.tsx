@@ -32,14 +32,14 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4 p-1">
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Estado</Label>
+        <Label className="text-sm font-medium truncate">Estado</Label>
         <Select value={filters.estado} onValueChange={(value) => updateFilter("estado", value)}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full h-10">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-popover border z-50">
             <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="Abierta">Abierta</SelectItem>
             <SelectItem value="Cerrada">Cerrada</SelectItem>
@@ -48,12 +48,12 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
       </div>
 
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Sector/Tema</Label>
+        <Label className="text-sm font-medium truncate">Sector/Tema</Label>
         <Select value={filters.sector} onValueChange={(value) => updateFilter("sector", value)}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full h-10">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-popover border z-50">
             <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="Educación">Educación</SelectItem>
             <SelectItem value="Inclusión Social">Inclusión Social</SelectItem>
@@ -67,12 +67,12 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
       </div>
 
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Orden</Label>
+        <Label className="text-sm font-medium truncate">Orden</Label>
         <Select value={filters.orden} onValueChange={(value) => updateFilter("orden", value)}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full h-10">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-popover border z-50">
             <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="Local">Local</SelectItem>
             <SelectItem value="Nacional">Nacional</SelectItem>
@@ -82,30 +82,34 @@ export const ConvocatoriaFilters = ({ filters, onFiltersChange }: ConvocatoriaFi
       </div>
 
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Fecha Desde</Label>
+        <Label className="text-sm font-medium truncate">Desde</Label>
         <Input
           type="date"
           value={filters.dateFrom}
           onChange={(e) => updateFilter("dateFrom", e.target.value)}
-          className="w-full"
+          className="w-full h-10"
         />
       </div>
 
-      <div className="space-y-2 flex flex-col">
-        <Label className="text-sm font-medium">Fecha Hasta</Label>
+      <div className="space-y-2">
+        <Label className="text-sm font-medium truncate">Hasta</Label>
         <Input
           type="date"
           value={filters.dateTo}
           onChange={(e) => updateFilter("dateTo", e.target.value)}
-          className="w-full mb-2"
+          className="w-full h-10"
         />
+      </div>
+
+      <div className="space-y-2 flex flex-col">
+        <Label className="text-sm font-medium truncate opacity-0">Acciones</Label>
         <Button 
           variant="outline" 
           onClick={clearFilters} 
-          className="mt-auto hover-scale text-sm"
+          className="w-full h-10 hover:bg-muted text-sm font-medium transition-colors"
           size="sm"
         >
-          Limpiar Filtros
+          Limpiar
         </Button>
       </div>
     </div>
