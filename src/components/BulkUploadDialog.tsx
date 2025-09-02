@@ -190,91 +190,130 @@ export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDi
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           
+          console.log('📊 Processing Excel file:', file.name);
+          console.log('📋 Sheet name:', sheetName);
+          
           // Convertir a JSON
           const jsonData = XLSX.utils.sheet_to_json(worksheet, { 
             header: 1, // Usar números como headers inicialmente
-            defval: "" // Valor por defecto para celdas vacías
+            defval: "", // Valor por defecto para celdas vacías
+            raw: false // No usar valores raw, convertir todo a string
           });
+          
+          console.log('📄 Raw data rows:', jsonData.length);
+          console.log('🔍 First few rows:', jsonData.slice(0, 3));
           
           if (jsonData.length < 2) {
             throw new Error("El archivo debe contener al menos una fila de encabezados y una fila de datos");
           }
           
-          // Obtener headers (primera fila)
-          const headers = jsonData[0] as string[];
+          // Obtener headers (primera fila) y limpiarlos
+          const headers = (jsonData[0] as string[]).map(h => 
+            h ? h.toString().trim().replace(/\n/g, ' ').replace(/\s+/g, ' ') : ''
+          );
           
-          // Mapear headers de Excel a nombres de campo de base de datos
+          console.log('📝 Headers found:', headers);
+          
+          // Mapear headers de Excel a nombres de campo de base de datos (más flexible)
           const headerMapping: Record<string, string> = {
+            // Nombres exactos de la plantilla
             "Nombre de la Convocatoria *": "nombre_convocatoria",
-            "nombre de la convocatoria *": "nombre_convocatoria",
-            "nombre_convocatoria": "nombre_convocatoria",
             "Entidad *": "entidad",
-            "entidad *": "entidad", 
-            "entidad": "entidad",
             "Orden": "orden",
-            "orden": "orden",
             "Tipo": "tipo",
-            "tipo": "tipo",
             "Valor/Monto": "valor",
-            "valor/monto": "valor",
+            "Tipo de Moneda": "tipo_moneda",
+            "Sector/Tema": "sector_tema",
+            "Componentes que Financia": "componentes_transversales",
+            "¿Cumplimos Requisitos?": "cumplimos_requisitos",
+            "¿Qué nos falta para cumplir?": "que_nos_falta",
+            "Fecha Límite (YYYY-MM-DD)": "fecha_limite_aplicacion",
+            "Link de la Convocatoria": "link_convocatoria",
+            "Estado de la Convocatoria": "estado_convocatoria",
+            "Estado Interno USM": "estado_usm",
+            "Observaciones": "observaciones",
+            
+            // Variaciones comunes (sin acentos, minúsculas, etc.)
+            "nombre de la convocatoria": "nombre_convocatoria",
+            "nombre_convocatoria": "nombre_convocatoria",
+            "convocatoria": "nombre_convocatoria",
+            "entidad": "entidad",
+            "orden": "orden",
+            "tipo": "tipo",
             "valor": "valor",
             "monto": "valor",
-            "Tipo de Moneda": "tipo_moneda",
-            "tipo de moneda": "tipo_moneda",
+            "valor/monto": "valor",
+            "tipo de moneda": "tipo_moneda", 
             "tipo_moneda": "tipo_moneda",
             "moneda": "tipo_moneda",
-            "Sector/Tema": "sector_tema",
+            "sector": "sector_tema",
+            "tema": "sector_tema",
             "sector/tema": "sector_tema",
             "sector_tema": "sector_tema",
-            "sector": "sector_tema",
-            "Componentes que Financia": "componentes_transversales",
+            "componentes": "componentes_transversales",
             "componentes que financia": "componentes_transversales",
             "componentes_transversales": "componentes_transversales",
-            "componentes": "componentes_transversales",
-            "¿Cumplimos Requisitos?": "cumplimos_requisitos",
-            "¿cumplimos requisitos?": "cumplimos_requisitos",
-            "cumplimos_requisitos": "cumplimos_requisitos",
+            "cumplimos": "cumplimos_requisitos",
             "cumplimos requisitos": "cumplimos_requisitos",
-            "¿Qué nos falta para cumplir?": "que_nos_falta",
-            "¿qué nos falta para cumplir?": "que_nos_falta",
-            "que_nos_falta": "que_nos_falta",
+            "cumplimos_requisitos": "cumplimos_requisitos",
+            "requisitos": "cumplimos_requisitos",
             "que nos falta": "que_nos_falta",
-            "Fecha Límite (YYYY-MM-DD)": "fecha_limite_aplicacion",
-            "fecha límite (yyyy-mm-dd)": "fecha_limite_aplicacion",
-            "fecha_limite_aplicacion": "fecha_limite_aplicacion",
+            "que_nos_falta": "que_nos_falta",
+            "falta": "que_nos_falta",
+            "fecha": "fecha_limite_aplicacion",
             "fecha limite": "fecha_limite_aplicacion",
             "fecha_limite": "fecha_limite_aplicacion",
-            "Link de la Convocatoria": "link_convocatoria",
-            "link de la convocatoria": "link_convocatoria",
-            "link_convocatoria": "link_convocatoria",
+            "fecha_limite_aplicacion": "fecha_limite_aplicacion",
             "link": "link_convocatoria",
-            "Estado de la Convocatoria": "estado_convocatoria",
-            "estado de la convocatoria": "estado_convocatoria",
-            "estado_convocatoria": "estado_convocatoria",
+            "link_convocatoria": "link_convocatoria",
+            "url": "link_convocatoria",
             "estado convocatoria": "estado_convocatoria",
-            "Estado Interno USM": "estado_usm",
-            "estado interno usm": "estado_usm",
-            "estado_usm": "estado_usm",
+            "estado_convocatoria": "estado_convocatoria",
+            "estado": "estado_convocatoria",
             "estado usm": "estado_usm",
-            "Observaciones": "observaciones",
-            "observaciones": "observaciones"
+            "estado_usm": "estado_usm",
+            "estado interno": "estado_usm",
+            "observaciones": "observaciones",
+            "notas": "observaciones"
           };
+          
+          // Crear mapeo basado en los headers encontrados
+          const columnMapping: Record<number, string> = {};
+          headers.forEach((header, index) => {
+            if (header) {
+              const normalized = header.toLowerCase().trim();
+              const fieldName = headerMapping[normalized] || headerMapping[header];
+              if (fieldName) {
+                columnMapping[index] = fieldName;
+                console.log(`🔗 Mapped column ${index} "${header}" -> "${fieldName}"`);
+              } else {
+                console.warn(`⚠️ Unmapped header: "${header}"`);
+              }
+            }
+          });
+          
+          console.log('🗺️ Column mapping:', columnMapping);
           
           // Convertir datos
           const processedData = jsonData.slice(1).map((row: any[], index: number) => {
             const processedRow: any = { _rowNumber: index + 2 };
             
-            headers.forEach((header, colIndex) => {
-              const normalizedHeader = header?.toString().trim();
-              const fieldName = headerMapping[normalizedHeader] || normalizedHeader.toLowerCase();
-              let value = row[colIndex]?.toString().trim() || '';
+            // Procesar cada columna usando el mapeo
+            Object.entries(columnMapping).forEach(([colIndex, fieldName]) => {
+              const cellValue = row[parseInt(colIndex)];
+              let value = '';
               
-              if (fieldName && value !== '') {
+              if (cellValue !== undefined && cellValue !== null) {
+                value = cellValue.toString().trim();
+              }
+              
+              if (value && fieldName) {
                 // Procesar campos específicos
                 if (fieldName === 'valor' && value) {
                   // Limpiar formato de moneda y convertir a número
                   const cleanValue = value.replace(/[^\d.-]/g, '');
-                  processedRow[fieldName] = parseFloat(cleanValue) || null;
+                  const numValue = parseFloat(cleanValue);
+                  processedRow[fieldName] = isNaN(numValue) ? null : numValue;
                 } else if (fieldName === 'cumplimos_requisitos') {
                   // Normalizar valores booleanos
                   const normalizedValue = value.toLowerCase();
@@ -282,38 +321,54 @@ export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDi
                                            normalizedValue === 'true' || normalizedValue === '1' || 
                                            normalizedValue === 'yes';
                 } else if (fieldName === 'fecha_limite_aplicacion' && value) {
-                  // Procesar fechas de Excel
-                  if (typeof row[colIndex] === 'number') {
-                    // Es una fecha serial de Excel
-                    const excelDate = XLSX.SSF.parse_date_code(row[colIndex]);
-                    if (excelDate) {
-                      const date = new Date(excelDate.y, excelDate.m - 1, excelDate.d);
-                      processedRow[fieldName] = date.toISOString().split('T')[0];
-                    }
-                  } else {
-                    // Es texto, validar formato
-                    const date = new Date(value);
-                    if (!isNaN(date.getTime())) {
-                      processedRow[fieldName] = value;
-                    } else {
-                      processedRow[fieldName] = null;
+                  // Procesar fechas
+                  let dateValue = null;
+                  
+                  // Si es número (fecha serial de Excel)
+                  if (!isNaN(Number(value))) {
+                    try {
+                      const excelDate = XLSX.SSF.parse_date_code(Number(value));
+                      if (excelDate) {
+                        const date = new Date(excelDate.y, excelDate.m - 1, excelDate.d);
+                        dateValue = date.toISOString().split('T')[0];
+                      }
+                    } catch (e) {
+                      console.warn('Error parsing Excel date:', e);
                     }
                   }
-                } else if (fieldName.includes('_')) {
-                  // Campo válido del esquema
+                  
+                  // Si no se pudo convertir como fecha de Excel, intentar como string
+                  if (!dateValue) {
+                    const date = new Date(value);
+                    if (!isNaN(date.getTime())) {
+                      dateValue = value.includes('-') ? value : date.toISOString().split('T')[0];
+                    }
+                  }
+                  
+                  processedRow[fieldName] = dateValue;
+                } else {
+                  // Campo de texto normal
                   processedRow[fieldName] = value;
                 }
               }
             });
             
+            console.log(`📝 Row ${index + 2} processed:`, processedRow);
             return processedRow;
           });
           
-          resolve(processedData.filter(row => 
-            Object.keys(row).length > 1 && // Más que solo _rowNumber
-            (row.nombre_convocatoria || row.entidad) // Al menos un campo principal
-          ));
+          // Filtrar filas que tienen al menos los campos principales
+          const validData = processedData.filter(row => {
+            const hasMainFields = row.nombre_convocatoria || row.entidad;
+            const hasData = Object.keys(row).length > 1; // Más que solo _rowNumber
+            return hasMainFields && hasData;
+          });
+          
+          console.log(`✅ Processed ${validData.length} valid rows from ${processedData.length} total rows`);
+          
+          resolve(validData);
         } catch (error) {
+          console.error('❌ Error parsing Excel file:', error);
           reject(error);
         }
       };
