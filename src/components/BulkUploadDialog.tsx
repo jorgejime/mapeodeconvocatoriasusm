@@ -13,6 +13,10 @@ import {
   DialogHeader, 
   DialogTitle 
 } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Upload, 
   Download, 
@@ -21,7 +25,9 @@ import {
   CheckCircle,
   X,
   FileText,
-  Info
+  Info,
+  Eye,
+  Plus
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import * as XLSX from 'xlsx';
@@ -38,11 +44,22 @@ interface UploadResult {
   errors: Array<{ row: number; error: string; data: any }>;
 }
 
+interface ProcessedConvocatoria {
+  _rowNumber: number;
+  _selected: boolean;
+  _hasErrors: boolean;
+  _errors: string[];
+  [key: string]: any;
+}
+
 export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDialogProps) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<UploadResult | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [processedData, setProcessedData] = useState<ProcessedConvocatoria[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
+  const [processingFile, setProcessingFile] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -347,41 +364,42 @@ export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDi
       errors.push("Entidad es requerida");
     }
     
-    // Validate catalog values
+    // Validate catalog values (case-insensitive)
     const validOrden = ["Local", "Nacional", "Internacional"];
-    if (row.orden && !validOrden.includes(row.orden)) {
+    if (row.orden && !validOrden.some(v => v.toLowerCase() === row.orden.toLowerCase())) {
       errors.push(`Orden debe ser uno de: ${validOrden.join(", ")}`);
     }
     
     const validTipo = ["Investigación", "Fortalecimiento institucional", "Formación", "Movilidad", "Otro", "Varios"];
-    if (row.tipo && !validTipo.includes(row.tipo)) {
+    if (row.tipo && !validTipo.some(v => v.toLowerCase() === row.tipo.toLowerCase())) {
       errors.push(`Tipo debe ser uno de: ${validTipo.join(", ")}`);
     }
     
     const validMoneda = ["COP", "USD", "EUR", "GBP", "JPY", "CNY", "BRL", "UYU"];
-    if (row.tipo_moneda && !validMoneda.includes(row.tipo_moneda)) {
+    if (row.tipo_moneda && !validMoneda.some(v => v.toLowerCase() === row.tipo_moneda.toLowerCase())) {
       errors.push(`Moneda debe ser una de: ${validMoneda.join(", ")}`);
     }
     
     const validSector = ["Educación", "Inclusión Social", "Cultura", "TIC", "CT&I+D", "Medio Ambiente", "Otro"];
-    if (row.sector_tema && !validSector.includes(row.sector_tema)) {
+    if (row.sector_tema && !validSector.some(v => v.toLowerCase() === row.sector_tema.toLowerCase())) {
       errors.push(`Sector debe ser uno de: ${validSector.join(", ")}`);
     }
     
     const validEstadoConv = ["Abierta", "Cerrada"];
-    if (row.estado_convocatoria && !validEstadoConv.includes(row.estado_convocatoria)) {
+    if (row.estado_convocatoria && !validEstadoConv.some(v => v.toLowerCase() === row.estado_convocatoria.toLowerCase())) {
       errors.push(`Estado convocatoria debe ser: ${validEstadoConv.join(" o ")}`);
     }
     
     const validEstadoUSM = ["En revisión", "En preparación", "Presentada", "En subsanación", "Archivada", "Adjudicada", "Rechazada"];
-    if (row.estado_usm && !validEstadoUSM.includes(row.estado_usm)) {
+    if (row.estado_usm && !validEstadoUSM.some(v => v.toLowerCase() === row.estado_usm.toLowerCase())) {
       errors.push(`Estado USM debe ser uno de: ${validEstadoUSM.join(", ")}`);
     }
     
     return errors;
   };
 
-  const handleFileUpload = async () => {
+  // Process file and show preview
+  const handleFileProcess = async () => {
     if (!selectedFile) {
       toast({
         title: "⚠️ Error",
@@ -391,8 +409,7 @@ export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDi
       return;
     }
 
-    setUploading(true);
-    setProgress(0);
+    setProcessingFile(true);
     setResult(null);
 
     try {
@@ -411,77 +428,146 @@ export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDi
       if (data.length === 0) {
         throw new Error("No se encontraron datos válidos en el archivo");
       }
-      
-      const uploadResult: UploadResult = {
-        successful: 0,
-        failed: 0,
-        errors: []
-      };
 
-      for (let i = 0; i < data.length; i++) {
-        const row = data[i];
-        const rowNumber = row._rowNumber;
-        delete row._rowNumber;
-        
-        setProgress(((i + 1) / data.length) * 100);
-        
-        // Validar fila
-        const validationErrors = validateRow(row);
-        if (validationErrors.length > 0) {
-          uploadResult.failed++;
-          uploadResult.errors.push({
-            row: rowNumber,
-            error: validationErrors.join("; "),
-            data: row
-          });
-          continue;
-        }
-        
-        // Limpiar valores vacíos
-        Object.keys(row).forEach(key => {
-          if (row[key] === '' || row[key] === null || row[key] === undefined) {
-            delete row[key];
-          }
-        });
-        
-        try {
-          const { error } = await supabase
-            .from("convocatorias")
-            .insert([row]);
-            
-          if (error) throw error;
-          uploadResult.successful++;
-        } catch (error: any) {
-          uploadResult.failed++;
-          uploadResult.errors.push({
-            row: rowNumber,
-            error: error.message || "Error desconocido",
-            data: row
-          });
-        }
-      }
+      // Process and validate data
+      const processedConvocatorias: ProcessedConvocatoria[] = data.map((row, index) => {
+        const rowNumber = row._rowNumber || index + 2;
+        const cleanRow = { ...row };
+        delete cleanRow._rowNumber;
 
-      setResult(uploadResult);
+        // Validate and normalize values
+        const errors = validateRow(cleanRow);
+        
+        // Normalize case-sensitive fields
+        if (cleanRow.orden) cleanRow.orden = normalizeValue(cleanRow.orden, ["Local", "Nacional", "Internacional"]);
+        if (cleanRow.tipo) cleanRow.tipo = normalizeValue(cleanRow.tipo, ["Investigación", "Fortalecimiento institucional", "Formación", "Movilidad", "Otro", "Varios"]);
+        if (cleanRow.tipo_moneda) cleanRow.tipo_moneda = normalizeValue(cleanRow.tipo_moneda, ["COP", "USD", "EUR", "GBP", "JPY", "CNY", "BRL", "UYU"]);
+        if (cleanRow.sector_tema) cleanRow.sector_tema = normalizeValue(cleanRow.sector_tema, ["Educación", "Inclusión Social", "Cultura", "TIC", "CT&I+D", "Medio Ambiente", "Otro"]);
+        if (cleanRow.estado_convocatoria) cleanRow.estado_convocatoria = normalizeValue(cleanRow.estado_convocatoria, ["Abierta", "Cerrada"]);
+        if (cleanRow.estado_usm) cleanRow.estado_usm = normalizeValue(cleanRow.estado_usm, ["En revisión", "En preparación", "Presentada", "En subsanación", "Archivada", "Adjudicada", "Rechazada"]);
+
+        return {
+          ...cleanRow,
+          _rowNumber: rowNumber,
+          _selected: errors.length === 0, // Auto-select only valid rows
+          _hasErrors: errors.length > 0,
+          _errors: errors
+        };
+      });
+
+      setProcessedData(processedConvocatorias);
+      setShowPreview(true);
       
-      if (uploadResult.successful > 0) {
-        toast({
-          title: "🎉 Carga completada",
-          description: `${uploadResult.successful} registros cargados exitosamente${uploadResult.failed > 0 ? ` - ${uploadResult.failed} fallidos` : ''}`,
-        });
-        onSuccess();
-      }
+      const validCount = processedConvocatorias.filter(row => !row._hasErrors).length;
+      const errorCount = processedConvocatorias.length - validCount;
+      
+      toast({
+        title: "📋 Archivo procesado",
+        description: `${processedConvocatorias.length} registros encontrados (${validCount} válidos, ${errorCount} con errores)`,
+      });
       
     } catch (error: any) {
-      console.error("Error uploading file:", error);
+      console.error("Error processing file:", error);
       toast({
         title: "💥 Error",
         description: "Error al procesar el archivo: " + error.message,
         variant: "destructive",
       });
     } finally {
-      setUploading(false);
-      setProgress(100);
+      setProcessingFile(false);
     }
+  };
+
+  // Helper function to normalize values
+  const normalizeValue = (value: string, validValues: string[]): string => {
+    const match = validValues.find(v => v.toLowerCase() === value.toLowerCase());
+    return match || value;
+  };
+
+  // Upload selected convocatorias to database
+  const handleUploadToDatabase = async () => {
+    const selectedRows = processedData.filter(row => row._selected && !row._hasErrors);
+    
+    if (selectedRows.length === 0) {
+      toast({
+        title: "⚠️ Advertencia",
+        description: "No hay registros válidos seleccionados para cargar",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setUploading(true);
+    setProgress(0);
+    
+    const uploadResult: UploadResult = {
+      successful: 0,
+      failed: 0,
+      errors: []
+    };
+
+    for (let i = 0; i < selectedRows.length; i++) {
+      const row = selectedRows[i];
+      const rowNumber = row._rowNumber;
+      const cleanRow = { ...row };
+      delete cleanRow._rowNumber;
+      delete cleanRow._selected;
+      delete cleanRow._hasErrors;
+      delete cleanRow._errors;
+      
+      setProgress(((i + 1) / selectedRows.length) * 100);
+      
+      // Limpiar valores vacíos
+      Object.keys(cleanRow).forEach(key => {
+        if (cleanRow[key] === '' || cleanRow[key] === null || cleanRow[key] === undefined) {
+          delete cleanRow[key];
+        }
+      });
+      
+      try {
+        // Create database record with only valid fields
+        const dbRecord: any = {};
+        const validFields = [
+          'nombre_convocatoria', 'entidad', 'orden', 'tipo', 'valor', 'tipo_moneda',
+          'sector_tema', 'componentes_transversales', 'cumplimos_requisitos', 'que_nos_falta',
+          'fecha_limite_aplicacion', 'link_convocatoria', 'estado_convocatoria', 'estado_usm', 'observaciones'
+        ];
+        
+        validFields.forEach(field => {
+          if (cleanRow[field] !== undefined && cleanRow[field] !== null && cleanRow[field] !== '') {
+            dbRecord[field] = cleanRow[field];
+          }
+        });
+
+        const { error } = await supabase
+          .from("convocatorias")
+          .insert(dbRecord);
+          
+        if (error) throw error;
+        uploadResult.successful++;
+      } catch (error: any) {
+        uploadResult.failed++;
+        uploadResult.errors.push({
+          row: rowNumber,
+          error: error.message || "Error desconocido",
+          data: cleanRow
+        });
+      }
+    }
+
+    setResult(uploadResult);
+    setShowPreview(false);
+    
+    if (uploadResult.successful > 0) {
+      toast({
+        title: "🎉 Carga completada",
+        description: `${uploadResult.successful} registros cargados exitosamente${uploadResult.failed > 0 ? ` - ${uploadResult.failed} fallidos` : ''}`,
+      });
+      onSuccess();
+    }
+    
+    setUploading(false);
+    setProgress(100);
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -516,8 +602,28 @@ export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDi
     setResult(null);
     setProgress(0);
     setUploading(false);
+    setProcessedData([]);
+    setShowPreview(false);
+    setProcessingFile(false);
     onOpenChange(false);
   };
+
+  const toggleRowSelection = (index: number) => {
+    const newData = [...processedData];
+    newData[index]._selected = !newData[index]._selected;
+    setProcessedData(newData);
+  };
+
+  const toggleAllSelection = (checked: boolean) => {
+    const newData = processedData.map(row => ({
+      ...row,
+      _selected: checked && !row._hasErrors
+    }));
+    setProcessedData(newData);
+  };
+
+  const selectedCount = processedData.filter(row => row._selected).length;
+  const validCount = processedData.filter(row => !row._hasErrors).length;
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -636,33 +742,195 @@ export const BulkUploadDialog = ({ open, onOpenChange, onSuccess }: BulkUploadDi
 
               <div className="flex gap-3 pt-2">
                 <Button
-                  onClick={handleFileUpload}
-                  disabled={!selectedFile || uploading}
+                  onClick={handleFileProcess}
+                  disabled={!selectedFile || processingFile || uploading}
                   className="hover:scale-105 transition-transform"
                   size="lg"
                 >
-                  {uploading ? (
+                  {processingFile ? (
                     <>
                       <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
                       Procesando...
                     </>
                   ) : (
                     <>
-                      <Upload className="h-4 w-4 mr-2" />
-                      Cargar Convocatorias
+                      <Eye className="h-4 w-4 mr-2" />
+                      Procesar y Revisar
                     </>
                   )}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={handleClose}
-                  disabled={uploading}
+                  disabled={processingFile || uploading}
                 >
                   Cancelar
                 </Button>
               </div>
             </CardContent>
           </Card>
+
+          {/* Preview and Authorization */}
+          {showPreview && processedData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Eye className="h-5 w-5 text-blue-500" />
+                  Autorizar Carga de Convocatorias
+                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    Revisa y autoriza las convocatorias antes de cargarlas a la base de datos
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <Badge variant="outline" className="text-green-600">
+                      {validCount} válidos
+                    </Badge>
+                    <Badge variant="outline" className="text-red-600">
+                      {processedData.length - validCount} con errores
+                    </Badge>
+                    <Badge variant="secondary">
+                      {selectedCount} seleccionados
+                    </Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Checkbox
+                      id="select-all"
+                      checked={selectedCount > 0 && selectedCount === validCount}
+                      onCheckedChange={toggleAllSelection}
+                    />
+                    <Label htmlFor="select-all" className="text-sm font-medium">
+                      Seleccionar todos los registros válidos ({validCount})
+                    </Label>
+                  </div>
+                  
+                  <ScrollArea className="h-96 w-full border rounded-md">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-12">Sel.</TableHead>
+                          <TableHead className="w-16">Fila</TableHead>
+                          <TableHead className="min-w-48">Convocatoria</TableHead>
+                          <TableHead className="min-w-32">Entidad</TableHead>
+                          <TableHead className="w-20">Orden</TableHead>
+                          <TableHead className="w-24">Tipo</TableHead>
+                          <TableHead className="w-32">Valor</TableHead>
+                          <TableHead className="w-20">Estado</TableHead>
+                          <TableHead className="min-w-48">Errores</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {processedData.map((row, index) => (
+                          <TableRow key={index} className={row._hasErrors ? "bg-red-50 dark:bg-red-950/20" : ""}>
+                            <TableCell>
+                              <Checkbox
+                                checked={row._selected}
+                                disabled={row._hasErrors}
+                                onCheckedChange={() => toggleRowSelection(index)}
+                              />
+                            </TableCell>
+                            <TableCell className="font-mono text-xs">
+                              {row._rowNumber}
+                            </TableCell>
+                            <TableCell className="max-w-48">
+                              <div className="truncate text-sm" title={row.nombre_convocatoria}>
+                                {row.nombre_convocatoria || <span className="text-muted-foreground">Sin nombre</span>}
+                              </div>
+                            </TableCell>
+                            <TableCell className="max-w-32">
+                              <div className="truncate text-sm" title={row.entidad}>
+                                {row.entidad || <span className="text-muted-foreground">Sin entidad</span>}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="text-xs">
+                                {row.orden || "N/A"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="text-xs">
+                                {row.tipo || "N/A"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              {row.valor ? (
+                                <span className="text-sm font-mono">
+                                  {new Intl.NumberFormat('es-CO').format(row.valor)} {row.tipo_moneda || 'COP'}
+                                </span>
+                              ) : (
+                                <span className="text-muted-foreground text-xs">Sin valor</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={row._hasErrors ? "destructive" : "default"} className="text-xs">
+                                {row._hasErrors ? "Error" : "Válido"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="max-w-48">
+                              {row._errors.length > 0 ? (
+                                <div className="space-y-1">
+                                  {row._errors.map((error, errorIndex) => (
+                                    <Badge key={errorIndex} variant="destructive" className="text-xs block">
+                                      {error}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              ) : (
+                                <Badge variant="outline" className="text-xs text-green-600">
+                                  ✓ Sin errores
+                                </Badge>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </ScrollArea>
+
+                  {uploading && (
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium">Cargando a la base de datos...</span>
+                        <span className="text-muted-foreground">{Math.round(progress)}%</span>
+                      </div>
+                      <Progress value={progress} className="w-full h-2" />
+                    </div>
+                  )}
+
+                  <div className="flex justify-between pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowPreview(false)}
+                      disabled={uploading}
+                    >
+                      Volver
+                    </Button>
+                    <Button
+                      onClick={handleUploadToDatabase}
+                      disabled={selectedCount === 0 || uploading}
+                      className="hover:scale-105 transition-transform"
+                    >
+                      {uploading ? (
+                        <>
+                          <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
+                          Cargando...
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Cargar {selectedCount} Convocatorias
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Results */}
           {result && (
