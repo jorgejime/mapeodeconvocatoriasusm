@@ -56,9 +56,27 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
   });
   const { toast } = useToast();
 
+  // Clave única para localStorage basada en el modo y ID
+  const storageKey = `convocatoria_form_${mode}_${convocatoria?.id || 'new'}`;
+
+  // Cargar datos del localStorage al inicializar
   useEffect(() => {
+    const savedData = localStorage.getItem(storageKey);
+    
+    if (savedData && mode === "create") {
+      // Solo restaurar para modo crear si no hay datos de convocatoria
+      try {
+        const parsedData = JSON.parse(savedData);
+        setFormData(parsedData);
+        return;
+      } catch (error) {
+        console.error("Error parsing saved form data:", error);
+      }
+    }
+
+    // Cargar datos existentes para editar o clonar
     if (convocatoria && (mode === "edit" || mode === "clone")) {
-      setFormData({
+      const initialData = {
         nombre_convocatoria: convocatoria.nombre_convocatoria,
         entidad: convocatoria.entidad,
         orden: convocatoria.orden || "",
@@ -74,9 +92,20 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
         estado_convocatoria: convocatoria.estado_convocatoria || "",
         estado_usm: convocatoria.estado_usm || "",
         observaciones: convocatoria.observaciones || "",
-      });
+      };
+      
+      setFormData(initialData);
+      // Guardar estado inicial en localStorage
+      localStorage.setItem(storageKey, JSON.stringify(initialData));
     }
-  }, [convocatoria, mode]);
+  }, [convocatoria, mode, storageKey]);
+
+  // Guardar en localStorage cada vez que cambien los datos del formulario
+  useEffect(() => {
+    if (mode === "create" || (formData.nombre_convocatoria || formData.entidad)) {
+      localStorage.setItem(storageKey, JSON.stringify(formData));
+    }
+  }, [formData, storageKey, mode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,6 +139,8 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
         description: `Convocatoria ${mode === "edit" ? "actualizada" : "creada"} correctamente`,
       });
 
+      // Limpiar localStorage después del éxito
+      localStorage.removeItem(storageKey);
       onSuccess();
     } catch (error) {
       console.error("Error saving convocatoria:", error);
@@ -125,6 +156,36 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
 
   const updateField = (field: string, value: any) => {
     setFormData({ ...formData, [field]: value });
+  };
+
+  const handleCancel = () => {
+    // Limpiar localStorage al cancelar
+    localStorage.removeItem(storageKey);
+    onCancel();
+  };
+
+  const clearDraftData = () => {
+    // Función para limpiar datos borrador manualmente
+    localStorage.removeItem(storageKey);
+    if (mode === "create") {
+      setFormData({
+        nombre_convocatoria: "",
+        entidad: "",
+        orden: "",
+        tipo: "",
+        valor: "",
+        tipo_moneda: "COP",
+        sector_tema: "",
+        componentes_transversales: "",
+        cumplimos_requisitos: false,
+        que_nos_falta: "",
+        fecha_limite_aplicacion: "",
+        link_convocatoria: "",
+        estado_convocatoria: "",
+        estado_usm: "",
+        observaciones: "",
+      });
+    }
   };
 
   return (
@@ -369,13 +430,28 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
         </Card>
       </div>
 
-      <div className="flex gap-4 justify-end">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancelar
-        </Button>
-        <Button type="submit" disabled={loading}>
-          {loading ? "Guardando..." : mode === "edit" ? "Actualizar" : "Crear"}
-        </Button>
+      <div className="flex gap-4 justify-between">
+        <div>
+          {mode === "create" && localStorage.getItem(storageKey) && (
+            <Button 
+              type="button" 
+              variant="ghost" 
+              size="sm"
+              onClick={clearDraftData}
+              className="text-muted-foreground"
+            >
+              Limpiar borrador
+            </Button>
+          )}
+        </div>
+        <div className="flex gap-4">
+          <Button type="button" variant="outline" onClick={handleCancel}>
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Guardando..." : mode === "edit" ? "Actualizar" : "Crear"}
+          </Button>
+        </div>
       </div>
     </form>
   );
