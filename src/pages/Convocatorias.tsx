@@ -55,6 +55,7 @@ interface Filters {
 }
 
 export default function Convocatorias() {
+  console.log("Convocatorias: Rendering convocatorias page");
   const [convocatorias, setConvocatorias] = useState<Convocatoria[]>([]);
   const [filteredConvocatorias, setFilteredConvocatorias] = useState<Convocatoria[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +70,26 @@ export default function Convocatorias() {
   const [selectedConvocatoria, setSelectedConvocatoria] = useState<Convocatoria | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState<"create" | "edit" | "clone">("create");
+  const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
+
+  // Get user info and role
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const isAdmin = user?.email === "admin@usm.edu.co";
+  const canManage = isAdmin;
 
   useEffect(() => {
     fetchConvocatorias();
@@ -260,7 +280,7 @@ export default function Convocatorias() {
         <div>
           <h1 className="text-3xl font-bold mb-2">Convocatorias</h1>
           <p className="text-muted-foreground">
-            Gestiona todas las convocatorias del sistema
+            {canManage ? "Gestiona todas las convocatorias del sistema" : "Consulta y filtra las convocatorias disponibles"}
           </p>
         </div>
         <div className="flex gap-2">
@@ -268,10 +288,12 @@ export default function Convocatorias() {
             <Download className="h-4 w-4 mr-2" />
             Exportar CSV
           </Button>
-          <Button onClick={handleCreate}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nueva Convocatoria
-          </Button>
+          {canManage && (
+            <Button onClick={handleCreate}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nueva Convocatoria
+            </Button>
+          )}
         </div>
       </div>
 
@@ -365,27 +387,34 @@ export default function Convocatorias() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleEdit(convocatoria)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleClone(convocatoria)}
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleDelete(convocatoria.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {canManage && (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleEdit(convocatoria)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleClone(convocatoria)}
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleDelete(convocatoria.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                        {!canManage && (
+                          <span className="text-sm text-muted-foreground">Solo lectura</span>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -402,33 +431,35 @@ export default function Convocatorias() {
         </CardContent>
       </Card>
 
-      {/* Form Dialog */}
-      <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {formMode === "create" && "Nueva Convocatoria"}
-              {formMode === "edit" && "Editar Convocatoria"}
-              {formMode === "clone" && "Clonar Convocatoria"}
-            </DialogTitle>
-            <DialogDescription>
-              {formMode === "create" && "Completa el formulario para crear una nueva convocatoria"}
-              {formMode === "edit" && "Modifica los datos de la convocatoria"}
-              {formMode === "clone" && "Crea una nueva convocatoria basada en esta plantilla"}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <ConvocatoriaForm
-            convocatoria={selectedConvocatoria}
-            mode={formMode}
-            onSuccess={() => {
-              setShowForm(false);
-              fetchConvocatorias();
-            }}
-            onCancel={() => setShowForm(false)}
-          />
-        </DialogContent>
-      </Dialog>
+      {/* Form Dialog - Only show for admins */}
+      {canManage && (
+        <Dialog open={showForm} onOpenChange={setShowForm}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>
+                {formMode === "create" && "Nueva Convocatoria"}
+                {formMode === "edit" && "Editar Convocatoria"}
+                {formMode === "clone" && "Clonar Convocatoria"}
+              </DialogTitle>
+              <DialogDescription>
+                {formMode === "create" && "Completa el formulario para crear una nueva convocatoria"}
+                {formMode === "edit" && "Modifica los datos de la convocatoria"}
+                {formMode === "clone" && "Crea una nueva convocatoria basada en esta plantilla"}
+              </DialogDescription>
+            </DialogHeader>
+            
+            <ConvocatoriaForm
+              convocatoria={selectedConvocatoria}
+              mode={formMode}
+              onSuccess={() => {
+                setShowForm(false);
+                fetchConvocatorias();
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
