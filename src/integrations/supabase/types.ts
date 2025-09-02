@@ -26,10 +26,12 @@ export type Database = {
           id: number
           link_convocatoria: string | null
           nombre_convocatoria: string
+          observaciones: string | null
           orden: string | null
           que_nos_falta: string | null
           sector_tema: string | null
           tipo: string | null
+          tipo_moneda: string | null
           updated_at: string | null
           valor: number | null
         }
@@ -44,10 +46,12 @@ export type Database = {
           id?: number
           link_convocatoria?: string | null
           nombre_convocatoria: string
+          observaciones?: string | null
           orden?: string | null
           que_nos_falta?: string | null
           sector_tema?: string | null
           tipo?: string | null
+          tipo_moneda?: string | null
           updated_at?: string | null
           valor?: number | null
         }
@@ -62,12 +66,44 @@ export type Database = {
           id?: number
           link_convocatoria?: string | null
           nombre_convocatoria?: string
+          observaciones?: string | null
           orden?: string | null
           que_nos_falta?: string | null
           sector_tema?: string | null
           tipo?: string | null
+          tipo_moneda?: string | null
           updated_at?: string | null
           valor?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: string
+          role: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
