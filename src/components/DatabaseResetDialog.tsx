@@ -39,7 +39,7 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const REQUIRED_PHRASE = "BORRAR TODO DEFINITIVAMENTE";
+  const REQUIRED_PHRASE = "BORRAR CONVOCATORIAS";
 
   // No mostrar si no es admin
   if (!isAdmin) {
@@ -98,8 +98,8 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
 
       if (data?.success) {
         toast({
-          title: "✅ Base de datos reseteada",
-          description: `Se eliminaron ${data.deletedCount} registros exitosamente`,
+          title: "✅ Convocatorias eliminadas",
+          description: `Se eliminaron ${data.deletedCount} convocatorias exitosamente`,
           duration: 5000,
         });
         
@@ -145,7 +145,7 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
             className="w-full bg-red-600 hover:bg-red-700"
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Resetear Base de Datos
+            Borrar Todas las Convocatorias
           </Button>
         </DialogTrigger>
         
@@ -153,16 +153,17 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
               <AlertTriangle className="h-5 w-5" />
-              ⚠️ PELIGRO - Confirmación Requerida
+              ⚠️ PELIGRO - Borrar Convocatorias
             </DialogTitle>
             <DialogDescription className="space-y-3">
               <p className="font-semibold text-red-700">
-                Esta acción es IRREVERSIBLE y eliminará TODOS los datos:
+                Esta acción es IRREVERSIBLE y eliminará TODAS las convocatorias:
               </p>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 <li>Todas las convocatorias registradas</li>
-                <li>Toda la información asociada</li>
+                <li>Toda la información de convocatorias</li>
                 <li>No se puede deshacer esta operación</li>
+                <li className="text-green-700 font-medium">✓ Los usuarios NO se eliminarán</li>
               </ul>
             </DialogDescription>
           </DialogHeader>
@@ -170,8 +171,8 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
           <Alert className="border-red-200 bg-red-50">
             <AlertTriangle className="h-4 w-4 text-red-600" />
             <AlertDescription className="text-red-800">
-              <strong>ADVERTENCIA FINAL:</strong> Todos los datos se perderán permanentemente.
-              Asegúrate de haber exportado cualquier información importante.
+              <strong>ADVERTENCIA:</strong> Todas las convocatorias se perderán permanentemente.
+              Los usuarios y sus cuentas NO se verán afectados.
             </AlertDescription>
           </Alert>
           
@@ -196,12 +197,12 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-red-600">
               <AlertTriangle className="h-5 w-5" />
-              🚨 CONFIRMACIÓN FINAL
+              🚨 CONFIRMAR BORRADO DE CONVOCATORIAS
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-4">
                 <p className="font-semibold">
-                  Para confirmar que realmente deseas eliminar TODOS los datos, 
+                  Para confirmar que realmente deseas eliminar TODAS las convocatorias, 
                   completa los siguientes campos:
                 </p>
                 
@@ -240,7 +241,8 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
                   <AlertTriangle className="h-4 w-4 text-red-600" />
                   <AlertDescription className="text-red-800 text-sm">
                     Una vez ejecutada, esta acción no se puede deshacer. 
-                    Todos los datos serán eliminados permanentemente.
+                    Todas las convocatorias serán eliminadas permanentemente.
+                    Los usuarios NO se eliminarán.
                   </AlertDescription>
                 </Alert>
               </div>
@@ -268,7 +270,7 @@ export function DatabaseResetDialog({ userEmail, isAdmin }: DatabaseResetDialogP
               ) : (
                 <>
                   <Trash2 className="h-4 w-4 mr-2" />
-                  ELIMINAR TODO
+                  BORRAR CONVOCATORIAS
                 </>
               )}
             </AlertDialogAction>

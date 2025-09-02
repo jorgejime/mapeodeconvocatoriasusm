@@ -77,7 +77,7 @@ Deno.serve(async (req) => {
     const body: ResetRequest = await req.json();
     
     // Validate confirmation phrase
-    const expectedPhrase = 'BORRAR TODO DEFINITIVAMENTE';
+    const expectedPhrase = 'BORRAR CONVOCATORIAS';
     if (body.confirmationPhrase !== expectedPhrase) {
       console.log('Invalid confirmation phrase provided');
       return new Response(
