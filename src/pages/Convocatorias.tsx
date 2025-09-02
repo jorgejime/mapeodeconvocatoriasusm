@@ -359,212 +359,173 @@ export default function Convocatorias() {
             </Badge>
           )}
         </CardHeader>
-        <CardContent className="p-0">
-          {/* Mobile Card View */}
-          <div className="block lg:hidden">
+        <CardContent className="p-4">
+          {/* Grid Card View - 3 Columns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {filteredConvocatorias.map((convocatoria) => (
-              <div 
+              <Card 
                 key={convocatoria.id} 
-                className="border-b border-border/50 p-4 hover:bg-muted/30 transition-colors cursor-pointer"
+                className="h-fit hover:shadow-md transition-all duration-200 border-border/50 hover:border-border cursor-pointer group"
                 onClick={() => handleViewDetail(convocatoria)}
               >
-                <div className="space-y-3">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-foreground truncate">{convocatoria.nombre_convocatoria}</h3>
-                      <p className="text-sm text-muted-foreground">{convocatoria.entidad}</p>
-                      {convocatoria.tipo && (
-                        <Badge variant="outline" className="mt-1 text-xs">{convocatoria.tipo}</Badge>
-                      )}
-                    </div>
+                <CardHeader className="pb-3">
+                  <div className="flex justify-between items-start gap-2">
+                    <CardTitle className="text-sm font-semibold line-clamp-2 leading-5">
+                      {convocatoria.nombre_convocatoria}
+                    </CardTitle>
                     {convocatoria.valor && (
-                      <div className="text-right ml-2">
-                        <p className="text-sm font-medium">
+                      <div className="text-right shrink-0">
+                        <p className="text-xs font-medium text-primary">
                           {convocatoria.tipo_moneda} ${convocatoria.valor.toLocaleString()}
                         </p>
                       </div>
                     )}
                   </div>
-                  
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-xs text-muted-foreground line-clamp-1">
+                    {convocatoria.entidad}
+                  </p>
+                </CardHeader>
+                
+                <CardContent className="space-y-3 pb-3">
+                  {/* Estado y Tipo */}
+                  <div className="flex flex-wrap gap-1">
                     {convocatoria.estado_convocatoria && (
-                      <Badge variant={convocatoria.estado_convocatoria === "Abierta" ? "default" : "secondary"}>
+                      <Badge 
+                        variant={convocatoria.estado_convocatoria === "Abierta" ? "default" : "secondary"}
+                        className="text-xs"
+                      >
                         {convocatoria.estado_convocatoria}
                       </Badge>
                     )}
-                    {convocatoria.fecha_limite_aplicacion && (
-                      <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)}>
-                        {getStatusText(convocatoria.fecha_limite_aplicacion)}
-                      </StatusBadge>
+                    {convocatoria.tipo && (
+                      <Badge variant="outline" className="text-xs">
+                        {convocatoria.tipo}
+                      </Badge>
                     )}
-                    {convocatoria.cumplimos_requisitos !== null && (
-                      <Badge 
-                        variant={convocatoria.cumplimos_requisitos ? "default" : "secondary"}
-                        className={convocatoria.cumplimos_requisitos ? "bg-success text-success-foreground" : ""}
-                      >
-                        {convocatoria.cumplimos_requisitos ? "Cumple" : "No cumple"}
+                    {convocatoria.orden && (
+                      <Badge variant="secondary" className="text-xs">
+                        {convocatoria.orden}
                       </Badge>
                     )}
                   </div>
                   
-                  <div className="flex gap-2 justify-end">
-                    {canManage ? (
-                      <>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEdit(convocatoria);
-                          }} 
-                          className="hover-scale"
-                        >
-                          <Edit className="h-3 w-3" />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleClone(convocatoria);
-                          }} 
-                          className="hover-scale"
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(convocatoria.id);
-                          }} 
-                          className="hover-scale"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">Clic para ver detalles</span>
-                    )}
+                  {/* Fecha límite */}
+                  {convocatoria.fecha_limite_aplicacion && (
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-muted-foreground">Fecha límite:</span>
+                      <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)}>
+                        {new Date(convocatoria.fecha_limite_aplicacion).toLocaleDateString()}
+                      </StatusBadge>
+                    </div>
+                  )}
+                  
+                  {/* Sector/Tema */}
+                  {convocatoria.sector_tema && (
+                    <div className="text-xs">
+                      <span className="text-muted-foreground">Sector: </span>
+                      <span className="text-foreground">{convocatoria.sector_tema}</span>
+                    </div>
+                  )}
+                  
+                  {/* Componentes transversales */}
+                  {convocatoria.componentes_transversales && (
+                    <div className="text-xs">
+                      <span className="text-muted-foreground">Componentes: </span>
+                      <span className="text-foreground line-clamp-2">{convocatoria.componentes_transversales}</span>
+                    </div>
+                  )}
+                  
+                  {/* Cumplimos requisitos */}
+                  {convocatoria.cumplimos_requisitos !== null && (
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-muted-foreground">Cumple requisitos:</span>
+                      <Badge 
+                        variant={convocatoria.cumplimos_requisitos ? "default" : "secondary"}
+                        className={`text-xs ${convocatoria.cumplimos_requisitos ? "bg-success text-success-foreground" : ""}`}
+                      >
+                        {convocatoria.cumplimos_requisitos ? "Sí" : "No"}
+                      </Badge>
+                    </div>
+                  )}
+                  
+                  {/* Estado USM */}
+                  {convocatoria.estado_usm && (
+                    <div className="text-xs">
+                      <span className="text-muted-foreground">Estado USM: </span>
+                      <span className="text-foreground">{convocatoria.estado_usm}</span>
+                    </div>
+                  )}
+                  
+                  {/* Qué nos falta */}
+                  {convocatoria.que_nos_falta && (
+                    <div className="text-xs">
+                      <span className="text-muted-foreground">Qué nos falta: </span>
+                      <span className="text-foreground line-clamp-2">{convocatoria.que_nos_falta}</span>
+                    </div>
+                  )}
+                  
+                  {/* Link de convocatoria */}
+                  {convocatoria.link_convocatoria && (
+                    <div className="text-xs">
+                      <a 
+                        href={convocatoria.link_convocatoria}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 text-primary hover:underline"
+                      >
+                        <span>Ver convocatoria</span>
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
+                        </svg>
+                      </a>
+                    </div>
+                  )}
+                </CardContent>
+                
+                {/* Botones de acción */}
+                {canManage && (
+                  <div className="flex gap-1 p-3 pt-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(convocatoria);
+                      }} 
+                      className="flex-1 h-8 hover-scale"
+                      title="Editar"
+                    >
+                      <Edit className="h-3 w-3" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleClone(convocatoria);
+                      }} 
+                      className="flex-1 h-8 hover-scale"
+                      title="Clonar"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(convocatoria.id);
+                      }} 
+                      className="flex-1 h-8 hover-scale text-destructive hover:text-destructive"
+                      title="Eliminar"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
                   </div>
-                </div>
-              </div>
+                )}
+              </Card>
             ))}
-          </div>
-
-          {/* Desktop Table View */}
-          <div className="hidden lg:block overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="font-semibold">Nombre</TableHead>
-                  <TableHead className="font-semibold">Entidad</TableHead>
-                  <TableHead className="font-semibold">Valor</TableHead>
-                  <TableHead className="font-semibold">Estado</TableHead>
-                  <TableHead className="font-semibold">Fecha Límite</TableHead>
-                  <TableHead className="font-semibold">Cumple Req.</TableHead>
-                  <TableHead className="font-semibold text-center">Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredConvocatorias.map((convocatoria, index) => (
-                  <TableRow 
-                    key={convocatoria.id} 
-                    className="hover:bg-muted/30 transition-colors cursor-pointer"
-                    style={{animationDelay: `${index * 50}ms`}}
-                    onClick={() => handleViewDetail(convocatoria)}
-                  >
-                    <TableCell>
-                      <div className="space-y-1">
-                        <p className="font-medium text-foreground">{convocatoria.nombre_convocatoria}</p>
-                        {convocatoria.tipo && (
-                          <Badge variant="outline" className="text-xs">{convocatoria.tipo}</Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{convocatoria.entidad}</TableCell>
-                    <TableCell>
-                      {convocatoria.valor && (
-                        <span className="font-medium">
-                          {convocatoria.tipo_moneda} ${convocatoria.valor.toLocaleString()}
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {convocatoria.estado_convocatoria && (
-                        <Badge 
-                          variant={convocatoria.estado_convocatoria === "Abierta" ? "default" : "secondary"}
-                          className="hover-scale"
-                        >
-                          {convocatoria.estado_convocatoria}
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {convocatoria.fecha_limite_aplicacion && (
-                        <StatusBadge status={getStatusColor(convocatoria.fecha_limite_aplicacion)} className="hover-scale">
-                          {getStatusText(convocatoria.fecha_limite_aplicacion)}
-                        </StatusBadge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {convocatoria.cumplimos_requisitos !== null && (
-                        <Badge 
-                          variant={convocatoria.cumplimos_requisitos ? "default" : "secondary"}
-                          className={`hover-scale ${convocatoria.cumplimos_requisitos ? "bg-success text-success-foreground" : ""}`}
-                        >
-                          {convocatoria.cumplimos_requisitos ? "Sí" : "No"}
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="flex gap-1 justify-center">
-                        {canManage ? (
-                          <>
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEdit(convocatoria);
-                              }} 
-                              className="hover-scale"
-                            >
-                              <Edit className="h-3 w-3" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleClone(convocatoria);
-                              }} 
-                              className="hover-scale"
-                            >
-                              <Copy className="h-3 w-3" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDelete(convocatoria.id);
-                              }} 
-                              className="hover-scale"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          </>
-                        ) : (
-                          <span className="text-xs text-muted-foreground">Clic para detalles</span>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
           </div>
 
           {filteredConvocatorias.length === 0 && (
