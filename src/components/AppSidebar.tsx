@@ -1,5 +1,6 @@
 import { useLocation, NavLink } from "react-router-dom";
 import { Home, FileText, BarChart3, Settings, LogOut, User } from "lucide-react";
+import logoUsm from "@/assets/logo-usm.png";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -76,12 +77,27 @@ export function AppSidebar() {
       <SidebarTrigger className="m-2 self-end" />
       
       <SidebarHeader>
-        {!collapsed && (
-          <div className="px-4 py-2 space-y-2">
-            <h2 className="text-lg font-semibold text-foreground">
-              Convocatorias USM
-            </h2>
-            <div className="flex items-center gap-2">
+        <div className="px-4 py-4 space-y-3">
+          <div className="flex items-center gap-3">
+            <img 
+              src={logoUsm} 
+              alt="Logo USM" 
+              className={collapsed ? "h-8 w-8 mx-auto" : "h-10 w-10"} 
+            />
+            {!collapsed && (
+              <div>
+                <h2 className="text-sm font-bold text-foreground leading-tight">
+                  MAPEO DE CONVOCATORIAS USM
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  Institución Universitaria de Santa Marta
+                </p>
+              </div>
+            )}
+          </div>
+          
+          {!collapsed && (
+            <div className="flex items-center gap-2 pt-2 border-t">
               <User className="h-4 w-4" />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{user?.email}</span>
@@ -90,8 +106,8 @@ export function AppSidebar() {
                 </Badge>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </SidebarHeader>
       
       <SidebarContent>
