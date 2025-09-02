@@ -58,7 +58,7 @@ export default function Convocatorias() {
     busqueda: "",
     estadoConvocatoria: [],
     estadoUSM: [],
-    cumpleRequisitos: "",
+    cumpleRequisitos: "todos",
     valorMinimo: "",
     valorMaximo: "",
     entidades: [],
@@ -152,7 +152,7 @@ export default function Convocatorias() {
     }
 
     // Filtro por cumplimiento de requisitos
-    if (advancedFilters.cumpleRequisitos) {
+    if (advancedFilters.cumpleRequisitos && advancedFilters.cumpleRequisitos !== "todos") {
       if (advancedFilters.cumpleRequisitos === "si") {
         filtered = filtered.filter((c) => c.cumplimos_requisitos === true);
       } else if (advancedFilters.cumpleRequisitos === "no") {
@@ -223,7 +223,7 @@ export default function Convocatorias() {
     if (advancedFilters.busqueda) count++;
     if (advancedFilters.estadoConvocatoria.length > 0) count++;
     if (advancedFilters.estadoUSM.length > 0) count++;
-    if (advancedFilters.cumpleRequisitos) count++;
+    if (advancedFilters.cumpleRequisitos && advancedFilters.cumpleRequisitos !== "todos") count++;
     if (advancedFilters.valorMinimo) count++;
     if (advancedFilters.valorMaximo) count++;
     if (advancedFilters.entidades.length > 0) count++;
@@ -240,7 +240,7 @@ export default function Convocatorias() {
       busqueda: "",
       estadoConvocatoria: [],
       estadoUSM: [],
-      cumpleRequisitos: "",
+      cumpleRequisitos: "todos",
       valorMinimo: "",
       valorMaximo: "",
       entidades: [],

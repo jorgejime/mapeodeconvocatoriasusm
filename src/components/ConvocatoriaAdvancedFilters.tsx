@@ -115,8 +115,12 @@ export function ConvocatoriaAdvancedFilters({
     if (value && Array.isArray(filters[key])) {
       toggleArrayFilter(key, value);
     } else {
-      updateFilter(key, key === 'fechaLimiteDesde' || key === 'fechaLimiteHasta' ? null : 
-                    Array.isArray(filters[key]) ? [] : '');
+      if (key === 'cumpleRequisitos') {
+        updateFilter(key, 'todos');
+      } else {
+        updateFilter(key, key === 'fechaLimiteDesde' || key === 'fechaLimiteHasta' ? null : 
+                      Array.isArray(filters[key]) ? [] : '');
+      }
     }
   };
 
@@ -212,9 +216,9 @@ export function ConvocatoriaAdvancedFilters({
             </Badge>
           ))}
           
-          {filters.cumpleRequisitos && (
+          {filters.cumpleRequisitos && filters.cumpleRequisitos !== "todos" && (
             <Badge variant="secondary" className="gap-1">
-              Requisitos: {filters.cumpleRequisitos === 'si' ? 'Cumple' : 'No cumple'}
+              Requisitos: {filters.cumpleRequisitos === 'si' ? 'Cumple' : filters.cumpleRequisitos === 'no' ? 'No cumple' : 'Pendiente'}
               <X 
                 className="h-3 w-3 cursor-pointer"
                 onClick={() => removeFilter('cumpleRequisitos')}
@@ -284,7 +288,6 @@ export function ConvocatoriaAdvancedFilters({
 
             <Separator />
 
-            {/* Cumplimiento de requisitos */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">Cumplimiento de requisitos</Label>
               <Select value={filters.cumpleRequisitos} onValueChange={(value) => updateFilter('cumpleRequisitos', value)}>
@@ -292,7 +295,7 @@ export function ConvocatoriaAdvancedFilters({
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos</SelectItem>
+                  <SelectItem value="todos">Todos</SelectItem>
                   <SelectItem value="si">✅ Cumplimos requisitos</SelectItem>
                   <SelectItem value="no">❌ No cumplimos requisitos</SelectItem>
                   <SelectItem value="pendiente">⏳ Pendiente de evaluar</SelectItem>
@@ -332,29 +335,24 @@ export function ConvocatoriaAdvancedFilters({
             {/* Entidades */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">Entidades</Label>
-              <Select 
-                value="" 
-                onValueChange={(value) => toggleArrayFilter('entidades', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={`${filters.entidades.length > 0 ? `${filters.entidades.length} seleccionadas` : 'Seleccionar entidades...'}`} />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableEntidades.map(entidad => (
-                    <SelectItem key={entidad} value={entidad}>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={filters.entidades.includes(entidad)}
-                          readOnly
-                          className="rounded border-gray-300"
-                        />
-                        <span>{entidad}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="max-h-40 overflow-y-auto border rounded-md p-2 space-y-2 bg-background">
+                {availableEntidades.map(entidad => (
+                  <label key={entidad} className="flex items-center space-x-2 cursor-pointer hover:bg-muted/50 p-1 rounded">
+                    <input
+                      type="checkbox"
+                      checked={filters.entidades.includes(entidad)}
+                      onChange={() => toggleArrayFilter('entidades', entidad)}
+                      className="rounded border-gray-300"
+                    />
+                    <span className="text-sm">{entidad}</span>
+                  </label>
+                ))}
+                {availableEntidades.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-2">
+                    No hay entidades disponibles
+                  </p>
+                )}
+              </div>
               {filters.entidades.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
                   {filters.entidades.map(entidad => (
