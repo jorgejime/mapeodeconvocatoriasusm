@@ -49,7 +49,7 @@ export function AppSidebar() {
         setRole("administrador");
       } else if (user?.email === "rectoria@usm.edu.co") {
         setIsAdmin(false);
-        setRole("usuario");
+        setRole("centro de información");
       } else {
         setIsAdmin(false);
         setRole("usuario");
@@ -131,9 +131,11 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {isAdmin && (
+        {(isAdmin || user?.email === "rectoria@usm.edu.co") && (
           <SidebarGroup>
-            <SidebarGroupLabel>Administrador</SidebarGroupLabel>
+            <SidebarGroupLabel>
+              {isAdmin ? "Administrador" : "Centro de Información"}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {adminMenuItems.map((item) => (

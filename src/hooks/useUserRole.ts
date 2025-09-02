@@ -52,6 +52,10 @@ export const useUserRole = (user: User | null) => {
     return user?.email === "rectoria@usm.edu.co";
   };
 
+  const isInfoCenter = () => {
+    return user?.email === "rectoria@usm.edu.co";
+  };
+
   const canManage = () => {
     return isAdmin();
   };
@@ -60,12 +64,18 @@ export const useUserRole = (user: User | null) => {
     return isAdmin() || isUser();
   };
 
+  const canViewAll = () => {
+    return isAdmin() || isInfoCenter();
+  };
+
   return {
     profile,
     loading,
     isAdmin: isAdmin(),
     isUser: isUser(),
+    isInfoCenter: isInfoCenter(),
     canManage: canManage(),
     canView: canView(),
+    canViewAll: canViewAll(),
   };
 };
