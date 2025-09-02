@@ -33,7 +33,14 @@ export const AuthForm = () => {
   };
   return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-accent/20 to-primary/5 p-4">
       <Card className="w-full max-w-md shadow-xl border-border/20">
-        <CardHeader className="space-y-1 text-center">
+        <CardHeader className="space-y-4 text-center">
+          <div className="flex justify-center">
+            <img 
+              src="/src/assets/logo-usm.png" 
+              alt="Logo USM" 
+              className="h-20 w-auto"
+            />
+          </div>
           <CardTitle className="text-2xl font-bold">Mapeo de Convocatorias USM</CardTitle>
           <CardDescription>
             Ingresa con tus credenciales institucionales
