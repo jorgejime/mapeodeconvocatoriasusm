@@ -1,35 +1,11 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  Legend
-} from "recharts";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Calendar, 
-  DollarSign, 
-  FileText, 
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Building2
-} from "lucide-react";
+import { XCircle } from "lucide-react";
+import StatsCards from "@/components/stats/StatsCards";
+import CurrencyStats from "@/components/stats/CurrencyStats";
+import ChartsGrid from "@/components/stats/ChartsGrid";
+import SummaryCards from "@/components/stats/SummaryCards";
 
 interface Convocatoria {
   id: number;
@@ -54,30 +30,42 @@ interface Convocatoria {
 
 interface StatsData {
   totalConvocatorias: number;
-  totalValor: number;
   convocatoriasAbiertas: number;
   cumplimosRequisitos: number;
+  proximasVencer: number;
   porEstado: Array<{ name: string; value: number; color: string }>;
   porSector: Array<{ name: string; value: number }>;
-  porMes: Array<{ name: string; convocatorias: number; valor: number }>;
+  porMes: Array<{ name: string; convocatorias: number }>;
   porEntidad: Array<{ name: string; value: number }>;
-  proximasVencer: number;
+  currencyStats: Array<{ currency: string; total: number; count: number; average: number }>;
+  sectoresUnicos: number;
+  entidadesUnicas: number;
 }
 
-const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', '#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00ff00'];
+const CHART_COLORS = [
+  'hsl(var(--primary))',
+  'hsl(var(--secondary))', 
+  'hsl(var(--success))',
+  'hsl(var(--warning))',
+  'hsl(var(--danger))',
+  '#8884d8',
+  '#82ca9d'
+];
 
 export default function Estadisticas() {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<StatsData>({
     totalConvocatorias: 0,
-    totalValor: 0,
     convocatoriasAbiertas: 0,
     cumplimosRequisitos: 0,
+    proximasVencer: 0,
     porEstado: [],
     porSector: [],
     porMes: [],
     porEntidad: [],
-    proximasVencer: 0
+    currencyStats: [],
+    sectoresUnicos: 0,
+    entidadesUnicas: 0
   });
   const [user, setUser] = useState<any>(null);
 
@@ -127,10 +115,6 @@ export default function Estadisticas() {
 
   const calculateStats = (convocatorias: Convocatoria[]) => {
     const total = convocatorias.length;
-    const totalValor = convocatorias
-      .filter(c => c.valor && c.tipo_moneda === 'COP')
-      .reduce((sum, c) => sum + (c.valor || 0), 0);
-
     const abiertas = convocatorias.filter(c => c.estado_convocatoria === "Abierta").length;
     const cumplimos = convocatorias.filter(c => c.cumplimos_requisitos === true).length;
 
@@ -144,7 +128,7 @@ export default function Estadisticas() {
     const porEstado = Object.entries(estadoCount).map(([name, value], index) => ({
       name,
       value,
-      color: COLORS[index % COLORS.length]
+      color: CHART_COLORS[index % CHART_COLORS.length]
     }));
 
     // Por sector
@@ -160,22 +144,29 @@ export default function Estadisticas() {
       .slice(0, 10);
 
     // Por mes de creación
-    const mesCount: Record<string, { convocatorias: number; valor: number }> = {};
+    const mesCount: Record<string, { convocatorias: number }> = {};
     convocatorias.forEach(c => {
       const fecha = new Date(c.created_at);
       const mes = fecha.toLocaleDateString('es-ES', { month: 'short', year: '2-digit' });
       if (!mesCount[mes]) {
-        mesCount[mes] = { convocatorias: 0, valor: 0 };
+        mesCount[mes] = { convocatorias: 0 };
       }
       mesCount[mes].convocatorias += 1;
-      if (c.valor && c.tipo_moneda === 'COP') {
-        mesCount[mes].valor += c.valor;
-      }
     });
 
     const porMes = Object.entries(mesCount)
       .map(([name, data]) => ({ name, ...data }))
-      .sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime())
+      .sort((a, b) => {
+        const [monthA, yearA] = a.name.split(' ');
+        const [monthB, yearB] = b.name.split(' ');
+        const monthNumA = getMonthNumber(monthA);
+        const monthNumB = getMonthNumber(monthB);
+        const yearNumA = parseInt(`20${yearA}`);
+        const yearNumB = parseInt(`20${yearB}`);
+        const dateA = new Date(yearNumA, monthNumA);
+        const dateB = new Date(yearNumB, monthNumB);
+        return dateA.getTime() - dateB.getTime();
+      })
       .slice(-6);
 
     // Por entidad
@@ -188,6 +179,27 @@ export default function Estadisticas() {
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 8);
+
+    // Estadísticas por moneda
+    const currencyStats: Record<string, { total: number; count: number; values: number[] }> = {};
+    convocatorias.forEach(c => {
+      if (c.valor && c.tipo_moneda) {
+        const currency = c.tipo_moneda;
+        if (!currencyStats[currency]) {
+          currencyStats[currency] = { total: 0, count: 0, values: [] };
+        }
+        currencyStats[currency].total += c.valor;
+        currencyStats[currency].count += 1;
+        currencyStats[currency].values.push(c.valor);
+      }
+    });
+
+    const currencyStatsArray = Object.entries(currencyStats).map(([currency, data]) => ({
+      currency,
+      total: data.total,
+      count: data.count,
+      average: data.total / data.count
+    })).sort((a, b) => b.count - a.count);
 
     // Próximas a vencer (30 días)
     const hoy = new Date();
@@ -202,15 +214,22 @@ export default function Estadisticas() {
 
     setStats({
       totalConvocatorias: total,
-      totalValor,
       convocatoriasAbiertas: abiertas,
       cumplimosRequisitos: cumplimos,
+      proximasVencer,
       porEstado,
       porSector,
       porMes,
       porEntidad,
-      proximasVencer
+      currencyStats: currencyStatsArray,
+      sectoresUnicos: porSector.length,
+      entidadesUnicas: porEntidad.length
     });
+  };
+
+  const getMonthNumber = (monthName: string): number => {
+    const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    return months.indexOf(monthName.toLowerCase());
   };
 
   if (loading) {
@@ -234,237 +253,56 @@ export default function Estadisticas() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-6 animate-fade-in">
+    <div className="space-y-8 p-4 md:p-6 animate-fade-in">
+      {/* Encabezado */}
       <div className="space-y-2">
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground">Estadísticas del Sistema</h1>
-        <p className="text-sm md:text-base text-muted-foreground">
-          Análisis detallado y métricas de las convocatorias
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          Estadísticas del Sistema
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Dashboard ejecutivo con análisis completo de convocatorias por moneda
         </p>
       </div>
 
       {/* Métricas principales */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Convocatorias</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalConvocatorias}</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1" />
-              Registradas en el sistema
-            </div>
-          </CardContent>
-        </Card>
+      <StatsCards 
+        totalConvocatorias={stats.totalConvocatorias}
+        convocatoriasAbiertas={stats.convocatoriasAbiertas}
+        proximasVencer={stats.proximasVencer}
+        cumplimosRequisitos={stats.cumplimosRequisitos}
+      />
 
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Valor Total</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ${(stats.totalValor / 1000000).toFixed(1)}M
-            </div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1" />
-              COP en convocatorias
-            </div>
-          </CardContent>
-        </Card>
+      {/* Estadísticas por Moneda */}
+      {stats.currencyStats.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold text-foreground">Análisis por Moneda</h2>
+          <CurrencyStats currencyStats={stats.currencyStats} />
+        </div>
+      )}
 
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Convocatorias Abiertas</CardTitle>
-            <CheckCircle className="h-4 w-4 text-success" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-success">{stats.convocatoriasAbiertas}</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <Calendar className="h-3 w-3 mr-1" />
-              Disponibles para aplicar
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Próximas a Vencer</CardTitle>
-            <AlertCircle className="h-4 w-4 text-warning" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-warning">{stats.proximasVencer}</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <Clock className="h-3 w-3 mr-1" />
-              En los próximos 30 días
-            </div>
-          </CardContent>
-        </Card>
+      {/* Gráficos principales */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold text-foreground">Análisis Gráfico</h2>
+        <ChartsGrid 
+          data={{
+            porEstado: stats.porEstado,
+            porSector: stats.porSector,
+            porMes: stats.porMes,
+            porEntidad: stats.porEntidad
+          }}
+        />
       </div>
 
-      {/* Gráficos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Distribución por Estado */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart className="h-5 w-5" />
-              Distribución por Estado
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={stats.porEstado}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {stats.porEstado.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Top Sectores */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5" />
-              Top 10 Sectores
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stats.porSector} layout="horizontal">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis dataKey="name" type="category" width={120} />
-                <Tooltip />
-                <Bar dataKey="value" fill="hsl(var(--primary))" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Tendencia por Mes */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Tendencia Últimos 6 Meses
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={stats.porMes}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis yAxisId="convocatorias" />
-                <YAxis yAxisId="valor" orientation="right" />
-                <Tooltip 
-                  formatter={(value, name) => [
-                    name === 'valor' ? `$${(Number(value) / 1000000).toFixed(1)}M` : value,
-                    name === 'convocatorias' ? 'Convocatorias' : 'Valor (COP)'
-                  ]}
-                />
-                <Legend />
-                <Bar yAxisId="convocatorias" dataKey="convocatorias" fill="hsl(var(--primary))" />
-                <Line yAxisId="valor" type="monotone" dataKey="valor" stroke="hsl(var(--secondary))" strokeWidth={3} />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Top Entidades */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5" />
-              Top 8 Entidades
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stats.porEntidad}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="hsl(var(--primary))" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Métricas adicionales */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Cumplimiento de Requisitos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span>Cumplimos requisitos:</span>
-                <Badge variant="default" className="bg-success text-success-foreground">
-                  {stats.cumplimosRequisitos} ({((stats.cumplimosRequisitos / stats.totalConvocatorias) * 100).toFixed(1)}%)
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>No cumplimos requisitos:</span>
-                <Badge variant="secondary">
-                  {stats.totalConvocatorias - stats.cumplimosRequisitos} ({(((stats.totalConvocatorias - stats.cumplimosRequisitos) / stats.totalConvocatorias) * 100).toFixed(1)}%)
-                </Badge>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div 
-                  className="bg-success h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${(stats.cumplimosRequisitos / stats.totalConvocatorias) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Resumen Rápido</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Convocatorias activas:</span>
-                <span className="font-medium">{stats.convocatoriasAbiertas}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Valor promedio:</span>
-                <span className="font-medium">
-                  ${stats.totalConvocatorias > 0 ? (stats.totalValor / stats.totalConvocatorias / 1000000).toFixed(1) : 0}M COP
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Sectores únicos:</span>
-                <span className="font-medium">{stats.porSector.length}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Entidades únicas:</span>
-                <span className="font-medium">{stats.porEntidad.length}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Resumen ejecutivo */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold text-foreground">Resumen Ejecutivo</h2>
+        <SummaryCards 
+          totalConvocatorias={stats.totalConvocatorias}
+          cumplimosRequisitos={stats.cumplimosRequisitos}
+          convocatoriasAbiertas={stats.convocatoriasAbiertas}
+          sectoresUnicos={stats.sectoresUnicos}
+          entidadesUnicas={stats.entidadesUnicas}
+        />
       </div>
     </div>
   );
