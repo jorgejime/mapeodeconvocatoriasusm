@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import logoUsm from "@/assets/logo-usm.png";
 export const AuthForm = () => {
   console.log("AuthForm: Rendering auth form");
   const [loading, setLoading] = useState(false);
@@ -36,7 +37,7 @@ export const AuthForm = () => {
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
             <img 
-              src="/src/assets/logo-usm.png" 
+              src={logoUsm} 
               alt="Logo USM" 
               className="h-20 w-auto"
             />
