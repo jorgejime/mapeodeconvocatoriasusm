@@ -133,29 +133,29 @@ export default function QuickActions({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
             {actions.map((action) => {
               const Icon = action.icon;
               return (
-                  <Button
+                <Button
                   key={action.title}
                   variant={action.variant}
                   onClick={action.onClick}
                   disabled={action.disabled}
-                  className="h-auto p-3 flex flex-col items-center space-y-2 relative"
+                  className="h-auto p-2 sm:p-3 flex flex-col items-center space-y-1 sm:space-y-2 relative min-h-[80px] sm:min-h-[100px]"
                 >
                   {action.badge && (
                     <Badge 
                       variant={action.badgeVariant || "default"} 
-                      className="absolute -top-2 -right-2 text-xs"
+                      className="absolute -top-1 -right-1 text-xs h-5 w-5 flex items-center justify-center p-0"
                     >
                       {action.badge}
                     </Badge>
                   )}
-                  <Icon className="h-6 w-6 mb-1" />
-                  <div className="text-center space-y-1 px-1">
-                    <p className="text-sm font-medium leading-tight">{action.title}</p>
-                    <p className="text-xs text-muted-foreground leading-tight line-clamp-2">
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6 mb-1 flex-shrink-0" />
+                  <div className="text-center space-y-0.5 px-1 flex-1 flex flex-col justify-center">
+                    <p className="text-xs sm:text-sm font-medium leading-tight">{action.title}</p>
+                    <p className="text-xs text-muted-foreground leading-tight line-clamp-2 hidden sm:block">
                       {action.description}
                     </p>
                   </div>
@@ -175,27 +175,27 @@ export default function QuickActions({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {priorities.map((priority) => (
               <div
                 key={priority.title}
-                className={`p-3 rounded-lg border ${getColorClasses(priority.color)}`}
+                className={`p-2 sm:p-3 rounded-lg border ${getColorClasses(priority.color)}`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-medium">{priority.title}</h4>
-                      <Badge variant="secondary" className="text-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1 sm:gap-2 mb-1">
+                      <h4 className="font-medium text-sm sm:text-base truncate">{priority.title}</h4>
+                      <Badge variant="secondary" className="text-xs flex-shrink-0">
                         {priority.count}
                       </Badge>
                     </div>
-                    <p className="text-sm opacity-80">{priority.description}</p>
+                    <p className="text-xs sm:text-sm opacity-80 line-clamp-2">{priority.description}</p>
                   </div>
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={onNavigateToConvocatorias}
-                    className="shrink-0"
+                    className="shrink-0 text-xs sm:text-sm px-2 sm:px-3"
                   >
                     {priority.action}
                   </Button>
@@ -205,8 +205,8 @@ export default function QuickActions({
           </div>
 
           {priorities.every(p => p.count === 0) && (
-            <div className="text-center py-6 text-muted-foreground">
-              <p className="text-sm">¡Excelente! No hay tareas urgentes pendientes.</p>
+            <div className="text-center py-4 sm:py-6 text-muted-foreground">
+              <p className="text-xs sm:text-sm">¡Excelente! No hay tareas urgentes pendientes.</p>
             </div>
           )}
         </CardContent>
