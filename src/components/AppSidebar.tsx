@@ -1,5 +1,5 @@
 import { useLocation, NavLink } from "react-router-dom";
-import { Home, FileText, BarChart3, Settings, LogOut, User } from "lucide-react";
+import { Home, FileText, BarChart3, Settings, LogOut, User, BookOpen } from "lucide-react";
 import logoUsm from "@/assets/logo-usm.png";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 const menuItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home },
   { title: "Convocatorias", url: "/convocatorias", icon: FileText },
+  { title: "Manual de Uso", url: "/manual", icon: BookOpen },
 ];
 
 const adminMenuItems = [
