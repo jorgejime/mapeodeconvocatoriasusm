@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -80,17 +81,31 @@ export default function Estadisticas() {
   });
   const [user, setUser] = useState<any>(null);
 
+  // Get user info and role
   useEffect(() => {
-    // Verificar si es admin
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
-      if (user?.email === "admin@usm.edu.co") {
-        fetchStats();
-      } else {
-        setLoading(false);
-      }
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
+
+  const { canViewAll, loading: roleLoading } = useUserRole(user);
+
+  // Fetch stats when user has permissions
+  useEffect(() => {
+    if (!roleLoading && canViewAll) {
+      fetchStats();
+    } else if (!roleLoading) {
+      setLoading(false);
+    }
+  }, [canViewAll, roleLoading]);
 
   const fetchStats = async () => {
     try {
@@ -206,13 +221,13 @@ export default function Estadisticas() {
     );
   }
 
-  if (!user || user.email !== "admin@usm.edu.co") {
+  if (!canViewAll) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center space-y-4">
           <XCircle className="h-16 w-16 text-destructive mx-auto" />
           <h1 className="text-2xl font-bold">Acceso Denegado</h1>
-          <p className="text-muted-foreground">Solo los administradores pueden ver las estadísticas.</p>
+          <p className="text-muted-foreground">Solo los administradores y el centro de información pueden ver las estadísticas.</p>
         </div>
       </div>
     );
