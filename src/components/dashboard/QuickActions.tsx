@@ -137,12 +137,12 @@ export default function QuickActions({
             {actions.map((action) => {
               const Icon = action.icon;
               return (
-                <Button
+                  <Button
                   key={action.title}
                   variant={action.variant}
                   onClick={action.onClick}
                   disabled={action.disabled}
-                  className="h-auto p-4 flex flex-col items-center space-y-2 relative"
+                  className="h-auto p-3 flex flex-col items-center space-y-2 relative"
                 >
                   {action.badge && (
                     <Badge 
@@ -152,10 +152,10 @@ export default function QuickActions({
                       {action.badge}
                     </Badge>
                   )}
-                  <Icon className="h-6 w-6" />
-                  <div className="text-center">
-                    <p className="text-sm font-medium">{action.title}</p>
-                    <p className="text-xs text-muted-foreground leading-tight">
+                  <Icon className="h-6 w-6 mb-1" />
+                  <div className="text-center space-y-1 px-1">
+                    <p className="text-sm font-medium leading-tight">{action.title}</p>
+                    <p className="text-xs text-muted-foreground leading-tight line-clamp-2">
                       {action.description}
                     </p>
                   </div>
