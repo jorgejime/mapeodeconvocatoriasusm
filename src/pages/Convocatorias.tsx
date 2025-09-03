@@ -76,6 +76,23 @@ export default function Convocatorias() {
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
 
+  // Get user info and role
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      console.log("User obtained:", user?.email);
+      setUser(user);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log("Auth state changed:", session?.user?.email);
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const { canManage } = useUserRole(user);
 
   console.log("Convocatorias state:", { showForm, formMode, selectedConvocatoria });
@@ -387,6 +404,14 @@ export default function Convocatorias() {
                 <span className="sm:hidden">Nueva</span>
               </Button>
             </>
+          )}
+          {/* Botón de respaldo para admin - siempre visible */}
+          {user?.email === "admin@usm.edu.co" && (
+            <Button onClick={handleCreate} className="w-full sm:w-auto hover-scale bg-primary">
+              <Plus className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Crear Convocatoria</span>
+              <span className="sm:hidden">Crear</span>
+            </Button>
           )}
         </div>
       </div>
