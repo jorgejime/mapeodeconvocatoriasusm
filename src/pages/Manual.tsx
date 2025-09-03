@@ -604,8 +604,9 @@ export default function Manual() {
               <div className="bg-primary/5 p-4 rounded-lg">
                 <div className="text-center space-y-2">
                   <p className="font-medium">Desarrollado por</p>
-                  <p className="text-lg font-bold text-primary">JORGE JIMÉNEZ</p>
+                  <p className="text-lg font-bold text-primary">JORGE JIMÉNEZ CALVANO</p>
                   <p className="text-sm text-muted-foreground">Líder de Inteligencia Artificial - USM</p>
+                  <p className="text-sm text-primary">jorge@centroeidea.com</p>
                 </div>
                 <Separator className="my-4" />
                 <div className="text-sm text-muted-foreground text-center">

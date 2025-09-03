@@ -19,7 +19,7 @@ export const Layout = ({ children }: LayoutProps) => {
           </main>
           <footer className="border-t bg-card/30 px-4 py-3 text-center">
             <p className="text-sm text-muted-foreground">
-              Desarrollada por <span className="font-semibold text-foreground">JORGE JIMÉNEZ</span> - Líder IA
+              Desarrollada por <span className="font-semibold text-foreground">JORGE JIMÉNEZ CALVANO</span> - Líder IA | jorge@centroeidea.com
             </p>
           </footer>
         </div>
