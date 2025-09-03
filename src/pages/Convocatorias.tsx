@@ -76,22 +76,14 @@ export default function Convocatorias() {
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
 
-  // Get user info and role
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const { canManage } = useUserRole(user);
+
+  console.log("Convocatorias state:", { showForm, formMode, selectedConvocatoria });
+
+  // Debug logging for form dialog
+  useEffect(() => {
+    console.log("Form state changed:", { canManage, showForm, formMode });
+  }, [showForm, formMode, canManage]);
 
   useEffect(() => {
     fetchConvocatorias();
@@ -251,6 +243,7 @@ export default function Convocatorias() {
   };
 
   const handleCreate = () => {
+    console.log("handleCreate called - Setting showForm to true");
     setSelectedConvocatoria(null);
     setFormMode("create");
     setShowForm(true);
