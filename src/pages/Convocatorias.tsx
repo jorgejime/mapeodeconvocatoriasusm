@@ -26,6 +26,7 @@ import { Plus, Search, Edit, Trash2, Download, Copy, EyeOff, Upload } from "luci
 import { useToast } from "@/hooks/use-toast";
 import { useUserRole } from "@/hooks/useUserRole";
 import { BulkUploadDialog } from "@/components/BulkUploadDialog";
+import { ExportDropdown } from "@/components/ExportDropdown";
 import { ConvocatoriaDetailDialog } from "@/components/ConvocatoriaDetailDialog";
 
 interface Convocatoria {
@@ -308,38 +309,7 @@ export default function Convocatorias() {
     }
   };
 
-  const handleExport = () => {
-    const csvData = filteredConvocatorias.map((c) => ({
-      ID: c.id,
-      Nombre: c.nombre_convocatoria,
-      Entidad: c.entidad,
-      Orden: c.orden || "",
-      Tipo: c.tipo || "",
-      Valor: c.valor || "",
-      Moneda: c.tipo_moneda || "",
-      Sector: c.sector_tema || "",
-      Componentes: c.componentes_transversales || "",
-      "Cumplimos Requisitos": c.cumplimos_requisitos ? "Sí" : "No",
-      "Qué nos falta": c.que_nos_falta || "",
-      "Fecha Límite": c.fecha_limite_aplicacion || "",
-      "Estado Convocatoria": c.estado_convocatoria || "",
-      "Estado USM": c.estado_usm || "",
-      Observaciones: c.observaciones || "",
-    }));
-
-    const csv = [
-      Object.keys(csvData[0] || {}).join(","),
-      ...csvData.map((row) => Object.values(row).join(","))
-    ].join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `convocatorias-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
+  // Export functionality has been moved to ExportDropdown component
 
   const getStatusColor = (fechaLimite: string | null): "verde" | "amarillo" | "rojo" => {
     if (!fechaLimite) return "rojo";
@@ -385,11 +355,10 @@ export default function Convocatorias() {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <Button onClick={handleExport} variant="outline" className="w-full sm:w-auto hover-scale">
-            <Download className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Exportar CSV</span>
-            <span className="sm:hidden">Exportar</span>
-          </Button>
+          <ExportDropdown 
+            data={filteredConvocatorias}
+            filename="convocatorias"
+          />
           {canManage && (
             <>
               <Button onClick={() => setShowBulkUpload(true)} variant="outline" className="w-full sm:w-auto hover-scale">
