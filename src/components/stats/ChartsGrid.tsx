@@ -134,50 +134,66 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
-            Tendencia Últimos 6 Meses
+            Convocatorias por Mes (Últimos 6 Meses)
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <ComposedChart data={data.porMes}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis 
-                dataKey="name" 
-                tick={{ fontSize: 12 }}
-                stroke="hsl(var(--muted-foreground))"
-              />
-              <YAxis 
-                tick={{ fontSize: 12 }}
-                stroke="hsl(var(--muted-foreground))"
-              />
-              <Tooltip 
-                contentStyle={{
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: 'calc(var(--radius) - 2px)'
-                }}
-                formatter={(value, name) => [
-                  `${value} convocatorias`,
-                  'Convocatorias'
-                ]}
-              />
-              <Legend />
-              <Bar 
-                dataKey="convocatorias" 
-                fill="hsl(var(--primary))" 
-                name="Convocatorias"
-                radius={[4, 4, 0, 0]}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="convocatorias" 
-                stroke="hsl(var(--success))" 
-                strokeWidth={3}
-                dot={{ fill: 'hsl(var(--success))' }}
-                name="Tendencia"
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
+          <div className="space-y-4">
+            {data.porMes.map((mes, index) => (
+              <div key={mes.name} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-primary"></div>
+                    <span className="font-medium text-foreground capitalize">
+                      {mes.name}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-lg font-bold text-primary">
+                      {mes.convocatorias}
+                    </span>
+                    <span className="text-sm text-muted-foreground ml-1">
+                      convocatorias
+                    </span>
+                  </div>
+                </div>
+                <div className="w-full bg-muted rounded-full h-3">
+                  <div 
+                    className="bg-gradient-to-r from-primary to-primary/70 h-3 rounded-full transition-all duration-700 flex items-center justify-end pr-2"
+                    style={{ 
+                      width: `${Math.min((mes.convocatorias / Math.max(...data.porMes.map(m => m.convocatorias))) * 100, 100)}%` 
+                    }}
+                  >
+                    {mes.convocatorias > 0 && (
+                      <span className="text-xs font-bold text-primary-foreground">
+                        {mes.convocatorias}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {data.porMes.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <TrendingUp className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <p>No hay datos de tendencias disponibles</p>
+              </div>
+            )}
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Total últimos 6 meses:</span>
+                <span className="font-semibold text-foreground">
+                  {data.porMes.reduce((sum, mes) => sum + mes.convocatorias, 0)} convocatorias
+                </span>
+              </div>
+              <div className="flex justify-between text-sm text-muted-foreground mt-1">
+                <span>Promedio mensual:</span>
+                <span className="font-semibold text-foreground">
+                  {data.porMes.length > 0 ? Math.round(data.porMes.reduce((sum, mes) => sum + mes.convocatorias, 0) / data.porMes.length) : 0} convocatorias
+                </span>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
