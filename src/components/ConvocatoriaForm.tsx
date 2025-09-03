@@ -229,7 +229,6 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el orden" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Local">Local</SelectItem>
                   <SelectItem value="Nacional">Nacional</SelectItem>
                   <SelectItem value="Internacional">Internacional</SelectItem>
@@ -244,7 +243,6 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el tipo" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Investigación">Investigación</SelectItem>
                   <SelectItem value="Fortalecimiento institucional">Fortalecimiento institucional</SelectItem>
                   <SelectItem value="Formación">Formación</SelectItem>
@@ -410,7 +408,6 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el estado" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="Abierta">Abierta</SelectItem>
                   <SelectItem value="Cerrada">Cerrada</SelectItem>
                   <SelectItem value="Próxima">Próxima</SelectItem>
@@ -425,7 +422,6 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                   <SelectValue placeholder="Selecciona el estado interno" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Sin especificar</SelectItem>
                   <SelectItem value="En revisión">En revisión</SelectItem>
                   <SelectItem value="En preparación">En preparación</SelectItem>
                   <SelectItem value="Presentada">Presentada</SelectItem>
