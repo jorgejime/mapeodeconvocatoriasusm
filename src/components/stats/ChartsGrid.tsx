@@ -93,35 +93,39 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.porSector} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis 
-                type="number" 
-                tick={{ fontSize: 12 }}
-                stroke="hsl(var(--muted-foreground))"
-              />
-              <YAxis 
-                dataKey="name" 
-                type="category" 
-                width={120} 
-                tick={{ fontSize: 11 }}
-                stroke="hsl(var(--muted-foreground))"
-              />
-              <Tooltip 
-                contentStyle={{
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: 'calc(var(--radius) - 2px)'
-                }}
-              />
-              <Bar 
-                dataKey="value" 
-                fill="hsl(var(--primary))" 
-                radius={[0, 4, 4, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="space-y-3">
+            {data.porSector.map((sector, index) => (
+              <div key={sector.name} className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-xs font-bold text-primary">{index + 1}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-center mb-1">
+                    <p className="text-sm font-medium text-foreground truncate pr-2">
+                      {sector.name}
+                    </p>
+                    <span className="text-sm font-bold text-primary flex-shrink-0">
+                      {sector.value}
+                    </span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div 
+                      className="bg-primary h-2 rounded-full transition-all duration-500"
+                      style={{ 
+                        width: `${Math.min((sector.value / Math.max(...data.porSector.map(s => s.value))) * 100, 100)}%` 
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            {data.porSector.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <Building2 className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <p>No hay datos de sectores disponibles</p>
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
 
