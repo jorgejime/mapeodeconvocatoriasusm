@@ -260,7 +260,6 @@ export default function Convocatorias() {
   };
 
   const handleCreate = () => {
-    console.log("handleCreate called - Setting showForm to true");
     setSelectedConvocatoria(null);
     setFormMode("create");
     setShowForm(true);
@@ -404,14 +403,6 @@ export default function Convocatorias() {
                 <span className="sm:hidden">Nueva</span>
               </Button>
             </>
-          )}
-          {/* Botón de respaldo para admin - siempre visible */}
-          {user?.email === "admin@usm.edu.co" && (
-            <Button onClick={handleCreate} className="w-full sm:w-auto hover-scale bg-primary">
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Crear Convocatoria</span>
-              <span className="sm:hidden">Crear</span>
-            </Button>
           )}
         </div>
       </div>
