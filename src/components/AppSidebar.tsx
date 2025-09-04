@@ -74,25 +74,23 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-60"} collapsible="icon">
-      <SidebarTrigger className="m-2 self-end" />
-      
+    <Sidebar className={collapsed ? "w-14" : "w-48 sm:w-60"} collapsible="icon">
       <SidebarHeader>
-        <div className="px-4 py-4 space-y-3">
+        <div className="px-2 sm:px-4 py-4 space-y-3">
           <div className="flex flex-col items-center gap-2">
-            <div className={collapsed ? "w-10 h-10" : "w-full max-w-[200px]"}>
+            <div className={collapsed ? "w-8 h-8 sm:w-10 sm:h-10" : "w-full max-w-[180px] sm:max-w-[200px]"}>
               <img 
                 src={logoUsm} 
                 alt="Logo USM" 
-                className={`w-full h-auto object-contain ${collapsed ? "max-h-10" : "max-h-16"}`}
+                className={`w-full h-auto object-contain ${collapsed ? "max-h-8 sm:max-h-10" : "max-h-12 sm:max-h-16"}`}
               />
             </div>
             {!collapsed && (
-              <div className="text-center w-full">
-                <h2 className="text-sm font-bold text-foreground leading-tight break-words">
+              <div className="text-center w-full px-1">
+                <h2 className="text-xs sm:text-sm font-bold text-foreground leading-tight break-words">
                   MAPEO DE CONVOCATORIAS USM
                 </h2>
-                <p className="text-xs text-muted-foreground break-words">
+                <p className="text-[10px] sm:text-xs text-muted-foreground break-words">
                   Institución Universitaria de Santa Marta
                 </p>
               </div>
@@ -101,10 +99,10 @@ export function AppSidebar() {
           
           {!collapsed && (
             <div className="flex items-center gap-2 pt-2 border-t">
-              <User className="h-4 w-4 flex-shrink-0" />
+              <User className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
               <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-sm font-medium truncate">{user?.email}</span>
-                <Badge variant={isAdmin ? "default" : "secondary"} className="w-fit">
+                <span className="text-xs sm:text-sm font-medium truncate">{user?.email}</span>
+                <Badge variant={isAdmin ? "default" : "secondary"} className="w-fit text-[10px] sm:text-xs">
                   {role}
                 </Badge>
               </div>
@@ -115,15 +113,15 @@ export function AppSidebar() {
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navegación Principal</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs sm:text-sm">Navegación Principal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavCls}>
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                      <item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                      {!collapsed && <span className="text-xs sm:text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -134,7 +132,7 @@ export function AppSidebar() {
 
         {(isAdmin || user?.email === "rectoria@usm.edu.co") && (
           <SidebarGroup>
-            <SidebarGroupLabel>
+            <SidebarGroupLabel className="text-xs sm:text-sm">
               {isAdmin ? "Administrador" : "Centro de Información"}
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -143,8 +141,8 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <NavLink to={item.url} className={getNavCls}>
-                        <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
+                        <item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                        {!collapsed && <span className="text-xs sm:text-sm">{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -161,9 +159,10 @@ export function AppSidebar() {
             <Button
               variant="ghost"
               onClick={handleSignOut}
-              className="w-full justify-start"
+              className="w-full justify-start text-xs sm:text-sm"
+              size="sm"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-3 w-3 sm:h-4 sm:w-4" />
               {!collapsed && <span className="ml-2">Cerrar Sesión</span>}
             </Button>
           </SidebarMenuItem>

@@ -195,70 +195,70 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
     if (!analisis) return null;
 
     return (
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 lg:gap-6 grid-cols-2 lg:grid-cols-4">
         <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
-          <div className="p-4">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
               <div className="neumorphic-icon">
-                <Target className="h-4 w-4 text-slate-600" />
+                <Target className="h-3 w-3 sm:h-4 sm:w-4 text-slate-600" />
               </div>
-              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Elegibilidad General</h4>
+              <h4 className="executive-subtitle text-xs sm:text-sm font-medium text-slate-700">Elegibilidad General</h4>
             </div>
-            <div className="metric-value text-3xl text-slate-800 mb-1">
+            <div className="metric-value text-xl sm:text-2xl lg:text-3xl text-slate-800 mb-1">
               {analisis.tasaElegibilidadGeneral}%
             </div>
-            <p className="executive-body text-xs text-slate-500">
+            <p className="executive-body text-[10px] sm:text-xs text-slate-500">
               Convocatorias viables
             </p>
           </div>
         </div>
 
         <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
-          <div className="p-4">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
               <div className="neumorphic-icon">
-                <TrendingUp className="h-4 w-4 text-slate-600" />
+                <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-slate-600" />
               </div>
-              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Ventaja Competitiva</h4>
+              <h4 className="executive-subtitle text-xs sm:text-sm font-medium text-slate-700">Ventaja Competitiva</h4>
             </div>
-            <div className="metric-value text-2xl text-slate-800 mb-1">
+            <div className="metric-value text-lg sm:text-xl lg:text-2xl text-slate-800 mb-1">
               {analisis.ventajaComparativa.mejor}
             </div>
-            <p className="executive-body text-xs text-slate-500">
+            <p className="executive-body text-[10px] sm:text-xs text-slate-500">
               +{analisis.ventajaComparativa.diferencia}% diferencia
             </p>
           </div>
         </div>
 
         <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
-          <div className="p-4">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
               <div className="neumorphic-icon">
-                <BarChart3 className="h-4 w-4 text-slate-600" />
+                <BarChart3 className="h-3 w-3 sm:h-4 sm:w-4 text-slate-600" />
               </div>
-              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Sector Prometedor</h4>
+              <h4 className="executive-subtitle text-xs sm:text-sm font-medium text-slate-700">Sector Prometedor</h4>
             </div>
-            <div className="metric-value text-sm text-slate-800 mb-1 truncate">
+            <div className="metric-value text-xs sm:text-sm text-slate-800 mb-1 truncate">
               {analisis.sectorMasExitoso.nombre || 'N/A'}
             </div>
-            <p className="executive-body text-xs text-slate-500">
+            <p className="executive-body text-[10px] sm:text-xs text-slate-500">
               {analisis.sectorMasExitoso.tasa}% éxito
             </p>
           </div>
         </div>
 
         <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
-          <div className="p-4">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
               <div className="neumorphic-icon">
-                <Clock className="h-4 w-4 text-slate-600" />
+                <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-slate-600" />
               </div>
-              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Oportunidades Urgentes</h4>
+              <h4 className="executive-subtitle text-xs sm:text-sm font-medium text-slate-700">Oportunidades Urgentes</h4>
             </div>
-            <div className="metric-value text-3xl text-slate-800 mb-1">
+            <div className="metric-value text-xl sm:text-2xl lg:text-3xl text-slate-800 mb-1">
               {analisis.oportunidadesUrgentes.length}
             </div>
-            <p className="executive-body text-xs text-slate-500">
+            <p className="executive-body text-[10px] sm:text-xs text-slate-500">
               Requieren atención inmediata
             </p>
           </div>
@@ -660,49 +660,52 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
       
       <div className="neumorphic-main-card">
         <div className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="neumorphic-icon">
-                  <Brain className="h-5 w-5 text-slate-600" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="neumorphic-icon">
+                    <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600" />
+                  </div>
+                  <h2 className="executive-title text-lg sm:text-xl text-slate-800">
+                    Informes Estadísticos Inteligentes
+                  </h2>
                 </div>
-                <h2 className="executive-title text-xl text-slate-800">
-                  Informes Estadísticos Inteligentes
-                </h2>
+                <p className="executive-subtitle text-sm sm:text-base text-slate-600">
+                  Análisis automático de patrones, correlaciones y oportunidades ocultas
+                </p>
               </div>
-              <p className="executive-subtitle text-slate-600">
-                Análisis automático de patrones, correlaciones y oportunidades ocultas
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={generarInforme} 
-                disabled={loading || !convocatorias.length}
-                className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2 disabled:opacity-50"
-              >
-                {loading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-600" />
-                    Generando...
-                  </>
-                ) : (
-                  <>
-                    <FileText className="h-4 w-4" />
-                    Generar Informe
-                  </>
-                )}
-              </button>
-              {informe && (
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
                 <button
-                  onClick={descargarPDF}
-                  className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2"
+                  onClick={generarInforme} 
+                  disabled={loading || !convocatorias.length}
+                  className="neumorphic-button px-3 sm:px-4 py-2 text-xs sm:text-sm text-slate-700 font-medium flex items-center gap-2 disabled:opacity-50 justify-center sm:justify-start"
                 >
-                  <Download className="h-4 w-4" />
-                  Descargar PDF
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-slate-600" />
+                      <span className="hidden sm:inline">Generando...</span>
+                      <span className="sm:hidden">...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">Generar Informe</span>
+                      <span className="sm:hidden">Generar</span>
+                    </>
+                  )}
                 </button>
-              )}
+                {informe && (
+                  <button
+                    onClick={descargarPDF}
+                    className="neumorphic-button px-3 sm:px-4 py-2 text-xs sm:text-sm text-slate-700 font-medium flex items-center gap-2 justify-center sm:justify-start"
+                  >
+                    <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Descargar PDF</span>
+                    <span className="sm:hidden">PDF</span>
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
         </div>
 
         <div className="p-6">
@@ -743,88 +746,93 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             </div>
           ) : (
             <div className="w-full">
-              <div className="flex w-full mb-6">
+              <div className="flex flex-wrap w-full mb-4 sm:mb-6 gap-1 sm:gap-0">
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mr-1 ${activeTab === 'resumen' ? 'active' : ''}`}
+                  className={`neumorphic-button px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium flex-1 sm:mr-1 ${activeTab === 'resumen' ? 'active' : ''}`}
                   onClick={() => setActiveTab('resumen')}
                 >
-                  Resumen
+                  <span className="hidden sm:inline">Resumen</span>
+                  <span className="sm:hidden">📊</span>
                 </button>
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${activeTab === 'alertas' ? 'active' : ''}`}
+                  className={`neumorphic-button px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium flex-1 sm:mx-1 ${activeTab === 'alertas' ? 'active' : ''}`}
                   onClick={() => setActiveTab('alertas')}
                 >
-                  Alertas
+                  <span className="hidden sm:inline">Alertas</span>
+                  <span className="sm:hidden">🚨</span>
                 </button>
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${activeTab === 'oportunidades' ? 'active' : ''}`}
+                  className={`neumorphic-button px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium flex-1 sm:mx-1 ${activeTab === 'oportunidades' ? 'active' : ''}`}
                   onClick={() => setActiveTab('oportunidades')}
                 >
-                  Oportunidades
+                  <span className="hidden sm:inline">Oportunidades</span>
+                  <span className="sm:hidden">⏰</span>
                 </button>
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 ml-1 ${activeTab === 'informe' ? 'active' : ''}`}
+                  className={`neumorphic-button px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium flex-1 sm:ml-1 ${activeTab === 'informe' ? 'active' : ''}`}
                   onClick={() => setActiveTab('informe')}
                 >
-                  Informe Completo
+                  <span className="hidden sm:inline">Informe Completo</span>
+                  <span className="sm:hidden">📋</span>
                 </button>
               </div>
 
               <div className="w-full">
                 {activeTab === 'resumen' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
-                      <h3 className="executive-title text-lg text-slate-800">Resumen Ejecutivo</h3>
+                      <h3 className="executive-title text-base sm:text-lg text-slate-800 mb-3 sm:mb-4">Resumen Ejecutivo</h3>
                       {renderResumenEjecutivo()}
                     </div>
                     {metadatos && (
-                      <div className="pt-4 border-t border-slate-300">
-                      <div className="executive-body flex items-center gap-4 text-sm text-slate-600">
-                        <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
-                        <span>•</span>
-                        <span>📅 {metadatos.fechaGeneracion}</span>
-                        <span>•</span>
-                        <span>🔧 Versión {metadatos.version}</span>
-                      </div>
+                      <div className="pt-3 sm:pt-4 border-t border-slate-300">
+                        <div className="executive-body flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-600">
+                          <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span>📅 {metadatos.fechaGeneracion}</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span>🔧 Versión {metadatos.version}</span>
+                        </div>
                       </div>
                     )}
                   </div>
                 )}
 
                 {activeTab === 'alertas' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
-                      <h3 className="executive-title text-lg text-slate-800">Alertas y Notificaciones</h3>
+                      <h3 className="executive-title text-base sm:text-lg text-slate-800 mb-3 sm:mb-4">Alertas y Notificaciones</h3>
                       {renderAlertas()}
                     </div>
                   </div>
                 )}
 
                 {activeTab === 'oportunidades' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
-                      <h3 className="executive-title text-lg text-slate-800">Oportunidades Urgentes</h3>
+                      <h3 className="executive-title text-base sm:text-lg text-slate-800 mb-3 sm:mb-4">Oportunidades Urgentes</h3>
                       {renderOportunidadesUrgentes()}
                     </div>
                   </div>
                 )}
 
                 {activeTab === 'informe' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="executive-title text-lg text-slate-800">Informe Completo</h3>
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-3">
+                        <h3 className="executive-title text-base sm:text-lg text-slate-800">Informe Completo</h3>
                         <button
                           onClick={descargarPDF}
-                          className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2"
+                          className="neumorphic-button px-3 sm:px-4 py-2 text-xs sm:text-sm text-slate-700 font-medium flex items-center gap-2 w-full sm:w-auto justify-center"
                         >
-                          <Download className="h-4 w-4" />
-                          Descargar PDF
+                          <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span className="hidden sm:inline">Descargar PDF</span>
+                          <span className="sm:hidden">PDF</span>
                         </button>
                       </div>
-                      <div className="neumorphic-card p-6">
-                        <div className="h-[600px] overflow-auto">
-                          <div className="informe-content executive-body text-sm leading-relaxed text-slate-700 font-inter">
+                      <div className="neumorphic-card p-3 sm:p-6">
+                        <div className="h-[400px] sm:h-[600px] overflow-auto">
+                          <div className="informe-content executive-body text-xs sm:text-sm leading-relaxed text-slate-700 font-inter">
                             {informe}
                           </div>
                         </div>
