@@ -246,7 +246,7 @@ function generarTablaUrgenciaTexto(data: Convocatoria[]): string {
   }
   
   let texto = `
-                           ANÁLISIS DE URGENCIA TEMPORAL
+                    ANÁLISIS DE URGENCIA TEMPORAL
                           
     ═══════════════════════════════════════════════════════════════════════════════
     
@@ -266,8 +266,8 @@ function generarTablaUrgenciaTexto(data: Convocatoria[]): string {
     .forEach(item => {
       const diasFormat = item.dias < 0 ? `${item.dias}` : `${item.dias}`;
       const cumpleText = item.cumple ? 'SÍ' : 'NO';
-      const prioridadText = item.dias < 0 ? '**CRÍTICA**' : 
-                           (item.dias <= 7 && item.cumple) ? '**ALTA**' :
+      const prioridadText = item.dias < 0 ? 'CRÍTICA' : 
+                           (item.dias <= 7 && item.cumple) ? 'ALTA' :
                            (item.dias <= 30 && item.cumple) ? 'MEDIA' : 'BAJA';
       
       texto += `
@@ -278,7 +278,7 @@ function generarTablaUrgenciaTexto(data: Convocatoria[]): string {
     ───────────────────────────────────────────────────────────────────────────────
     
     Convocatorias mostradas: ${Math.min(abiertas.length, 10)} de ${abiertas.length} total
-    *Calculado desde ${new Date().toLocaleDateString('es-ES')}
+    Calculado desde ${new Date().toLocaleDateString('es-ES')}
     ═══════════════════════════════════════════════════════════════════════════════
 `;
   
@@ -302,22 +302,22 @@ function generarAnalisisCorrelacionesTexto(data: Convocatoria[]): string {
                               
     ═══════════════════════════════════════════════════════════════════════════════
     
-    **PATRÓN ORDEN VS ÉXITO**
+    PATRÓN ORDEN VS ÉXITO
     
-    ⚡ HALLAZGO ESTADÍSTICO SIGNIFICATIVO: Existe una correlación ${tasaInt > tasaNac ? 'POSITIVA' : 'NEGATIVA'} 
-       entre el orden internacional y el éxito de USM.
+    HALLAZGO ESTADÍSTICO SIGNIFICATIVO: Existe una correlación ${tasaInt > tasaNac ? 'POSITIVA' : 'NEGATIVA'} 
+    entre el orden internacional y el éxito de USM.
 
     ───────────────────────────────────────────────────────────────────────────────
     
     Orden              Tasa de Éxito    Conv. Elegibles    Total
     ───────────────────────────────────────────────────────────────────────────────
-    Internacional      **${Math.round(tasaInt * 10) / 10}%**           ${String(internacional.filter(c => c.cumplimos_requisitos).length).padStart(8)}      ${String(internacional.length).padStart(5)}
-    Nacional           **${Math.round(tasaNac * 10) / 10}%**           ${String(nacional.filter(c => c.cumplimos_requisitos).length).padStart(8)}      ${String(nacional.length).padStart(5)}
+    Internacional      ${Math.round(tasaInt * 10) / 10}%           ${String(internacional.filter(c => c.cumplimos_requisitos).length).padStart(8)}      ${String(internacional.length).padStart(5)}
+    Nacional           ${Math.round(tasaNac * 10) / 10}%           ${String(nacional.filter(c => c.cumplimos_requisitos).length).padStart(8)}      ${String(nacional.length).padStart(5)}
     ───────────────────────────────────────────────────────────────────────────────
     
-    📊 DIFERENCIA ESTADÍSTICA: ${Math.abs(tasaInt - tasaNac).toFixed(1)} puntos porcentuales
+    DIFERENCIA ESTADÍSTICA: ${Math.abs(tasaInt - tasaNac).toFixed(1)} puntos porcentuales
     
-    💡 INFERENCIA ESTRATÉGICA: ${tasaInt > tasaNac ? 
+    INFERENCIA ESTRATÉGICA: ${tasaInt > tasaNac ? 
       'USM presenta ventajas competitivas significativamente superiores en el ámbito internacional. ' +
       'La institución debe reorientar prioritariamente sus recursos hacia convocatorias internacionales.' :
       'USM presenta mayor alineación con requisitos de convocatorias nacionales. ' +
@@ -339,7 +339,7 @@ function generarAnalisisCorrelacionesTexto(data: Convocatoria[]): string {
     analisis += `
 
 
-    **ANÁLISIS SECTORIAL POR VIABILIDAD**
+    ANÁLISIS SECTORIAL POR VIABILIDAD
     
     ───────────────────────────────────────────────────────────────────────────────
     
@@ -347,12 +347,12 @@ function generarAnalisisCorrelacionesTexto(data: Convocatoria[]): string {
     ───────────────────────────────────────────────────────────────────────────────`;
     
     sectorAnalisis.slice(0, 5).forEach(s => {
-      const potencial = s.tasa >= CONFIGURACION.POTENCIAL_ALTO ? '**ALTO**' :
+      const potencial = s.tasa >= CONFIGURACION.POTENCIAL_ALTO ? 'ALTO' :
                        s.tasa >= CONFIGURACION.POTENCIAL_MEDIO ? 'MEDIO' : 'BAJO';
       const sector = s.sector.length > 25 ? s.sector.substring(0, 25) + '...' : s.sector;
       
       analisis += `
-    ${sector.padEnd(26)} **${s.tasa.toFixed(1)}%**     ${String(s.total).padStart(8)}    ${potencial}`;
+    ${sector.padEnd(26)} ${s.tasa.toFixed(1)}%     ${String(s.total).padStart(8)}    ${potencial}`;
     });
     
     analisis += `
@@ -370,103 +370,110 @@ function generarRecomendacionesAutomaticasTexto(analisis: AnalisisResultado): st
                               
     ═══════════════════════════════════════════════════════════════════════════════
     
-    **INMEDIATAS (0-30 DÍAS)**
+    INMEDIATAS (0-30 DÍAS)
     ───────────────────────────────────────────────────────────────────────────────`;
   
   if (analisis.convocatoriasVencidas.length > 0) {
     recomendaciones += `
     
-    🚨 **ACCIÓN CORRECTIVA URGENTE**
-       Verificar estado real de ${analisis.convocatoriasVencidas.length} convocatorias marcadas como 
-       abiertas pero vencidas.
-       IDs afectados: ${analisis.convocatoriasVencidas.join(', ')}
-       
-       **Impacto:** CRÍTICO - Posible pérdida de oportunidades por desactualización`;
+    ACCIÓN CORRECTIVA URGENTE
+    
+    Verificar estado real de ${analisis.convocatoriasVencidas.length} convocatorias marcadas como 
+    abiertas pero vencidas.
+    IDs afectados: ${analisis.convocatoriasVencidas.join(', ')}
+    
+    Impacto: CRÍTICO - Posible pérdida de oportunidades por desactualización`;
   }
   
   if (analisis.oportunidadesUrgentes.length > 0) {
     recomendaciones += `
     
-    🎯 **OPORTUNIDADES DE ALTO IMPACTO**
-       Priorizar aplicación inmediata a:`;
+    OPORTUNIDADES DE ALTO IMPACTO
+    
+    Priorizar aplicación inmediata a:`;
     
     analisis.oportunidadesUrgentes.slice(0, 3).forEach((opp, index) => {
       recomendaciones += `
-       ${index + 1}. ${opp.nombre.substring(0, 60)}... (${opp.monto}) - ${opp.dias} días restantes`;
+    ${index + 1}. ${opp.nombre.substring(0, 60)}... (${opp.monto}) - ${opp.dias} días restantes`;
     });
     
     recomendaciones += `
-       
-       **Potencial de financiamiento:** ${analisis.oportunidadesUrgentes.length} convocatorias elegibles`;
+    
+    Potencial de financiamiento: ${analisis.oportunidadesUrgentes.length} convocatorias elegibles`;
   }
   
   if (analisis.ventajaComparativa.diferencia > 20) {
     recomendaciones += `
     
-    📊 **REORIENTACIÓN ESTRATÉGICA**
-       Enfocar 80% de recursos en convocatorias ${analisis.ventajaComparativa.mejor.toLowerCase()}es
-       
-       Ventaja competitiva detectada: ${analisis.ventajaComparativa.diferencia.toFixed(1)} puntos porcentuales
-       ROI estimado: +${Math.round(analisis.ventajaComparativa.diferencia * 1.5)}% adicional`;
+    REORIENTACIÓN ESTRATÉGICA
+    
+    Enfocar 80% de recursos en convocatorias ${analisis.ventajaComparativa.mejor.toLowerCase()}es
+    
+    Ventaja competitiva detectada: ${analisis.ventajaComparativa.diferencia.toFixed(1)} puntos porcentuales
+    ROI estimado: +${Math.round(analisis.ventajaComparativa.diferencia * 1.5)}% adicional`;
   }
   
   // Mediano plazo
   recomendaciones += `
     
     ───────────────────────────────────────────────────────────────────────────────
-    **MEDIANO PLAZO (1-6 MESES)**
+    MEDIANO PLAZO (1-6 MESES)
     ───────────────────────────────────────────────────────────────────────────────`;
   
   if (analisis.sectorMasExitoso.tasa > CONFIGURACION.POTENCIAL_ALTO) {
     recomendaciones += `
     
-    🔬 **ESPECIALIZACIÓN SECTORIAL**
-       Desarrollar expertise específica en ${analisis.sectorMasExitoso.nombre}
-       
-       Tasa de éxito actual: ${analisis.sectorMasExitoso.tasa}%
-       Potencial de optimización: +15-20% adicional
-       
-       Acciones específicas:
-       • Crear equipo especializado en el sector
-       • Desarrollar alianzas estratégicas sectoriales
-       • Implementar metodología de propuestas específica`;
+    ESPECIALIZACIÓN SECTORIAL
+    
+    Desarrollar expertise específica en ${analisis.sectorMasExitoso.nombre}
+    
+    Tasa de éxito actual: ${analisis.sectorMasExitoso.tasa}%
+    Potencial de optimización: +15-20% adicional
+    
+    Acciones específicas:
+    - Crear equipo especializado en el sector
+    - Desarrollar alianzas estratégicas sectoriales
+    - Implementar metodología de propuestas específica`;
   }
   
   recomendaciones += `
     
-    ⚙️ **OPTIMIZACIÓN DE PROCESOS**
-       Implementar mejoras operacionales críticas:
-       
-       • Sistema de alertas tempranas (30, 15, 7 días antes del cierre)
-       • Perfiles de requisitos automatizados por tipo de convocatoria
-       • Dashboard de seguimiento en tiempo real con indicadores clave
-       • Base de conocimiento de propuestas exitosas por sector
-       • Protocolo de evaluación rápida de viabilidad`;
+    OPTIMIZACIÓN DE PROCESOS
+    
+    Implementar mejoras operacionales críticas:
+    
+    - Sistema de alertas tempranas (30, 15, 7 días antes del cierre)
+    - Perfiles de requisitos automatizados por tipo de convocatoria
+    - Dashboard de seguimiento en tiempo real con indicadores clave
+    - Base de conocimiento de propuestas exitosas por sector
+    - Protocolo de evaluación rápida de viabilidad`;
   
   // Largo plazo
   recomendaciones += `
     
     ───────────────────────────────────────────────────────────────────────────────
-    **LARGO PLAZO (6+ MESES)**
+    LARGO PLAZO (6+ MESES)
     ───────────────────────────────────────────────────────────────────────────────
     
-    🎓 **DESARROLLO DE CAPACIDADES INSTITUCIONALES**
-       Fortalecer áreas identificadas como débiles en requisitos y crear alianzas 
-       estratégicas para convocatorias de alta complejidad.
-       
-       Inversión recomendada en:
-       • Capacitación del personal en sectores prometedores
-       • Infraestructura tecnológica para gestión de convocatorias
-       • Red de contactos internacionales para colaboraciones
+    DESARROLLO DE CAPACIDADES INSTITUCIONALES
     
-    📈 **EXPANSIÓN ESTRATÉGICA**
-       Explorar sectores emergentes con alta viabilidad y desarrollar propuestas 
-       tipo para convocatorias recurrentes.
-       
-       Objetivos cuantificables:
-       • Incrementar tasa de elegibilidad a 75% en 12 meses
-       • Duplicar número de aplicaciones exitosas en sector líder
-       • Establecer 5 alianzas estratégicas internacionales
+    Fortalecer áreas identificadas como débiles en requisitos y crear alianzas 
+    estratégicas para convocatorias de alta complejidad.
+    
+    Inversión recomendada en:
+    - Capacitación del personal en sectores prometedores
+    - Infraestructura tecnológica para gestión de convocatorias
+    - Red de contactos internacionales para colaboraciones
+    
+    EXPANSIÓN ESTRATÉGICA
+    
+    Explorar sectores emergentes con alta viabilidad y desarrollar propuestas 
+    tipo para convocatorias recurrentes.
+    
+    Objetivos cuantificables:
+    - Incrementar tasa de elegibilidad a 75% en 12 meses
+    - Duplicar número de aplicaciones exitosas en sector líder
+    - Establecer 5 alianzas estratégicas internacionales
     
     ═══════════════════════════════════════════════════════════════════════════════
 `;
