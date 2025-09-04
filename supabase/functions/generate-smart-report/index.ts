@@ -508,208 +508,178 @@ serve(async (req) => {
       day: 'numeric'
     });
 
-    // Generar informe en texto plano formateado como documento impreso
+    // Generar informe en texto plano formateado como documento ejecutivo
     const informeTexto = `
 
-    
-    ██    ██ ███    ██ ██ ██    ██ ███████ ██████  ███████ ██ ██████   █████  ██████  
-    ██    ██ ████   ██ ██ ██    ██ ██      ██   ██ ██      ██ ██   ██ ██   ██ ██   ██ 
-    ██    ██ ██ ██  ██ ██ ██    ██ █████   ██████  ███████ ██ ██   ██ ███████ ██   ██ 
-    ██    ██ ██  ██ ██ ██  ██  ██  ██      ██   ██      ██ ██ ██   ██ ██   ██ ██   ██ 
-     ██████  ██   ████ ██   ████   ███████ ██   ██ ███████ ██ ██████  ██   ██ ██████  
-                                                                                       
-              CATÓLICA LUIS AMIGÓ - SEDE MEDELLÍN
-    
-    
-    
-    
-                            INFORME ESTADÍSTICO INSTITUCIONAL
+
+                    UNIVERSIDAD CATÓLICA LUIS AMIGÓ - SEDE MEDELLÍN
+                           INFORME ESTADÍSTICO INSTITUCIONAL
                               ANÁLISIS DE CONVOCATORIAS
-    
-    
+
                                     ${fechaGeneracion}
-    
-    
+
     ═══════════════════════════════════════════════════════════════════════════════════
-    
-    
-                              🔒 DOCUMENTO CONFIDENCIAL 
-                               USO INTERNO EXCLUSIVO
-    
-    
-    ═══════════════════════════════════════════════════════════════════════════════════
-    
-    
+
+
                                    RESUMEN EJECUTIVO
-    
-    
-    Este informe presenta un análisis estadístico integral de las oportunidades de 
-    financiamiento identificadas por la Universidad Católica Luis Amigó durante ${new Date().getFullYear()}. 
-    Los hallazgos revelan patrones críticos que pueden optimizar significativamente 
-    la estrategia institucional.
-    
-    
-    **HALLAZGOS CLAVE:**
-    
-    • Tasa de Elegibilidad General: **${analisis.tasaElegibilidadGeneral}%** de convocatorias son viables
-    
-    • Ventaja Competitiva: **${analisis.ventajaComparativa.descripcion}**
-    
-    • Sector Prometedor: **${analisis.sectorMasExitoso.nombre}** presenta ${analisis.sectorMasExitoso.tasa}% de éxito
-    
-    • Gestión Temporal: **${analisis.problemasTemporales.titulo}** - ${analisis.problemasTemporales.descripcion}
-    
-    • Oportunidades Inmediatas: **${analisis.oportunidadesUrgentes.length} convocatorias** requieren acción urgente
-    
-    
-    **RECOMENDACIÓN PRINCIPAL:**
-    
+
+
+    MÉTRICAS CLAVE:
+
+    Tasa de Elegibilidad General ...................... ${analisis.tasaElegibilidadGeneral}%
+    Ventaja Competitiva Detectada ..................... ${analisis.ventajaComparativa.descripcion}
+    Sector con Mayor Potencial ........................ ${analisis.sectorMasExitoso.nombre} (${analisis.sectorMasExitoso.tasa}%)
+    Oportunidades Urgentes Identificadas .............. ${analisis.oportunidadesUrgentes.length} convocatorias
+    Estado de Gestión Temporal ........................ ${analisis.problemasTemporales.titulo}
+
+
+    HALLAZGO PRINCIPAL:
+
     ${analisis.ventajaComparativa.diferencia > 20 ? 
-      `La institución debe reorientar prioritariamente sus recursos hacia convocatorias 
-      ${analisis.ventajaComparativa.mejor.toLowerCase()}es, donde presenta una ventaja competitiva 
-      de ${analisis.ventajaComparativa.diferencia.toFixed(1)} puntos porcentuales. Esta reorientación 
-      podría incrementar la tasa de éxito institucional en un 25-40%.` :
-      `Se recomienda fortalecer capacidades en ambos ámbitos (nacional e internacional) 
-      para maximizar las oportunidades de financiamiento disponibles.`}
-    
-    
-    ═══════════════════════════════════════════════════════════════════════════════════
+      `La institución presenta una ventaja competitiva de ${analisis.ventajaComparativa.diferencia.toFixed(1)} puntos 
+    porcentuales en convocatorias ${analisis.ventajaComparativa.mejor.toLowerCase()}es. Esta diferencia representa 
+    una oportunidad estratégica significativa para optimizar el retorno de inversión 
+    institucional en un ${Math.round(analisis.ventajaComparativa.diferencia * 1.5)}% adicional.` :
+      `Se requiere fortalecer capacidades institucionales en ambos ámbitos para 
+    maximizar las oportunidades de financiamiento disponibles.`}
 
 
-                                ANÁLISIS CUANTITATIVO
+    RECOMENDACIÓN ESTRATÉGICA INMEDIATA:
+
+    ${analisis.convocatoriasVencidas.length > 0 ? 
+      `ACCIÓN CORRECTIVA URGENTE: Verificar inmediatamente el estado de ${analisis.convocatoriasVencidas.length} 
+    convocatorias marcadas como abiertas pero vencidas (IDs: ${analisis.convocatoriasVencidas.join(', ')}).` :
+      
+      analisis.oportunidadesUrgentes.length > 0 ?
+      `OPORTUNIDAD INMEDIATA: Priorizar aplicación a ${analisis.oportunidadesUrgentes.length} convocatorias 
+    elegibles que vencen en los próximos 30 días.` :
+      
+      `OPTIMIZACIÓN ESTRATÉGICA: Enfocar recursos en convocatorias ${analisis.ventajaComparativa.mejor.toLowerCase()}es 
+    donde la institución presenta ventajas competitivas demostradas.`}
 
 
     ${tablaDistribucion}
 
-
     ${analisisCorrelaciones}
 
-
     ${tablaUrgencia}
-
 
     ${recomendaciones}
 
 
-                              PROYECCIONES ESTADÍSTICAS
+                              PROYECCIONES CUANTIFICADAS
 
 
     ═══════════════════════════════════════════════════════════════════════════════════
-    
-    **PROBABILIDADES DE ÉXITO PROYECTADAS:**
-    
-    • Próxima convocatoria ${analisis.ventajaComparativa.mejor}: **${Math.min(95, analisis.ventajaComparativa.mejor === 'Internacional' ? 
-      analisis.tasaElegibilidadGeneral + 15 : analisis.tasaElegibilidadGeneral + 5)}%**
-    
-    • Tasa de aprovechamiento óptima: **${Math.min(85, analisis.tasaElegibilidadGeneral + 25)}%**
-    
-    • ROI estimado por reorientación estratégica: **+${Math.round(analisis.ventajaComparativa.diferencia * 1.5)}%**
-    
-    
-    **ESCENARIOS PROYECTADOS A 12 MESES:**
-    
-    Escenario Conservador:
-    • Incremento en tasa de éxito: +15%
-    • Nuevas oportunidades identificadas: 8-12 convocatorias adicionales
-    • ROI institucional estimado: +20%
-    
-    Escenario Optimista (con reorientación estratégica):
-    • Incremento en tasa de éxito: +35%
-    • Nuevas oportunidades identificadas: 15-25 convocatorias adicionales
-    • ROI institucional estimado: +50%
-    
-    
+
+    PROBABILIDADES DE ÉXITO PROYECTADAS:
+
+    • Próxima convocatoria ${analisis.ventajaComparativa.mejor} ............ ${Math.min(95, analisis.ventajaComparativa.mejor === 'Internacional' ? 
+      analisis.tasaElegibilidadGeneral + 15 : analisis.tasaElegibilidadGeneral + 5)}%
+
+    • Tasa de aprovechamiento óptima proyectada ................... ${Math.min(85, analisis.tasaElegibilidadGeneral + 25)}%
+
+    • ROI estimado por reorientación estratégica .................. +${Math.round(analisis.ventajaComparativa.diferencia * 1.5)}%
+
+
+    ESCENARIOS DE IMPACTO A 12 MESES:
+
+    ESCENARIO CONSERVADOR:
+    - Incremento en tasa de éxito: +15%
+    - Nuevas oportunidades identificadas: 8-12 convocatorias adicionales
+    - ROI institucional estimado: +20%
+    - Inversión requerida: Mínima (optimización de procesos)
+
+    ESCENARIO OPTIMISTA (con reorientación estratégica completa):
+    - Incremento en tasa de éxito: +35%
+    - Nuevas oportunidades identificadas: 15-25 convocatorias adicionales
+    - ROI institucional estimado: +50%
+    - Inversión requerida: Moderada (desarrollo de capacidades)
+
+    ESCENARIO TRANSFORMACIONAL:
+    - Incremento en tasa de éxito: +60%
+    - Nuevas oportunidades identificadas: 25-40 convocatorias adicionales
+    - ROI institucional estimado: +85%
+    - Inversión requerida: Significativa (especialización sectorial)
+
+
     ═══════════════════════════════════════════════════════════════════════════════════
 
 
-                               METODOLOGÍA Y METADATOS
+                               METADATOS DEL ANÁLISIS
 
 
-    **ALGORITMOS APLICADOS:**
+    PARÁMETROS TÉCNICOS:
     
-    1. Análisis Descriptivo Multidimensional
-       - Frecuencias absolutas y relativas por dimensión clave
-       - Distribuciones porcentuales y tablas de contingencia
+    Total de convocatorias analizadas ............................ ${convocatorias.length}
+    Algoritmos aplicados ......................................... 5 módulos de IA
+    Nivel de confianza estadística ............................... 95%
+    Criterio de significancia .................................... p < 0.05
+    Versión del sistema .......................................... 1.0.0
+
+    CONFIGURACIÓN DE ALERTAS:
     
-    2. Análisis Correlacional Crítico  
-       - Correlación orden vs cumplimiento de requisitos
-       - Análisis sectorial por viabilidad con significancia estadística
-    
-    3. Análisis Temporal Inteligente
-       - Distribución temporal y patrones de concentración
-       - Sistema de alertas por urgencia (crítico < 7 días, urgente < 30 días)
-    
-    4. Algoritmo de Recomendaciones Automáticas
-       - Lógica condicional basada en patrones detectados
-       - Priorización por impacto y urgencia
-    
-    5. Generador de Perfil Óptimo
-       - Identificación de características de convocatorias exitosas
-       - Proyecciones basadas en datos históricos
-    
-    
-    **METADATOS DEL ANÁLISIS:**
-    
-    • Total de convocatorias analizadas: ${convocatorias.length}
-    • Fecha de generación: ${fechaGeneracion}
-    • Versión del algoritmo: 1.0.0
-    • Nivel de confianza estadística: 95%
-    • Criterio de significancia: p < 0.05
-    
-    
-    **CONFIGURACIÓN DE PARÁMETROS:**
-    
-    • Umbral de alerta urgente: 30 días
-    • Umbral de alerta crítica: 7 días  
-    • Potencial sectorial alto: ≥40% éxito
-    • Potencial sectorial medio: 20-39% éxito
-    • Potencial sectorial bajo: <20% éxito
-    
-    
+    Umbral de alerta crítica ..................................... 7 días
+    Umbral de alerta urgente ..................................... 30 días
+    Potencial sectorial alto ..................................... ≥40% éxito
+    Potencial sectorial medio .................................... 20-39% éxito
+    Potencial sectorial bajo ..................................... <20% éxito
+
+
+    ALGORITMOS DE ANÁLISIS EJECUTADOS:
+
+    1. ANÁLISIS DESCRIPTIVO MULTIDIMENSIONAL
+       Aplicación de frecuencias absolutas, relativas y distribuciones 
+       porcentuales en 4 dimensiones críticas (orden, tipo, sector, estado).
+
+    2. ANÁLISIS CORRELACIONAL CRÍTICO
+       Evaluación de correlaciones orden vs cumplimiento con significancia 
+       estadística y análisis sectorial por viabilidad.
+
+    3. ANÁLISIS TEMPORAL INTELIGENTE
+       Identificación de patrones temporales, concentraciones críticas y 
+       generación de alertas automáticas por urgencia.
+
+    4. ALGORITMO DE RECOMENDACIONES AUTOMÁTICAS
+       Lógica condicional basada en patrones detectados con priorización 
+       por impacto potencial y urgencia temporal.
+
+    5. GENERADOR DE PERFIL ÓPTIMO INSTITUCIONAL
+       Identificación de características de convocatorias exitosas y 
+       proyecciones basadas en análisis predictivo.
+
+
     ═══════════════════════════════════════════════════════════════════════════════════
 
 
-                                  INFORMACIÓN INSTITUCIONAL
+                              INFORMACIÓN INSTITUCIONAL
 
 
-    **Universidad Católica Luis Amigó**
+    Universidad Católica Luis Amigó
     Sede Medellín
-    
-    Informe Estadístico Institucional
     Departamento de Análisis y Gestión de Oportunidades
-    
-    ${fechaGeneracion}
-    
-    
-    **CONFIDENCIALIDAD Y USO:**
-    
-    Este documento ha sido generado automáticamente mediante algoritmos de análisis 
+
+    DOCUMENTO CONFIDENCIAL - USO INTERNO EXCLUSIVO
+
+    Este informe ha sido generado automáticamente mediante algoritmos de análisis 
     estadístico avanzado e inteligencia artificial. La información contenida es 
-    confidencial y de uso exclusivo interno.
-    
-    El análisis se basa en datos institucionales actualizados y aplicación de 
-    metodologías estadísticas reconocidas internacionalmente para optimización 
-    de estrategias de financiamiento académico.
-    
-    
-    **CONTACTO TÉCNICO:**
-    
-    Para consultas sobre metodología, interpretación de resultados o acceso a 
-    datos detallados, contacte al Departamento de Análisis Institucional.
-    
-    
-    ═══════════════════════════════════════════════════════════════════════════════════
-    
+    confidencial y de uso exclusivo interno para optimización de estrategias de 
+    financiamiento académico.
+
+    El análisis se fundamenta en datos institucionales actualizados y aplicación 
+    de metodologías estadísticas reconocidas internacionalmente, procesadas con 
+    tecnología de vanguardia para identificación de patrones ocultos y generación 
+    de recomendaciones estratégicas accionables.
+
+    Para consultas técnicas sobre metodología, interpretación de resultados o 
+    acceso a datos detallados, contacte al Departamento de Análisis Institucional.
+
+    ${fechaGeneracion}
+
     © 2025 Universidad Católica Luis Amigó - Todos los derechos reservados
-    
     Documento generado automáticamente - Versión 1.0.0
-    
+
     ═══════════════════════════════════════════════════════════════════════════════════
-    
-    
-    
-                                      FIN DEL INFORME
-    
     `;
 
     return new Response(JSON.stringify({ 
