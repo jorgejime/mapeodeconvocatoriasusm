@@ -194,74 +194,74 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
     if (!analisis) return null;
 
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-blue-200 bg-blue-50/50">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Target className="h-4 w-4 text-blue-600" />
-              Elegibilidad General
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-700">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
+          <div className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="neumorphic-icon">
+                <Target className="h-4 w-4 text-slate-600" />
+              </div>
+              <h4 className="text-sm font-medium text-slate-700">Elegibilidad General</h4>
+            </div>
+            <div className="text-3xl font-bold text-slate-800 mb-1">
               {analisis.tasaElegibilidadGeneral}%
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate-500">
               Convocatorias viables
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="border-green-200 bg-green-50/50">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              Ventaja Competitiva
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-700">
+        <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
+          <div className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="neumorphic-icon">
+                <TrendingUp className="h-4 w-4 text-slate-600" />
+              </div>
+              <h4 className="text-sm font-medium text-slate-700">Ventaja Competitiva</h4>
+            </div>
+            <div className="text-2xl font-bold text-slate-800 mb-1">
               {analisis.ventajaComparativa.mejor}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate-500">
               +{analisis.ventajaComparativa.diferencia}% diferencia
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="border-purple-200 bg-purple-50/50">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-purple-600" />
-              Sector Prometedor
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm font-bold text-purple-700 truncate">
+        <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
+          <div className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="neumorphic-icon">
+                <BarChart3 className="h-4 w-4 text-slate-600" />
+              </div>
+              <h4 className="text-sm font-medium text-slate-700">Sector Prometedor</h4>
+            </div>
+            <div className="text-sm font-bold text-slate-800 mb-1 truncate">
               {analisis.sectorMasExitoso.nombre || 'N/A'}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate-500">
               {analisis.sectorMasExitoso.tasa}% éxito
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="border-orange-200 bg-orange-50/50">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Clock className="h-4 w-4 text-orange-600" />
-              Oportunidades Urgentes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-700">
+        <div className="neumorphic-card group hover:neumorphic-card-hover transition-all duration-300">
+          <div className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="neumorphic-icon">
+                <Clock className="h-4 w-4 text-slate-600" />
+              </div>
+              <h4 className="text-sm font-medium text-slate-700">Oportunidades Urgentes</h4>
+            </div>
+            <div className="text-3xl font-bold text-slate-800 mb-1">
               {analisis.oportunidadesUrgentes.length}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate-500">
               Requieren atención inmediata
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     );
   };
@@ -308,24 +308,28 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
         {alertas.map((alerta, index) => {
           const Icon = alerta.icono;
           return (
-            <Card key={index} className={`border-${alerta.color}-200 bg-${alerta.color}-50/50`}>
-              <CardContent className="p-4">
+            <div key={index} className="neumorphic-card hover:neumorphic-card-hover transition-all duration-300">
+              <div className="p-4">
                 <div className="flex items-start gap-3">
-                  <Icon className={`h-5 w-5 text-${alerta.color}-600 mt-0.5`} />
+                  <div className="neumorphic-icon-alert">
+                    <Icon className="h-5 w-5 text-slate-600 mt-0.5" />
+                  </div>
                   <div className="flex-1">
-                    <h4 className={`font-medium text-${alerta.color}-900`}>
+                    <h4 className="font-medium text-slate-800">
                       {alerta.titulo}
                     </h4>
-                    <p className={`text-sm text-${alerta.color}-700 mt-1`}>
+                    <p className="text-sm text-slate-600 mt-1">
                       {alerta.descripcion}
                     </p>
                   </div>
-                  <Badge variant={alerta.tipo === 'critica' ? 'destructive' : 'secondary'}>
-                    {alerta.tipo.toUpperCase()}
-                  </Badge>
+                  <div className="neumorphic-badge">
+                    <span className="text-xs font-medium text-slate-700">
+                      {alerta.tipo.toUpperCase()}
+                    </span>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           );
         })}
       </div>
@@ -335,180 +339,334 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
   const renderOportunidadesUrgentes = () => {
     if (!analisis || analisis.oportunidadesUrgentes.length === 0) {
       return (
-        <Card>
-          <CardContent className="p-6 text-center text-muted-foreground">
-            <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
+        <div className="neumorphic-card">
+          <div className="p-6 text-center text-slate-500">
+            <div className="neumorphic-icon-large mx-auto mb-4">
+              <Clock className="h-12 w-12 text-slate-400" />
+            </div>
             <p>No hay oportunidades urgentes en este momento</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       );
     }
 
     return (
       <div className="space-y-3">
         {analisis.oportunidadesUrgentes.map((opp, index) => (
-          <Card key={opp.id} className="border-orange-200">
-            <CardContent className="p-4">
+          <div key={opp.id} className="neumorphic-card hover:neumorphic-card-hover transition-all duration-300">
+            <div className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h4 className="font-medium text-sm mb-1 line-clamp-1">
+                  <h4 className="font-medium text-sm mb-1 line-clamp-1 text-slate-800">
                     {opp.nombre}
                   </h4>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-4 text-xs text-slate-500">
                     <span>ID: {opp.id}</span>
                     <span>{opp.monto}</span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <Badge variant={opp.dias <= 7 ? 'destructive' : 'secondary'}>
-                    {opp.dias} días
-                  </Badge>
+                  <div className={`neumorphic-badge ${opp.dias <= 7 ? 'urgent' : ''}`}>
+                    <span className="text-xs font-medium text-slate-700">
+                      {opp.dias} días
+                    </span>
+                  </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
     );
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-primary" />
-              Informes Estadísticos Inteligentes
-            </CardTitle>
-            <CardDescription>
-              Análisis automático de patrones, correlaciones y oportunidades ocultas
-            </CardDescription>
-          </div>
-          <div className="flex gap-2">
-            <Button 
-              onClick={generarInforme} 
-              disabled={loading || !convocatorias.length}
-              className="bg-primary hover:bg-primary/90"
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Generando...
-                </>
-              ) : (
-                <>
-                  <FileText className="h-4 w-4 mr-2" />
-                  Generar Informe
-                </>
+    <div className="w-full">
+      <style dangerouslySetInnerHTML={{__html: `
+        .neumorphic-card {
+          background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+          border-radius: 16px;
+          box-shadow: 
+            8px 8px 16px #cbd5e1,
+            -8px -8px 16px #ffffff;
+          border: none;
+        }
+        
+        .neumorphic-card-hover:hover {
+          box-shadow: 
+            4px 4px 8px #cbd5e1,
+            -4px -4px 8px #ffffff;
+          transform: translateY(-2px);
+        }
+        
+        .neumorphic-icon {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(145deg, #e2e8f0, #f1f5f9);
+          box-shadow: 
+            3px 3px 6px #cbd5e1,
+            -3px -3px 6px #ffffff;
+        }
+        
+        .neumorphic-icon-alert {
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(145deg, #e2e8f0, #f1f5f9);
+          box-shadow: 
+            4px 4px 8px #cbd5e1,
+            -4px -4px 8px #ffffff;
+        }
+        
+        .neumorphic-icon-large {
+          width: 80px;
+          height: 80px;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(145deg, #e2e8f0, #f1f5f9);
+          box-shadow: 
+            6px 6px 12px #cbd5e1,
+            -6px -6px 12px #ffffff;
+        }
+        
+        .neumorphic-badge {
+          padding: 6px 12px;
+          border-radius: 8px;
+          background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+          box-shadow: 
+            2px 2px 4px #cbd5e1,
+            -2px -2px 4px #ffffff;
+        }
+        
+        .neumorphic-badge.urgent {
+          background: linear-gradient(145deg, #fed7d7, #fbb6b6);
+          box-shadow: 
+            2px 2px 4px #f87171,
+            -2px -2px 4px #ffffff;
+        }
+        
+        .neumorphic-main-card {
+          background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+          border-radius: 20px;
+          box-shadow: 
+            12px 12px 24px #cbd5e1,
+            -12px -12px 24px #ffffff;
+          border: none;
+        }
+        
+        .neumorphic-button {
+          background: linear-gradient(145deg, #e2e8f0, #f1f5f9);
+          border: none;
+          border-radius: 12px;
+          box-shadow: 
+            6px 6px 12px #cbd5e1,
+            -6px -6px 12px #ffffff;
+          transition: all 0.2s ease;
+        }
+        
+        .neumorphic-button:hover {
+          box-shadow: 
+            3px 3px 6px #cbd5e1,
+            -3px -3px 6px #ffffff;
+          transform: translateY(-1px);
+        }
+        
+        .neumorphic-button:active {
+          box-shadow: 
+            inset 3px 3px 6px #cbd5e1,
+            inset -3px -3px 6px #ffffff;
+          transform: translateY(0);
+        }
+      `}} />
+      
+      <div className="neumorphic-main-card">
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="neumorphic-icon">
+                  <Brain className="h-5 w-5 text-slate-600" />
+                </div>
+                <h2 className="text-xl font-semibold text-slate-800">
+                  Informes Estadísticos Inteligentes
+                </h2>
+              </div>
+              <p className="text-slate-600">
+                Análisis automático de patrones, correlaciones y oportunidades ocultas
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={generarInforme} 
+                disabled={loading || !convocatorias.length}
+                className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2 disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-600" />
+                    Generando...
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-4 w-4" />
+                    Generar Informe
+                  </>
+                )}
+              </button>
+              {informe && (
+                <button
+                  onClick={descargarPDF}
+                  className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Descargar PDF
+                </button>
               )}
-            </Button>
-            {informe && (
-              <Button variant="outline" onClick={descargarPDF}>
-                <Download className="h-4 w-4 mr-2" />
-                Descargar PDF
-              </Button>
-            )}
+            </div>
           </div>
         </div>
-      </CardHeader>
 
-      <CardContent>
-        {!informe ? (
-          <div className="text-center py-12">
-            <Brain className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-            <h3 className="text-lg font-medium mb-2">
-              Generador de Informes Inteligentes
-            </h3>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Utiliza algoritmos avanzados e IA para identificar patrones ocultos, 
-              correlaciones críticas y generar recomendaciones estratégicas automáticas.
-            </p>
-            <Button 
-              onClick={generarInforme} 
-              disabled={loading || !convocatorias.length}
-              size="lg"
-              className="bg-primary hover:bg-primary/90"
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Procesando {convocatorias.length} convocatorias...
-                </>
-              ) : (
-                <>
-                  <Brain className="h-5 w-5 mr-2" />
-                  Generar Análisis Inteligente
-                </>
-              )}
-            </Button>
-            {!convocatorias.length && (
-              <p className="text-xs text-muted-foreground mt-2">
-                No hay datos disponibles para analizar
+        <div className="p-6">
+          {!informe ? (
+            <div className="text-center py-12">
+              <div className="neumorphic-icon-large mx-auto mb-4">
+                <Brain className="h-16 w-16 text-slate-400" />
+              </div>
+              <h3 className="text-lg font-medium mb-2 text-slate-800">
+                Generador de Informes Inteligentes
+              </h3>
+              <p className="text-slate-600 mb-6 max-w-md mx-auto">
+                Utiliza algoritmos avanzados e IA para identificar patrones ocultos, 
+                correlaciones críticas y generar recomendaciones estratégicas automáticas.
               </p>
-            )}
-          </div>
-        ) : (
-          <Tabs defaultValue="resumen" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="resumen">Resumen</TabsTrigger>
-              <TabsTrigger value="alertas">Alertas</TabsTrigger>
-              <TabsTrigger value="oportunidades">Oportunidades</TabsTrigger>
-              <TabsTrigger value="informe">Informe Completo</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="resumen" className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Resumen Ejecutivo</h3>
-                {renderResumenEjecutivo()}
-              </div>
-              {metadatos && (
-                <div className="pt-4 border-t">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
-                    <Separator orientation="vertical" className="h-4" />
-                    <span>📅 {metadatos.fechaGeneracion}</span>
-                    <Separator orientation="vertical" className="h-4" />
-                    <span>🔧 Versión {metadatos.version}</span>
-                  </div>
-                </div>
+              <button 
+                onClick={generarInforme} 
+                disabled={loading || !convocatorias.length}
+                className="neumorphic-button px-6 py-3 text-slate-700 font-medium flex items-center gap-2 disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-600" />
+                    Procesando {convocatorias.length} convocatorias...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="h-5 w-5" />
+                    Generar Análisis Inteligente
+                  </>
+                )}
+              </button>
+              {!convocatorias.length && (
+                <p className="text-xs text-slate-500 mt-2">
+                  No hay datos disponibles para analizar
+                </p>
               )}
-            </TabsContent>
-
-            <TabsContent value="alertas" className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Alertas y Notificaciones</h3>
-                {renderAlertas()}
+            </div>
+          ) : (
+            <div className="w-full">
+              <div className="flex w-full mb-6">
+                <button 
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mr-1 ${!informe ? 'opacity-50' : ''}`}
+                  onClick={() => document.getElementById('tab-resumen')?.click()}
+                >
+                  Resumen
+                </button>
+                <button 
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${!informe ? 'opacity-50' : ''}`}
+                  onClick={() => document.getElementById('tab-alertas')?.click()}
+                >
+                  Alertas
+                </button>
+                <button 
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${!informe ? 'opacity-50' : ''}`}
+                  onClick={() => document.getElementById('tab-oportunidades')?.click()}
+                >
+                  Oportunidades
+                </button>
+                <button 
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 ml-1 ${!informe ? 'opacity-50' : ''}`}
+                  onClick={() => document.getElementById('tab-informe')?.click()}
+                >
+                  Informe Completo
+                </button>
               </div>
-            </TabsContent>
 
-            <TabsContent value="oportunidades" className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Oportunidades Urgentes</h3>
-                {renderOportunidadesUrgentes()}
-              </div>
-            </TabsContent>
+              <Tabs defaultValue="resumen" className="w-full">
+                <TabsList className="hidden">
+                  <TabsTrigger id="tab-resumen" value="resumen">Resumen</TabsTrigger>
+                  <TabsTrigger id="tab-alertas" value="alertas">Alertas</TabsTrigger>
+                  <TabsTrigger id="tab-oportunidades" value="oportunidades">Oportunidades</TabsTrigger>
+                  <TabsTrigger id="tab-informe" value="informe">Informe Completo</TabsTrigger>
+                </TabsList>
 
-            <TabsContent value="informe" className="space-y-6">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Informe Completo</h3>
-                  <Button variant="outline" size="sm" onClick={descargarPDF}>
-                    <Download className="h-4 w-4 mr-2" />
-                    Descargar PDF
-                  </Button>
-                </div>
-                <ScrollArea className="h-[600px] w-full rounded-md border p-4">
-                  <pre className="text-xs font-mono whitespace-pre-wrap leading-relaxed">
-                    {informe}
-                  </pre>
-                </ScrollArea>
-              </div>
-            </TabsContent>
-          </Tabs>
-        )}
-      </CardContent>
-    </Card>
+                <TabsContent value="resumen" className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Resumen Ejecutivo</h3>
+                    {renderResumenEjecutivo()}
+                  </div>
+                  {metadatos && (
+                    <div className="pt-4 border-t border-slate-300">
+                      <div className="flex items-center gap-4 text-sm text-slate-600">
+                        <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
+                        <span>•</span>
+                        <span>📅 {metadatos.fechaGeneracion}</span>
+                        <span>•</span>
+                        <span>🔧 Versión {metadatos.version}</span>
+                      </div>
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="alertas" className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Alertas y Notificaciones</h3>
+                    {renderAlertas()}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="oportunidades" className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Oportunidades Urgentes</h3>
+                    {renderOportunidadesUrgentes()}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="informe" className="space-y-6">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-slate-800">Informe Completo</h3>
+                      <button
+                        onClick={descargarPDF}
+                        className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2"
+                      >
+                        <Download className="h-4 w-4" />
+                        Descargar PDF
+                      </button>
+                    </div>
+                    <div className="neumorphic-card p-4">
+                      <div className="h-[600px] overflow-auto">
+                        <pre className="text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-700">
+                          {informe}
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
