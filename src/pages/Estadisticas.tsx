@@ -6,27 +6,8 @@ import StatsCards from "@/components/stats/StatsCards";
 import CurrencyStats from "@/components/stats/CurrencyStats";
 import ChartsGrid from "@/components/stats/ChartsGrid";
 import SummaryCards from "@/components/stats/SummaryCards";
-
-interface Convocatoria {
-  id: number;
-  nombre_convocatoria: string;
-  entidad: string;
-  orden: string | null;
-  tipo: string | null;
-  valor: number | null;
-  tipo_moneda: string | null;
-  sector_tema: string | null;
-  componentes_transversales: string | null;
-  cumplimos_requisitos: boolean | null;
-  que_nos_falta: string | null;
-  fecha_limite_aplicacion: string | null;
-  link_convocatoria: string | null;
-  estado_convocatoria: string | null;
-  estado_usm: string | null;
-  observaciones: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import SmartReportsModule from "@/components/SmartReportsModule";
+import { Convocatoria, ConvocatoriaForAnalysis } from "@/types/convocatoria";
 
 interface StatsData {
   totalConvocatorias: number;
@@ -54,6 +35,7 @@ const CHART_COLORS = [
 
 export default function Estadisticas() {
   const [loading, setLoading] = useState(true);
+  const [convocatorias, setConvocatorias] = useState<Convocatoria[]>([]);
   const [stats, setStats] = useState<StatsData>({
     totalConvocatorias: 0,
     convocatoriasAbiertas: 0,
@@ -97,14 +79,15 @@ export default function Estadisticas() {
 
   const fetchStats = async () => {
     try {
-      const { data: convocatorias, error } = await supabase
+      const { data: convocatoriasData, error } = await supabase
         .from("convocatorias")
         .select("*");
 
       if (error) throw error;
 
-      if (convocatorias) {
-        calculateStats(convocatorias);
+      if (convocatoriasData) {
+        setConvocatorias(convocatoriasData);
+        calculateStats(convocatoriasData);
       }
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -227,6 +210,35 @@ export default function Estadisticas() {
     });
   };
 
+  const convertForAnalysis = (convocatorias: Convocatoria[]): ConvocatoriaForAnalysis[] => {
+    return convocatorias.filter(c => 
+      c.orden && 
+      c.tipo && 
+      c.sector_tema && 
+      c.fecha_limite_aplicacion && 
+      c.estado_convocatoria &&
+      c.estado_usm &&
+      c.valor !== null &&
+      c.tipo_moneda &&
+      c.cumplimos_requisitos !== null &&
+      c.que_nos_falta
+    ).map(c => ({
+      id: c.id,
+      nombre_convocatoria: c.nombre_convocatoria,
+      entidad: c.entidad,
+      orden: (c.orden === 'Nacional' || c.orden === 'Internacional') ? c.orden : 'Nacional',
+      tipo: c.tipo!,
+      sector_tema: c.sector_tema!,
+      cumplimos_requisitos: c.cumplimos_requisitos!,
+      que_nos_falta: c.que_nos_falta!,
+      fecha_limite_aplicacion: c.fecha_limite_aplicacion!,
+      estado_convocatoria: (c.estado_convocatoria === 'Abierta' || c.estado_convocatoria === 'Cerrada') ? c.estado_convocatoria : 'Cerrada',
+      estado_usm: c.estado_usm!,
+      valor: c.valor!,
+      tipo_moneda: c.tipo_moneda!
+    }));
+  };
+
   const getMonthNumber = (monthName: string): number => {
     const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
     return months.indexOf(monthName.toLowerCase());
@@ -303,6 +315,12 @@ export default function Estadisticas() {
           sectoresUnicos={stats.sectoresUnicos}
           entidadesUnicas={stats.entidadesUnicas}
         />
+      </div>
+
+      {/* Informes Estadísticos Inteligentes */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold text-foreground">Análisis Inteligente</h2>
+        <SmartReportsModule convocatorias={convertForAnalysis(convocatorias)} />
       </div>
     </div>
   );
