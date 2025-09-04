@@ -532,6 +532,130 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
           font-weight: 600;
           font-feature-settings: 'tnum', 'ss01';
         }
+        .informe-content {
+          white-space: pre-wrap;
+          font-family: 'Inter', sans-serif;
+          line-height: 1.6;
+          max-width: 100%;
+          margin: 0 auto;
+          padding: 0;
+        }
+        
+        .informe-content table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 16px 0;
+          font-size: 12px;
+          background: white;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .informe-content th,
+        .informe-content td {
+          padding: 12px 16px;
+          text-align: left;
+          border-bottom: 1px solid #e2e8f0;
+          vertical-align: top;
+        }
+        
+        .informe-content th {
+          background: #f8fafc;
+          font-weight: 600;
+          color: #374151;
+          text-transform: uppercase;
+          font-size: 11px;
+          letter-spacing: 0.05em;
+        }
+        
+        .informe-content tr:hover {
+          background: #f9fafb;
+        }
+        
+        .informe-content .text-center {
+          text-align: center;
+        }
+        
+        .informe-content .text-right {
+          text-align: right;
+        }
+        
+        .informe-content .text-left {
+          text-align: left;
+        }
+        
+        .informe-content h1,
+        .informe-content h2,
+        .informe-content h3 {
+          font-family: 'Playfair Display', serif;
+          font-weight: 600;
+          margin: 24px 0 16px 0;
+          color: #1e293b;
+          text-align: center;
+        }
+        
+        .informe-content h1 {
+          font-size: 24px;
+          border-bottom: 2px solid #e2e8f0;
+          padding-bottom: 8px;
+        }
+        
+        .informe-content h2 {
+          font-size: 18px;
+        }
+        
+        .informe-content h3 {
+          font-size: 16px;
+        }
+        
+        .informe-content p {
+          margin: 12px 0;
+          text-align: justify;
+          text-justify: inter-word;
+        }
+        
+        .informe-content .section {
+          margin: 24px 0;
+          padding: 0 16px;
+        }
+        
+        .informe-content .metric-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 16px;
+          margin: 4px 0;
+          background: #f8fafc;
+          border-radius: 6px;
+        }
+        
+        .informe-content .metric-label {
+          font-weight: 500;
+          color: #64748b;
+        }
+        
+        .informe-content .metric-value {
+          font-family: 'Playfair Display', serif;
+          font-weight: 600;
+          color: #1e293b;
+        }
+        
+        .informe-content .divider {
+          border: 0;
+          height: 1px;
+          background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+          margin: 24px 0;
+        }
+        
+        .informe-content .signature-block {
+          margin-top: 40px;
+          text-align: center;
+          padding: 20px;
+          border-top: 1px solid #e2e8f0;
+          font-size: 12px;
+          color: #64748b;
+        }
       `}} />
       
       <div className="neumorphic-main-card">
@@ -700,7 +824,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                       </div>
                       <div className="neumorphic-card p-6">
                         <div className="h-[600px] overflow-auto">
-                          <div className="executive-body text-sm leading-relaxed text-slate-700 whitespace-pre-wrap font-inter">
+                          <div className="informe-content executive-body text-sm leading-relaxed text-slate-700 font-inter">
                             {informe}
                           </div>
                         </div>
