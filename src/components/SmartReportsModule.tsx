@@ -58,6 +58,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
   const [informe, setInforme] = useState<string>('');
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null);
   const [metadatos, setMetadatos] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<string>('resumen');
   const { toast } = useToast();
 
   const generarInforme = async () => {
@@ -486,6 +487,13 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             inset -3px -3px 6px #ffffff;
           transform: translateY(0);
         }
+        
+        .neumorphic-button.active {
+          box-shadow: 
+            inset 4px 4px 8px #cbd5e1,
+            inset -4px -4px 8px #ffffff;
+          background: linear-gradient(145deg, #d1d5db, #e5e7eb);
+        }
       `}} />
       
       <div className="neumorphic-main-card">
@@ -575,93 +583,94 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             <div className="w-full">
               <div className="flex w-full mb-6">
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mr-1 ${!informe ? 'opacity-50' : ''}`}
-                  onClick={() => document.getElementById('tab-resumen')?.click()}
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mr-1 ${activeTab === 'resumen' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('resumen')}
                 >
                   Resumen
                 </button>
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${!informe ? 'opacity-50' : ''}`}
-                  onClick={() => document.getElementById('tab-alertas')?.click()}
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${activeTab === 'alertas' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('alertas')}
                 >
                   Alertas
                 </button>
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${!informe ? 'opacity-50' : ''}`}
-                  onClick={() => document.getElementById('tab-oportunidades')?.click()}
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 mx-1 ${activeTab === 'oportunidades' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('oportunidades')}
                 >
                   Oportunidades
                 </button>
                 <button 
-                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 ml-1 ${!informe ? 'opacity-50' : ''}`}
-                  onClick={() => document.getElementById('tab-informe')?.click()}
+                  className={`neumorphic-button px-4 py-2 text-sm font-medium flex-1 ml-1 ${activeTab === 'informe' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('informe')}
                 >
                   Informe Completo
                 </button>
               </div>
 
-              <Tabs defaultValue="resumen" className="w-full">
-                <TabsList className="hidden">
-                  <TabsTrigger id="tab-resumen" value="resumen">Resumen</TabsTrigger>
-                  <TabsTrigger id="tab-alertas" value="alertas">Alertas</TabsTrigger>
-                  <TabsTrigger id="tab-oportunidades" value="oportunidades">Oportunidades</TabsTrigger>
-                  <TabsTrigger id="tab-informe" value="informe">Informe Completo</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="resumen" className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Resumen Ejecutivo</h3>
-                    {renderResumenEjecutivo()}
+              <div className="w-full">
+                {activeTab === 'resumen' && (
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4 text-slate-800">Resumen Ejecutivo</h3>
+                      {renderResumenEjecutivo()}
+                    </div>
+                    {metadatos && (
+                      <div className="pt-4 border-t border-slate-300">
+                        <div className="flex items-center gap-4 text-sm text-slate-600">
+                          <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
+                          <span>•</span>
+                          <span>📅 {metadatos.fechaGeneracion}</span>
+                          <span>•</span>
+                          <span>🔧 Versión {metadatos.version}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  {metadatos && (
-                    <div className="pt-4 border-t border-slate-300">
-                      <div className="flex items-center gap-4 text-sm text-slate-600">
-                        <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
-                        <span>•</span>
-                        <span>📅 {metadatos.fechaGeneracion}</span>
-                        <span>•</span>
-                        <span>🔧 Versión {metadatos.version}</span>
+                )}
+
+                {activeTab === 'alertas' && (
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4 text-slate-800">Alertas y Notificaciones</h3>
+                      {renderAlertas()}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'oportunidades' && (
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4 text-slate-800">Oportunidades Urgentes</h3>
+                      {renderOportunidadesUrgentes()}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'informe' && (
+                  <div className="space-y-6">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-slate-800">Informe Completo</h3>
+                        <button
+                          onClick={descargarPDF}
+                          className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2"
+                        >
+                          <Download className="h-4 w-4" />
+                          Descargar PDF
+                        </button>
+                      </div>
+                      <div className="neumorphic-card p-4">
+                        <div className="h-[600px] overflow-auto">
+                          <pre className="text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-700">
+                            {informe}
+                          </pre>
+                        </div>
                       </div>
                     </div>
-                  )}
-                </TabsContent>
-
-                <TabsContent value="alertas" className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Alertas y Notificaciones</h3>
-                    {renderAlertas()}
                   </div>
-                </TabsContent>
-
-                <TabsContent value="oportunidades" className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Oportunidades Urgentes</h3>
-                    {renderOportunidadesUrgentes()}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="informe" className="space-y-6">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-slate-800">Informe Completo</h3>
-                      <button
-                        onClick={descargarPDF}
-                        className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2"
-                      >
-                        <Download className="h-4 w-4" />
-                        Descargar PDF
-                      </button>
-                    </div>
-                    <div className="neumorphic-card p-4">
-                      <div className="h-[600px] overflow-auto">
-                        <pre className="text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-700">
-                          {informe}
-                        </pre>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
+                )}
+              </div>
             </div>
           )}
         </div>
