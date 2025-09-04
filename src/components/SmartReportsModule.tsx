@@ -109,7 +109,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
   const descargarPDF = () => {
     if (!informe) return;
 
-    // Crear una ventana temporal para imprimir
+    // Crear una ventana temporal para generar el PDF desde texto
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
       toast({
@@ -120,8 +120,58 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
       return;
     }
 
-    // Escribir el contenido HTML en la nueva ventana
-    printWindow.document.write(informe);
+    // Generar HTML formateado para impresión desde el texto plano
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Estadístico Institucional - USM</title>
+    <style>
+        @page {
+            margin: 2cm;
+            size: A4;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #000;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            padding: 0;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <pre>${informe}</pre>
+</body>
+</html>`;
+
+    // Escribir el contenido en la nueva ventana
+    printWindow.document.write(htmlContent);
     printWindow.document.close();
 
     // Esperar a que se cargue el contenido y luego imprimir
@@ -449,10 +499,9 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                   </Button>
                 </div>
                 <ScrollArea className="h-[600px] w-full rounded-md border p-4">
-                  <div 
-                    className="text-sm"
-                    dangerouslySetInnerHTML={{ __html: informe }}
-                  />
+                  <pre className="text-xs font-mono whitespace-pre-wrap leading-relaxed">
+                    {informe}
+                  </pre>
                 </ScrollArea>
               </div>
             </TabsContent>
