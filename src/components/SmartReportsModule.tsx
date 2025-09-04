@@ -698,11 +698,11 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                           Descargar PDF
                         </button>
                       </div>
-                      <div className="neumorphic-card p-4">
+                      <div className="neumorphic-card p-6">
                         <div className="h-[600px] overflow-auto">
-                        <pre className="executive-code text-xs leading-relaxed text-slate-700">
-                          {informe}
-                        </pre>
+                          <div className="executive-body text-sm leading-relaxed text-slate-700 whitespace-pre-wrap font-inter">
+                            {informe}
+                          </div>
                         </div>
                       </div>
                     </div>
