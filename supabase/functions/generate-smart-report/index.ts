@@ -519,7 +519,7 @@ serve(async (req) => {
     const informeTexto = `
 
 
-                    UNIVERSIDAD CATÓLICA LUIS AMIGÓ - SEDE MEDELLÍN
+                    INSTITUCIÓN UNIVERSITARIA DE SANTA MARTA
                            INFORME ESTADÍSTICO INSTITUCIONAL
                               ANÁLISIS DE CONVOCATORIAS
 
@@ -662,8 +662,7 @@ serve(async (req) => {
                               INFORMACIÓN INSTITUCIONAL
 
 
-    Universidad Católica Luis Amigó
-    Sede Medellín
+    Institución Universitaria de Santa Marta
     Departamento de Análisis y Gestión de Oportunidades
 
     DOCUMENTO CONFIDENCIAL - USO INTERNO EXCLUSIVO
@@ -683,7 +682,7 @@ serve(async (req) => {
 
     ${fechaGeneracion}
 
-    © 2025 Universidad Católica Luis Amigó - Todos los derechos reservados
+    © 2025 Institución Universitaria de Santa Marta - Todos los derechos reservados
     Documento generado automáticamente - Versión 1.0.0
 
     ═══════════════════════════════════════════════════════════════════════════════════
