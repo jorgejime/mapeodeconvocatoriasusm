@@ -202,12 +202,12 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
               <div className="neumorphic-icon">
                 <Target className="h-4 w-4 text-slate-600" />
               </div>
-              <h4 className="text-sm font-medium text-slate-700">Elegibilidad General</h4>
+              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Elegibilidad General</h4>
             </div>
-            <div className="text-3xl font-bold text-slate-800 mb-1">
+            <div className="metric-value text-3xl text-slate-800 mb-1">
               {analisis.tasaElegibilidadGeneral}%
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="executive-body text-xs text-slate-500">
               Convocatorias viables
             </p>
           </div>
@@ -219,12 +219,12 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
               <div className="neumorphic-icon">
                 <TrendingUp className="h-4 w-4 text-slate-600" />
               </div>
-              <h4 className="text-sm font-medium text-slate-700">Ventaja Competitiva</h4>
+              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Ventaja Competitiva</h4>
             </div>
-            <div className="text-2xl font-bold text-slate-800 mb-1">
+            <div className="metric-value text-2xl text-slate-800 mb-1">
               {analisis.ventajaComparativa.mejor}
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="executive-body text-xs text-slate-500">
               +{analisis.ventajaComparativa.diferencia}% diferencia
             </p>
           </div>
@@ -236,12 +236,12 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
               <div className="neumorphic-icon">
                 <BarChart3 className="h-4 w-4 text-slate-600" />
               </div>
-              <h4 className="text-sm font-medium text-slate-700">Sector Prometedor</h4>
+              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Sector Prometedor</h4>
             </div>
-            <div className="text-sm font-bold text-slate-800 mb-1 truncate">
+            <div className="metric-value text-sm text-slate-800 mb-1 truncate">
               {analisis.sectorMasExitoso.nombre || 'N/A'}
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="executive-body text-xs text-slate-500">
               {analisis.sectorMasExitoso.tasa}% éxito
             </p>
           </div>
@@ -253,12 +253,12 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
               <div className="neumorphic-icon">
                 <Clock className="h-4 w-4 text-slate-600" />
               </div>
-              <h4 className="text-sm font-medium text-slate-700">Oportunidades Urgentes</h4>
+              <h4 className="executive-subtitle text-sm font-medium text-slate-700">Oportunidades Urgentes</h4>
             </div>
-            <div className="text-3xl font-bold text-slate-800 mb-1">
+            <div className="metric-value text-3xl text-slate-800 mb-1">
               {analisis.oportunidadesUrgentes.length}
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="executive-body text-xs text-slate-500">
               Requieren atención inmediata
             </p>
           </div>
@@ -316,10 +316,10 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                     <Icon className="h-5 w-5 text-slate-600 mt-0.5" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-medium text-slate-800">
+                    <h4 className="executive-subtitle font-medium text-slate-800">
                       {alerta.titulo}
                     </h4>
-                    <p className="text-sm text-slate-600 mt-1">
+                    <p className="executive-body text-sm text-slate-600 mt-1">
                       {alerta.descripcion}
                     </p>
                   </div>
@@ -345,7 +345,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             <div className="neumorphic-icon-large mx-auto mb-4">
               <Clock className="h-12 w-12 text-slate-400" />
             </div>
-            <p>No hay oportunidades urgentes en este momento</p>
+            <p className="executive-body text-slate-500">No hay oportunidades urgentes en este momento</p>
           </div>
         </div>
       );
@@ -358,10 +358,10 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             <div className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h4 className="font-medium text-sm mb-1 line-clamp-1 text-slate-800">
+                  <h4 className="executive-subtitle font-medium text-sm mb-1 line-clamp-1 text-slate-800">
                     {opp.nombre}
                   </h4>
-                  <div className="flex items-center gap-4 text-xs text-slate-500">
+                  <div className="executive-body flex items-center gap-4 text-xs text-slate-500">
                     <span>ID: {opp.id}</span>
                     <span>{opp.monto}</span>
                   </div>
@@ -391,6 +391,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             8px 8px 16px #cbd5e1,
             -8px -8px 16px #ffffff;
           border: none;
+          font-family: 'Inter', sans-serif;
         }
         
         .neumorphic-card-hover:hover {
@@ -446,6 +447,8 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
           box-shadow: 
             2px 2px 4px #cbd5e1,
             -2px -2px 4px #ffffff;
+          font-family: 'Inter', sans-serif;
+          font-weight: 500;
         }
         
         .neumorphic-badge.urgent {
@@ -462,6 +465,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             12px 12px 24px #cbd5e1,
             -12px -12px 24px #ffffff;
           border: none;
+          font-family: 'Inter', sans-serif;
         }
         
         .neumorphic-button {
@@ -472,6 +476,8 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             6px 6px 12px #cbd5e1,
             -6px -6px 12px #ffffff;
           transition: all 0.2s ease;
+          font-family: 'Inter', sans-serif;
+          font-weight: 500;
         }
         
         .neumorphic-button:hover {
@@ -494,6 +500,38 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             inset -4px -4px 8px #ffffff;
           background: linear-gradient(145deg, #d1d5db, #e5e7eb);
         }
+        
+        .executive-title {
+          font-family: 'Playfair Display', serif;
+          font-weight: 600;
+          letter-spacing: -0.025em;
+          line-height: 1.2;
+        }
+        
+        .executive-subtitle {
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+          letter-spacing: -0.01em;
+        }
+        
+        .executive-body {
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+          line-height: 1.6;
+        }
+        
+        .executive-code {
+          font-family: 'JetBrains Mono', monospace;
+          font-weight: 400;
+          line-height: 1.5;
+          letter-spacing: 0;
+        }
+        
+        .metric-value {
+          font-family: 'Playfair Display', serif;
+          font-weight: 600;
+          font-feature-settings: 'tnum', 'ss01';
+        }
       `}} />
       
       <div className="neumorphic-main-card">
@@ -504,11 +542,11 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                 <div className="neumorphic-icon">
                   <Brain className="h-5 w-5 text-slate-600" />
                 </div>
-                <h2 className="text-xl font-semibold text-slate-800">
+                <h2 className="executive-title text-xl text-slate-800">
                   Informes Estadísticos Inteligentes
                 </h2>
               </div>
-              <p className="text-slate-600">
+              <p className="executive-subtitle text-slate-600">
                 Análisis automático de patrones, correlaciones y oportunidades ocultas
               </p>
             </div>
@@ -549,10 +587,10 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
               <div className="neumorphic-icon-large mx-auto mb-4">
                 <Brain className="h-16 w-16 text-slate-400" />
               </div>
-              <h3 className="text-lg font-medium mb-2 text-slate-800">
+              <h3 className="executive-title text-lg text-slate-800">
                 Generador de Informes Inteligentes
               </h3>
-              <p className="text-slate-600 mb-6 max-w-md mx-auto">
+              <p className="executive-body text-slate-600 mb-6 max-w-md mx-auto">
                 Utiliza algoritmos avanzados e IA para identificar patrones ocultos, 
                 correlaciones críticas y generar recomendaciones estratégicas automáticas.
               </p>
@@ -574,7 +612,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                 )}
               </button>
               {!convocatorias.length && (
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="executive-body text-xs text-slate-500 mt-2">
                   No hay datos disponibles para analizar
                 </p>
               )}
@@ -612,18 +650,18 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                 {activeTab === 'resumen' && (
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4 text-slate-800">Resumen Ejecutivo</h3>
+                      <h3 className="executive-title text-lg text-slate-800">Resumen Ejecutivo</h3>
                       {renderResumenEjecutivo()}
                     </div>
                     {metadatos && (
                       <div className="pt-4 border-t border-slate-300">
-                        <div className="flex items-center gap-4 text-sm text-slate-600">
-                          <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
-                          <span>•</span>
-                          <span>📅 {metadatos.fechaGeneracion}</span>
-                          <span>•</span>
-                          <span>🔧 Versión {metadatos.version}</span>
-                        </div>
+                      <div className="executive-body flex items-center gap-4 text-sm text-slate-600">
+                        <span>📊 {metadatos.totalConvocatorias} convocatorias analizadas</span>
+                        <span>•</span>
+                        <span>📅 {metadatos.fechaGeneracion}</span>
+                        <span>•</span>
+                        <span>🔧 Versión {metadatos.version}</span>
+                      </div>
                       </div>
                     )}
                   </div>
@@ -632,7 +670,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                 {activeTab === 'alertas' && (
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4 text-slate-800">Alertas y Notificaciones</h3>
+                      <h3 className="executive-title text-lg text-slate-800">Alertas y Notificaciones</h3>
                       {renderAlertas()}
                     </div>
                   </div>
@@ -641,7 +679,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                 {activeTab === 'oportunidades' && (
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4 text-slate-800">Oportunidades Urgentes</h3>
+                      <h3 className="executive-title text-lg text-slate-800">Oportunidades Urgentes</h3>
                       {renderOportunidadesUrgentes()}
                     </div>
                   </div>
@@ -651,7 +689,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-slate-800">Informe Completo</h3>
+                        <h3 className="executive-title text-lg text-slate-800">Informe Completo</h3>
                         <button
                           onClick={descargarPDF}
                           className="neumorphic-button px-4 py-2 text-slate-700 font-medium flex items-center gap-2"
@@ -662,9 +700,9 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                       </div>
                       <div className="neumorphic-card p-4">
                         <div className="h-[600px] overflow-auto">
-                          <pre className="text-xs font-mono whitespace-pre-wrap leading-relaxed text-slate-700">
-                            {informe}
-                          </pre>
+                        <pre className="executive-code text-xs leading-relaxed text-slate-700">
+                          {informe}
+                        </pre>
                         </div>
                       </div>
                     </div>
