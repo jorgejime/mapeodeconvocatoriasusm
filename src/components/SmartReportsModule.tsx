@@ -106,22 +106,37 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
     }
   };
 
-  const descargarInforme = () => {
+  const descargarPDF = () => {
     if (!informe) return;
 
-    const blob = new Blob([informe], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `informe-inteligente-${new Date().toISOString().split('T')[0]}.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // Crear una ventana temporal para imprimir
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      toast({
+        title: "Error",
+        description: "No se pudo abrir la ventana de impresión. Verifique el bloqueador de ventanas emergentes.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Escribir el contenido HTML en la nueva ventana
+    printWindow.document.write(informe);
+    printWindow.document.close();
+
+    // Esperar a que se cargue el contenido y luego imprimir
+    printWindow.onload = () => {
+      printWindow.print();
+      
+      // Cerrar la ventana después de la impresión
+      printWindow.onafterprint = () => {
+        printWindow.close();
+      };
+    };
 
     toast({
-      title: "Descarga completada",
-      description: "El informe se ha descargado correctamente",
+      title: "Generando PDF",
+      description: "Se abrirá el diálogo de impresión para guardar como PDF",
     });
   };
 
@@ -339,9 +354,9 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
               )}
             </Button>
             {informe && (
-              <Button variant="outline" onClick={descargarInforme}>
+              <Button variant="outline" onClick={descargarPDF}>
                 <Download className="h-4 w-4 mr-2" />
-                Descargar
+                Descargar PDF
               </Button>
             )}
           </div>
@@ -428,15 +443,16 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">Informe Completo</h3>
-                  <Button variant="outline" size="sm" onClick={descargarInforme}>
+                  <Button variant="outline" size="sm" onClick={descargarPDF}>
                     <Download className="h-4 w-4 mr-2" />
-                    Descargar MD
+                    Descargar PDF
                   </Button>
                 </div>
                 <ScrollArea className="h-[600px] w-full rounded-md border p-4">
-                  <pre className="whitespace-pre-wrap text-sm font-mono">
-                    {informe}
-                  </pre>
+                  <div 
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{ __html: informe }}
+                  />
                 </ScrollArea>
               </div>
             </TabsContent>
