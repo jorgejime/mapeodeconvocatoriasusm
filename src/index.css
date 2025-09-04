@@ -2,46 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design system for convocatorias management app 
-Professional corporate colors with traffic light indicators
+/* Neumorphism Design System - Soft Embossed Surfaces
+Professional corporate colors with neumorphism effects
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
+    /* Neumorphism base colors */
+    --neomorphic-bg: 220 14% 96%;
+    --neomorphic-surface: 220 14% 96%;
+    --neomorphic-light: 0 0% 100%;
+    --neomorphic-dark: 220 14% 83%;
+    --neomorphic-shadow-light: 220 14% 83%;
+    --neomorphic-shadow-dark: 220 20% 88%;
+    
+    --background: 220 14% 96%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
+    --card: 220 14% 96%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 100%;
+    --popover: 220 14% 96%;
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
+    --secondary: 220 14% 91%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 96%;
+    --muted: 220 14% 91%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 94%;
+    --accent: 220 14% 91%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
     --ring: 217 91% 60%;
 
     --radius: 0.75rem;
 
-    /* Corporate gradient */
+    /* Neumorphism specific gradients */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 20% 98%));
+    --gradient-neomorphic: linear-gradient(145deg, hsl(220 14% 98%), hsl(220 14% 94%));
+    --gradient-neomorphic-inset: linear-gradient(145deg, hsl(220 14% 92%), hsl(220 14% 96%));
     
     /* Traffic light indicators */
     --success: 142 76% 36%;
@@ -56,24 +65,24 @@ All colors MUST be HSL.
     --warning-light: 48 96% 53% / 0.1;
     --danger-light: 0 84% 60% / 0.1;
 
-    --sidebar-background: 0 0% 98%;
-
+    --sidebar-background: 220 14% 96%;
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
+    --sidebar-accent: 220 14% 93%;
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
+    --neomorphic-bg: 222.2 84% 4.9%;
+    --neomorphic-surface: 222.2 84% 4.9%;
+    --neomorphic-light: 217.2 32.6% 20%;
+    --neomorphic-dark: 222.2 84% 2%;
+    --neomorphic-shadow-light: 217.2 32.6% 20%;
+    --neomorphic-shadow-dark: 222.2 84% 2%;
+    
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -102,9 +111,10 @@ All colors MUST be HSL.
     --input: 217.2 32.6% 17.5%;
     --ring: 217 91% 60%;
 
-    /* Corporate gradient for dark mode */
+    /* Neumorphism gradients for dark mode */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-card: linear-gradient(145deg, hsl(222.2 84% 4.9%), hsl(217.2 32.6% 17.5%));
+    --gradient-neomorphic: linear-gradient(145deg, hsl(217.2 32.6% 20%), hsl(222.2 84% 4.9%));
+    --gradient-neomorphic-inset: linear-gradient(145deg, hsl(222.2 84% 2%), hsl(217.2 32.6% 17.5%));
     
     /* Traffic light indicators for dark mode */
     --success: 142 76% 50%;
@@ -136,5 +146,82 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  /* Neumorphism Base Components */
+  .neomorphic {
+    background: hsl(var(--neomorphic-surface));
+    border-radius: 16px;
+    box-shadow: 
+      8px 8px 16px hsl(var(--neomorphic-shadow-dark)),
+      -8px -8px 16px hsl(var(--neomorphic-light));
+    border: 1px solid hsl(var(--border) / 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .neomorphic-hover:hover {
+    box-shadow: 
+      4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
+      -4px -4px 8px hsl(var(--neomorphic-light));
+    transform: translateY(-1px);
+  }
+  
+  .neomorphic-pressed,
+  .neomorphic-inset {
+    background: var(--gradient-neomorphic-inset);
+    box-shadow: 
+      inset 4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
+      inset -4px -4px 8px hsl(var(--neomorphic-light));
+  }
+  
+  .neomorphic-small {
+    border-radius: 12px;
+    box-shadow: 
+      4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
+      -4px -4px 8px hsl(var(--neomorphic-light));
+  }
+  
+  .neomorphic-large {
+    border-radius: 24px;
+    box-shadow: 
+      12px 12px 24px hsl(var(--neomorphic-shadow-dark)),
+      -12px -12px 24px hsl(var(--neomorphic-light));
+  }
+  
+  .neomorphic-button {
+    @apply neomorphic neomorphic-hover;
+    padding: 12px 24px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .neomorphic-button:active {
+    @apply neomorphic-pressed;
+    transform: translateY(0);
+  }
+  
+  .neomorphic-card {
+    @apply neomorphic;
+    background: var(--gradient-neomorphic);
+  }
+  
+  .neomorphic-input {
+    @apply neomorphic-inset;
+    padding: 12px 16px;
+    background: hsl(var(--background));
+    border: none;
+    outline: none;
+  }
+  
+  .neomorphic-input:focus {
+    box-shadow: 
+      inset 4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
+      inset -4px -4px 8px hsl(var(--neomorphic-light)),
+      0 0 0 2px hsl(var(--ring) / 0.3);
   }
 }

@@ -1,6 +1,3 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { DollarSign, Target, TrendingUp, Award } from "lucide-react";
 
 interface Convocatoria {
@@ -103,78 +100,110 @@ export default function PerformanceMetrics({ convocatorias }: PerformanceMetrics
   };
 
   return (
-    <div className="space-y-6">
-      {/* Métricas principales */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {metrics.map((metric) => {
-          const Icon = metric.icon;
-          return (
-            <Card key={metric.title}>
-              <CardContent className="p-4">
+    <div className="p-4 sm:p-6">
+      <div className="mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="neomorphic-small p-2">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold font-playfair">Métricas de Rendimiento</h3>
+        </div>
+        <p className="text-sm text-muted-foreground font-inter">
+          Análisis financiero y tasas de conversión
+        </p>
+      </div>
+      
+      <div className="space-y-4 sm:space-y-6">
+        {/* Métricas principales */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+          {metrics.map((metric) => {
+            const Icon = metric.icon;
+            return (
+              <div key={metric.title} className="neomorphic-small neomorphic-hover p-3 sm:p-4">
                 <div className="flex items-center space-x-2">
-                  <div className={`p-2 rounded-lg ${getColorClasses(metric.color)}`}>
-                    <Icon className="h-4 w-4" />
+                  <div className={`neomorphic-small p-2 ${getColorClasses(metric.color)}`}>
+                    <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-lg font-bold">{metric.value}</p>
-                    <p className="text-xs text-muted-foreground truncate">{metric.title}</p>
-                    <p className="text-xs text-muted-foreground">{metric.subtitle}</p>
+                    <p className="text-sm sm:text-lg font-bold font-playfair">{metric.value}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground truncate font-inter">{metric.title}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground font-inter">{metric.subtitle}</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+              </div>
+            );
+          })}
+        </div>
 
-      {/* Tasas de conversión */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Tasas de Conversión</CardTitle>
-          <CardDescription>
-            Métricas clave de eficiencia en el proceso de gestión
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+        {/* Tasas de conversión */}
+        <div className="neomorphic-small p-4 sm:p-6 space-y-4 sm:space-y-6">
+          <div className="mb-4">
+            <h4 className="font-bold font-playfair text-base sm:text-lg mb-2">Tasas de Conversión</h4>
+            <p className="text-sm text-muted-foreground font-inter">
+              Métricas clave de eficiencia en el proceso de gestión
+            </p>
+          </div>
+          
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Tasa de Elegibilidad</span>
-                <Badge variant="outline">{eligibilityRate.toFixed(1)}%</Badge>
+                <span className="text-sm font-medium font-inter">Tasa de Elegibilidad</span>
+                <div className="neomorphic-small px-2 py-1">
+                  <span className="text-xs font-bold">{eligibilityRate.toFixed(1)}%</span>
+                </div>
               </div>
-              <Progress value={eligibilityRate} className="h-2" />
-              <p className="text-xs text-muted-foreground">
+              <div className="neomorphic-inset h-2 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-300"
+                  style={{ width: `${eligibilityRate}%` }}
+                ></div>
+              </div>
+              <p className="text-xs text-muted-foreground font-inter">
                 {eligibleCount} de {totalConvocatorias} convocatorias cumplen requisitos
               </p>
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Tasa de Presentación</span>
-                <Badge variant="outline">{submissionRate.toFixed(1)}%</Badge>
+                <span className="text-sm font-medium font-inter">Tasa de Presentación</span>
+                <div className="neomorphic-small px-2 py-1">
+                  <span className="text-xs font-bold">{submissionRate.toFixed(1)}%</span>
+                </div>
               </div>
-              <Progress value={submissionRate} className="h-2" />
-              <p className="text-xs text-muted-foreground">
+              <div className="neomorphic-inset h-2 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-success to-success/80 transition-all duration-300"
+                  style={{ width: `${submissionRate}%` }}
+                ></div>
+              </div>
+              <p className="text-xs text-muted-foreground font-inter">
                 {submittedCount} de {eligibleCount} elegibles fueron presentadas
               </p>
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Conversión de Activas</span>
-                <Badge variant="outline">{conversionRate.toFixed(1)}%</Badge>
+                <span className="text-sm font-medium font-inter">Conversión de Activas</span>
+                <div className="neomorphic-small px-2 py-1">
+                  <span className="text-xs font-bold">{conversionRate.toFixed(1)}%</span>
+                </div>
               </div>
-              <Progress value={conversionRate} className="h-2" />
-              <p className="text-xs text-muted-foreground">
+              <div className="neomorphic-inset h-2 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-warning to-warning/80 transition-all duration-300"
+                  style={{ width: `${conversionRate}%` }}
+                ></div>
+              </div>
+              <p className="text-xs text-muted-foreground font-inter">
                 {submittedCount} de {activeCount} activas fueron presentadas
               </p>
             </div>
           </div>
 
           {/* Insights */}
-          <div className="pt-4 border-t space-y-2">
-            <h4 className="font-medium">Insights</h4>
-            <div className="space-y-1 text-sm text-muted-foreground">
+          <div className="pt-4 border-t border-border/20 space-y-2">
+            <h4 className="font-medium font-playfair">Insights</h4>
+            <div className="space-y-1 text-sm text-muted-foreground font-inter">
               {eligibilityRate < 50 && (
                 <p>• Baja tasa de elegibilidad - revisar criterios de selección</p>
               )}
@@ -186,8 +215,8 @@ export default function PerformanceMetrics({ convocatorias }: PerformanceMetrics
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

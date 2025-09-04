@@ -1,6 +1,3 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress"; 
-import { Badge } from "@/components/ui/badge";
 import { TrendingUp, TrendingDown, Minus, Calendar, Target, Award } from "lucide-react";
 
 interface Convocatoria {
@@ -88,123 +85,136 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Award className="h-5 w-5 text-primary" />
-          Resumen Ejecutivo
-        </CardTitle>
-        <CardDescription>
+    <div className="p-4 sm:p-6">
+      <div className="mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="neomorphic-small p-2">
+            <Award className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold font-playfair">Resumen Ejecutivo</h3>
+        </div>
+        <p className="text-sm text-muted-foreground font-inter">
           Vista estratégica del portafolio de convocatorias
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+        </p>
+      </div>
+      
+      <div className="space-y-4 sm:space-y-6">
         {/* KPIs principales */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="text-center space-y-1">
-            <div className="text-2xl font-bold text-primary">{totalConvocatorias}</div>
-            <div className="text-xs text-muted-foreground">Total Convocatorias</div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+          <div className="neomorphic-small neomorphic-hover p-3 sm:p-4 text-center space-y-1">
+            <div className="text-lg sm:text-2xl font-bold text-primary font-playfair">{totalConvocatorias}</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-inter">Total Convocatorias</div>
             {recentConvocatorias > 0 && (
-              <Badge variant="secondary" className="text-xs">
-                +{recentConvocatorias} este mes
-              </Badge>
+              <div className="neomorphic-small px-2 py-1 mt-1">
+                <span className="text-[10px] sm:text-xs font-medium">+{recentConvocatorias} este mes</span>
+              </div>
             )}
           </div>
           
-          <div className="text-center space-y-1">
-            <div className="text-2xl font-bold text-success">{eligibleConvocatorias}</div>
-            <div className="text-xs text-muted-foreground">Cumplimos Requisitos</div>
-            <div className={`text-xs font-medium ${getRateColor(eligibilityRate)}`}>
+          <div className="neomorphic-small neomorphic-hover p-3 sm:p-4 text-center space-y-1">
+            <div className="text-lg sm:text-2xl font-bold text-success font-playfair">{eligibleConvocatorias}</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-inter">Cumplimos Requisitos</div>
+            <div className={`text-[10px] sm:text-xs font-medium font-inter ${getRateColor(eligibilityRate)}`}>
               {eligibilityRate.toFixed(0)}% elegibles
             </div>
           </div>
           
-          <div className="text-center space-y-1">
-            <div className="text-2xl font-bold text-warning">{activeConvocatorias}</div>
-            <div className="text-xs text-muted-foreground">Activas</div>
-            <div className={`text-xs font-medium ${getRateColor(activeRate)}`}>
+          <div className="neomorphic-small neomorphic-hover p-3 sm:p-4 text-center space-y-1">
+            <div className="text-lg sm:text-2xl font-bold text-warning font-playfair">{activeConvocatorias}</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-inter">Activas</div>
+            <div className={`text-[10px] sm:text-xs font-medium font-inter ${getRateColor(activeRate)}`}>
               {activeRate.toFixed(0)}% del total
             </div>
           </div>
           
-          <div className="text-center space-y-1">
-            <div className="text-2xl font-bold text-primary">{submittedConvocatorias}</div>
-            <div className="text-xs text-muted-foreground">Presentadas</div>
-            <div className={`text-xs font-medium ${getRateColor(submissionRate)}`}>
+          <div className="neomorphic-small neomorphic-hover p-3 sm:p-4 text-center space-y-1">
+            <div className="text-lg sm:text-2xl font-bold text-primary font-playfair">{submittedConvocatorias}</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground font-inter">Presentadas</div>
+            <div className={`text-[10px] sm:text-xs font-medium font-inter ${getRateColor(submissionRate)}`}>
               {submissionRate.toFixed(0)}% conversión
             </div>
           </div>
         </div>
 
         {/* Valor elegible y vencimientos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="neomorphic-small neomorphic-hover p-4 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Valor Elegible Total</span>
+              <span className="text-sm font-medium font-inter">Valor Elegible Total</span>
               <Target className="h-4 w-4 text-success" />
             </div>
-            <div className="text-xl font-bold text-success">
+            <div className="text-lg sm:text-xl font-bold text-success font-playfair">
               {formatCurrency(totalEligibleValue)}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground font-inter">
               En {eligibleConvocatorias} convocatorias que cumplimos requisitos
             </p>
           </div>
 
-          <div className="space-y-2">
+          <div className="neomorphic-small neomorphic-hover p-4 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Vencimientos Próximos</span>
+              <span className="text-sm font-medium font-inter">Vencimientos Próximos</span>
               <Calendar className="h-4 w-4 text-warning" />
             </div>
-            <div className="text-xl font-bold text-warning">
+            <div className="text-lg sm:text-xl font-bold text-warning font-playfair">
               {expiringSoon}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground font-inter">
               Convocatorias que vencen en próximos 30 días
             </p>
           </div>
         </div>
 
         {/* Indicadores de rendimiento */}
-        <div className="space-y-4">
-          <h4 className="font-medium">Indicadores de Rendimiento</h4>
+        <div className="neomorphic-small p-4 space-y-4">
+          <h4 className="font-medium font-playfair">Indicadores de Rendimiento</h4>
           
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-sm">Tasa de Elegibilidad</span>
+                <span className="text-sm font-inter">Tasa de Elegibilidad</span>
                 {getTrendIcon(eligibilityRate)}
               </div>
-              <span className={`text-sm font-medium ${getRateColor(eligibilityRate)}`}>
+              <span className={`text-sm font-medium font-inter ${getRateColor(eligibilityRate)}`}>
                 {eligibilityRate.toFixed(1)}%
               </span>
             </div>
-            <Progress value={eligibilityRate} className="h-2" />
+            <div className="neomorphic-inset h-2 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-300"
+                style={{ width: `${eligibilityRate}%` }}
+              ></div>
+            </div>
             
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-sm">Tasa de Presentación</span>
+                <span className="text-sm font-inter">Tasa de Presentación</span>
                 {getTrendIcon(submissionRate)}
               </div>
-              <span className={`text-sm font-medium ${getRateColor(submissionRate)}`}>
+              <span className={`text-sm font-medium font-inter ${getRateColor(submissionRate)}`}>
                 {submissionRate.toFixed(1)}%
               </span>
             </div>
-            <Progress value={submissionRate} className="h-2" />
+            <div className="neomorphic-inset h-2 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-success to-success/80 transition-all duration-300"
+                style={{ width: `${submissionRate}%` }}
+              ></div>
+            </div>
           </div>
         </div>
 
         {/* Top sectores */}
         {topSectors.length > 0 && (
-          <div className="space-y-3">
-            <h4 className="font-medium">Sectores Principales (Elegibles)</h4>
+          <div className="neomorphic-small p-4 space-y-3">
+            <h4 className="font-medium font-playfair">Sectores Principales (Elegibles)</h4>
             <div className="space-y-2">
               {topSectors.map(([sector, count]) => (
-                <div key={sector} className="flex items-center justify-between">
-                  <span className="text-sm truncate flex-1">{sector}</span>
-                  <Badge variant="outline" className="text-xs">
-                    {count}
-                  </Badge>
+                <div key={sector} className="neomorphic-small neomorphic-hover p-2 flex items-center justify-between">
+                  <span className="text-sm truncate flex-1 font-inter">{sector}</span>
+                  <div className="neomorphic-small px-2 py-1">
+                    <span className="text-xs font-bold">{count}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -212,9 +222,9 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
         )}
 
         {/* Recomendaciones */}
-        <div className="pt-4 border-t space-y-2">
-          <h4 className="font-medium text-primary">Recomendaciones Estratégicas</h4>
-          <div className="space-y-1 text-sm text-muted-foreground">
+        <div className="neomorphic-small p-4 space-y-2 border-t-2 border-primary/20">
+          <h4 className="font-medium text-primary font-playfair">Recomendaciones Estratégicas</h4>
+          <div className="space-y-1 text-sm text-muted-foreground font-inter">
             {eligibilityRate < 50 && (
               <p>• Revisar criterios de preselección para mejorar tasa de elegibilidad</p>
             )}
@@ -229,7 +239,7 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
             )}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

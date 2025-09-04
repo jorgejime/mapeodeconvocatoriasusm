@@ -1,6 +1,3 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { AlertTriangle, Clock, TrendingUp, Target } from "lucide-react";
 
 interface Convocatoria {
@@ -100,70 +97,78 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-danger" />
-          Alertas Críticas
-        </CardTitle>
-        <CardDescription>
-          Situaciones que requieren atención inmediata
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {alerts.map((alert) => {
-            const Icon = alert.icon;
-            return (
-              <div key={alert.type} className="text-center space-y-2">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full ${getColorClasses(alert.color)}`}>
-                  <Icon className="h-6 w-6" />
-                </div>
-                <div className={`text-2xl font-bold ${getColorClasses(alert.color, true)}`}>
-                  {alert.count}
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">{alert.title}</p>
-                  <p className="text-xs text-muted-foreground">{alert.description}</p>
-                </div>
-              </div>
-            );
-          })}
+    <div className="p-4 sm:p-6">
+      <div className="mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="neomorphic-small p-2">
+            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-danger" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold font-playfair">Alertas Críticas</h3>
         </div>
-
-        {urgentDeadlines.length > 0 && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="font-medium text-danger">Vencimientos Urgentes</h4>
-              <Badge variant="destructive">{urgentDeadlines.length}</Badge>
+        <p className="text-sm text-muted-foreground font-inter">
+          Situaciones que requieren atención inmediata
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+        {alerts.map((alert) => {
+          const Icon = alert.icon;
+          return (
+            <div key={alert.type} className="neomorphic-small neomorphic-hover p-3 sm:p-4 text-center space-y-2">
+              <div className={`neomorphic-small inline-flex items-center justify-center w-8 h-8 sm:w-12 sm:h-12 ${getColorClasses(alert.color)}`}>
+                <Icon className="h-3 w-3 sm:h-6 sm:w-6" />
+              </div>
+              <div className={`text-lg sm:text-2xl font-bold font-playfair ${getColorClasses(alert.color, true)}`}>
+                {alert.count}
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs sm:text-sm font-medium font-inter">{alert.title}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground font-inter">{alert.description}</p>
+              </div>
             </div>
-            <div className="space-y-2 max-h-32 overflow-y-auto">
-              {urgentDeadlines.slice(0, 3).map((conv) => {
-                const daysLeft = Math.ceil((new Date(conv.fecha_limite_aplicacion!).getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-                return (
-                  <div key={conv.id} className="flex items-center justify-between p-2 bg-danger-light rounded-lg">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{conv.nombre_convocatoria}</p>
-                      <p className="text-xs text-muted-foreground">{conv.entidad}</p>
-                    </div>
-                    <div className="text-right">
-                      <Badge variant="destructive" className="text-xs">
-                        {daysLeft === 0 ? "Hoy" : `${daysLeft}d`}
-                      </Badge>
-                    </div>
-                  </div>
-                );
-              })}
+          );
+        })}
+      </div>
+
+      {urgentDeadlines.length > 0 && (
+        <div className="space-y-3 mb-4">
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium text-danger font-inter">Vencimientos Urgentes</h4>
+            <div className="neomorphic-small px-2 py-1">
+              <span className="text-xs font-bold text-danger">{urgentDeadlines.length}</span>
             </div>
           </div>
-        )}
-
-        <div className="mt-4 pt-4 border-t">
-          <Button onClick={onNavigateToConvocatoria} variant="outline" className="w-full">
-            Ver Todas las Convocatorias
-          </Button>
+          <div className="space-y-2 max-h-32 overflow-y-auto">
+            {urgentDeadlines.slice(0, 3).map((conv) => {
+              const daysLeft = Math.ceil((new Date(conv.fecha_limite_aplicacion!).getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+              return (
+                <div key={conv.id} className="neomorphic-small neomorphic-hover flex items-center justify-between p-2 sm:p-3 bg-danger-light">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs sm:text-sm font-medium truncate font-inter">{conv.nombre_convocatoria}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground font-inter">{conv.entidad}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="neomorphic-small px-2 py-1">
+                      <span className="text-xs font-bold text-danger">
+                        {daysLeft === 0 ? "Hoy" : `${daysLeft}d`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      )}
+
+      <div className="pt-3 sm:pt-4 border-t border-border/20">
+        <button 
+          onClick={onNavigateToConvocatoria} 
+          className="neomorphic-button w-full text-sm font-inter text-foreground"
+        >
+          Ver Todas las Convocatorias
+        </button>
+      </div>
+    </div>
   );
 }
