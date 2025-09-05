@@ -287,6 +287,7 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                     <SelectItem value="JPY">JPY</SelectItem>
                     <SelectItem value="CNY">CNY</SelectItem>
                     <SelectItem value="BRL">BRL</SelectItem>
+                    <SelectItem value="MXN">MXN</SelectItem>
                     <SelectItem value="UYU">UYU</SelectItem>
                   </SelectContent>
                 </Select>
