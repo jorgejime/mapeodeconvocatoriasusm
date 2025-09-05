@@ -78,36 +78,38 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Dashboard Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-        {/* Column 1: Critical Alerts */}
-        <div className="space-y-4 sm:space-y-6">
-          <div className="neomorphic-card">
-            <CriticalAlerts 
-              convocatorias={convocatorias}
-              onNavigateToConvocatoria={() => navigate("/convocatorias")}
-            />
-          </div>
-          
-          <div className="neomorphic-card">
-            <QuickActions
-              convocatorias={convocatorias}
-              onNavigateToConvocatorias={() => navigate("/convocatorias")}
-              onNavigateToEstadisticas={() => navigate("/estadisticas")}
-              onNavigateToConfiguracion={() => navigate("/configuracion")}
-              isAdmin={isAdmin}
-            />
-          </div>
+      {/* Dashboard Content */}
+      <div className="space-y-6 sm:space-y-8">
+        {/* Critical Alerts - Full Width */}
+        <div className="neomorphic-card">
+          <CriticalAlerts 
+            convocatorias={convocatorias}
+            onNavigateToConvocatoria={() => navigate("/convocatorias")}
+          />
         </div>
 
-        {/* Column 2: Executive Summary */}
+        {/* Quick Actions - Full Width */}
         <div className="neomorphic-card">
-          <ExecutiveSummary convocatorias={convocatorias} />
+          <QuickActions
+            convocatorias={convocatorias}
+            onNavigateToConvocatorias={() => navigate("/convocatorias")}
+            onNavigateToEstadisticas={() => navigate("/estadisticas")}
+            onNavigateToConfiguracion={() => navigate("/configuracion")}
+            isAdmin={isAdmin}
+          />
         </div>
 
-        {/* Column 3: Performance Metrics */}
-        <div className="neomorphic-card">
-          <PerformanceMetrics convocatorias={convocatorias} />
+        {/* Two Column Layout for Summary and Metrics */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Executive Summary */}
+          <div className="neomorphic-card">
+            <ExecutiveSummary convocatorias={convocatorias} />
+          </div>
+
+          {/* Performance Metrics */}
+          <div className="neomorphic-card">
+            <PerformanceMetrics convocatorias={convocatorias} />
+          </div>
         </div>
       </div>
     </div>
