@@ -227,7 +227,7 @@ export default function Manual() {
                     Monitoree situaciones que requieren atención inmediata:
                   </p>
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div>• Convocatorias que vencen en 7 días</div>
+                    <div>• Convocatorias que vencen en 30 días</div>
                     <div>• Oportunidades de alto valor (&gt;$100M)</div>
                     <div>• Procesos estancados en revisión</div>
                     <div>• Oportunidades perdidas</div>
