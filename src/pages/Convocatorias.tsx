@@ -22,11 +22,10 @@ import {
   DialogHeader, 
   DialogTitle 
 } from "@/components/ui/dialog";
-import { Plus, Search, Edit, Trash2, Download, Copy, EyeOff, Upload } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Copy, EyeOff, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserRole } from "@/hooks/useUserRole";
 import { BulkUploadDialog } from "@/components/BulkUploadDialog";
-import { ExportDropdown } from "@/components/ExportDropdown";
 import { ConvocatoriaDetailDialog } from "@/components/ConvocatoriaDetailDialog";
 
 interface Convocatoria {
@@ -355,10 +354,6 @@ export default function Convocatorias() {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <ExportDropdown 
-            data={filteredConvocatorias}
-            filename="convocatorias"
-          />
           {canManage && (
             <>
               <Button onClick={() => setShowBulkUpload(true)} variant="outline" className="w-full sm:w-auto hover-scale">
