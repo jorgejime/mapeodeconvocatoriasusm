@@ -99,17 +99,14 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Two Column Layout for Summary and Metrics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-          {/* Executive Summary */}
-          <div className="neomorphic-card">
-            <ExecutiveSummary convocatorias={convocatorias} />
-          </div>
+        {/* Executive Summary - Full Width */}
+        <div className="neomorphic-card">
+          <ExecutiveSummary convocatorias={convocatorias} />
+        </div>
 
-          {/* Performance Metrics */}
-          <div className="neomorphic-card">
-            <PerformanceMetrics convocatorias={convocatorias} />
-          </div>
+        {/* Performance Metrics - Full Width */}
+        <div className="neomorphic-card">
+          <PerformanceMetrics convocatorias={convocatorias} />
         </div>
       </div>
     </div>
