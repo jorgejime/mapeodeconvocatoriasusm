@@ -86,6 +86,9 @@ export default function Configuracion() {
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserName, setNewUserName] = useState("");
   const [newUserRole, setNewUserRole] = useState("usuario");
+  const [totalConvocatorias, setTotalConvocatorias] = useState<number | null>(null);
+  const [lastBackupDate, setLastBackupDate] = useState<string | null>(null);
+  const [loadingStats, setLoadingStats] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -95,6 +98,7 @@ export default function Configuracion() {
       if (user?.email === "admin@usm.edu.co") {
         fetchProfiles();
         loadSettings();
+        fetchDatabaseStats();
       } else {
         setLoading(false);
       }
@@ -119,6 +123,28 @@ export default function Configuracion() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchDatabaseStats = async () => {
+    setLoadingStats(true);
+    try {
+      // Obtener total de convocatorias
+      const { count, error } = await supabase
+        .from("convocatorias")
+        .select("id", { count: "exact", head: true });
+      
+      if (error) throw error;
+      setTotalConvocatorias(count || 0);
+      
+      // Obtener fecha del último backup del localStorage
+      const lastBackup = localStorage.getItem("lastBackupDate");
+      setLastBackupDate(lastBackup);
+    } catch (error) {
+      console.error("Error fetching database stats:", error);
+      setTotalConvocatorias(0);
+    } finally {
+      setLoadingStats(false);
     }
   };
 
@@ -219,24 +245,35 @@ export default function Configuracion() {
 
       if (error) throw error;
 
-      const jsonData = JSON.stringify({ convocatorias, profiles }, null, 2);
+      const jsonData = JSON.stringify({ 
+        convocatorias, 
+        profiles, 
+        exportDate: new Date().toISOString(),
+        version: "1.0.0"
+      }, null, 2);
+      
       const blob = new Blob([jsonData], { type: "application/json" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `backup-convocatorias-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       window.URL.revokeObjectURL(url);
 
+      // Guardar fecha del backup
+      const backupDate = new Date().toLocaleString("es-ES");
+      localStorage.setItem("lastBackupDate", backupDate);
+      setLastBackupDate(backupDate);
+
       toast({
-        title: "Backup creado",
-        description: "Los datos se han exportado correctamente",
+        title: "Backup creado exitosamente",
+        description: `Se exportaron ${convocatorias?.length || 0} convocatorias y ${profiles.length} usuarios`,
       });
     } catch (error) {
       console.error("Error exporting data:", error);
       toast({
-        title: "Error",
-        description: "Error al crear el backup",
+        title: "Error al crear backup",
+        description: "No se pudo exportar la información. Verifica los permisos.",
         variant: "destructive",
       });
     }
@@ -339,8 +376,13 @@ export default function Configuracion() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>Notificaciones</Label>
-                <p className="text-sm text-muted-foreground">Habilitar notificaciones</p>
+                <Label className="flex items-center gap-2">
+                  <Bell className="h-4 w-4" />
+                  Notificaciones del Sistema
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Habilita alertas por email para eventos importantes como vencimiento de convocatorias, errores del sistema y actualizaciones de estado
+                </p>
               </div>
               <Switch
                 checked={settings.notificationsEnabled}
@@ -458,19 +500,37 @@ export default function Configuracion() {
             <Separator />
             
             <div className="space-y-2">
-              <p className="text-sm font-medium">Información de la Base de Datos</p>
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium">Información de la Base de Datos</p>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={fetchDatabaseStats}
+                  disabled={loadingStats}
+                >
+                  {loadingStats ? (
+                    <RefreshCw className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <RefreshCw className="h-3 w-3" />
+                  )}
+                </Button>
+              </div>
               <div className="space-y-1 text-sm text-muted-foreground">
                 <div className="flex justify-between">
                   <span>Total de convocatorias:</span>
-                  <span>En carga...</span>
+                  <span className="font-medium text-foreground">
+                    {loadingStats ? "Cargando..." : totalConvocatorias !== null ? totalConvocatorias : "Error"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Usuarios registrados:</span>
-                  <span>{profiles.length}</span>
+                  <span className="font-medium text-foreground">{profiles.length}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Último backup:</span>
-                  <span>Nunca</span>
+                  <span className="font-medium text-foreground">
+                    {lastBackupDate || "Nunca"}
+                  </span>
                 </div>
               </div>
             </div>
