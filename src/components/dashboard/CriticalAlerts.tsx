@@ -19,12 +19,12 @@ interface CriticalAlertsProps {
 export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria }: CriticalAlertsProps) {
   const today = new Date();
   
-  // Convocatorias que vencen en los próximos 7 días
+  // Convocatorias que vencen en los próximos 30 días
   const urgentDeadlines = convocatorias.filter(c => {
     if (!c.fecha_limite_aplicacion || c.estado_convocatoria !== "Abierta") return false;
     const deadline = new Date(c.fecha_limite_aplicacion);
     const diffDays = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-    return diffDays >= 0 && diffDays <= 7;
+    return diffDays >= 0 && diffDays <= 30;
   });
 
   // Convocatorias de alto valor (más de 100M)
@@ -53,7 +53,7 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
       type: "urgent" as const,
       count: urgentDeadlines.length,
       title: "Vencimientos Críticos",
-      description: "Convocatorias que vencen en 7 días",
+      description: "Convocatorias que vencen en 30 días",
       icon: AlertTriangle,
       color: "danger"
     },
