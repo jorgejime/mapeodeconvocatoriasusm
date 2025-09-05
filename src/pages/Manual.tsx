@@ -34,13 +34,18 @@ export default function Manual() {
     <div className="space-y-6 p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent flex items-center gap-2">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent flex items-center gap-2 font-playfair">
           <BookOpen className="h-8 w-8 text-primary" />
           Manual de Usuario
         </h1>
-        <p className="text-muted-foreground">
-          Guía completa para el uso del Sistema de Gestión de Convocatorias USM
+        <p className="text-muted-foreground font-inter">
+          Guía completa para el uso del Sistema de Gestión de Convocatorias de la Universidad Santa María
         </p>
+        <div className="neomorphic-card p-4 bg-gradient-subtle">
+          <p className="text-sm text-slate-600">
+            <strong>📋 Versión del Sistema:</strong> 2.0 | <strong>🎨 Diseño:</strong> Neumorphism UI | <strong>⚡ Tecnología:</strong> Inteligencia Artificial Integrada
+          </p>
+        </div>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
@@ -85,31 +90,49 @@ export default function Manual() {
               <Separator />
 
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Tipos de Usuario</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="border-success/20 bg-success-light">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Users className="h-5 w-5 text-success" />
-                        <h4 className="font-medium">Rectoría</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Acceso completo para visualización, análisis estratégico y toma de decisiones ejecutivas.
-                      </p>
-                    </CardContent>
-                  </Card>
+                <h3 className="font-semibold text-lg">Roles de Usuario del Sistema</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="neomorphic-card p-4 border-success/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Users className="h-5 w-5 text-success" />
+                      <h4 className="font-medium text-success">Rectoría / Centro de Información</h4>
+                    </div>
+                    <div className="text-sm text-slate-600 space-y-1">
+                      <div>• <strong>Dashboard:</strong> Vista completa ejecutiva</div>
+                      <div>• <strong>Convocatorias:</strong> Solo visualización</div>
+                      <div>• <strong>Estadísticas:</strong> Acceso completo</div>
+                      <div>• <strong>Informes IA:</strong> Generación y descarga</div>
+                      <div>• <strong>Exportación:</strong> PDF y Excel permitido</div>
+                    </div>
+                  </div>
 
-                  <Card className="border-primary/20 bg-primary/5">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Shield className="h-5 w-5 text-primary" />
-                        <h4 className="font-medium">Administrador</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Acceso total al sistema incluyendo gestión, configuración y administración completa.
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <div className="neomorphic-card p-4 border-primary/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="h-5 w-5 text-primary" />
+                      <h4 className="font-medium text-primary">Administrador</h4>
+                    </div>
+                    <div className="text-sm text-slate-600 space-y-1">
+                      <div>• <strong>Gestión total:</strong> CRUD de convocatorias</div>
+                      <div>• <strong>Carga masiva:</strong> Importación Excel</div>
+                      <div>• <strong>Configuración:</strong> Sistema y usuarios</div>
+                      <div>• <strong>Base de datos:</strong> Reset y backup</div>
+                      <div>• <strong>Acceso completo:</strong> Todas las secciones</div>
+                    </div>
+                  </div>
+
+                  <div className="neomorphic-card p-4 border-orange-200 bg-orange-50/50">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Eye className="h-5 w-5 text-orange-600" />
+                      <h4 className="font-medium text-orange-600">Usuario Estándar</h4>
+                    </div>
+                    <div className="text-sm text-slate-600 space-y-1">
+                      <div>• <strong>Dashboard:</strong> Vista limitada</div>
+                      <div>• <strong>Convocatorias:</strong> Solo lectura</div>
+                      <div>• <strong>Estadísticas:</strong> Acceso denegado</div>
+                      <div>• <strong>Configuración:</strong> Sin acceso</div>
+                      <div>• <strong>Exportación:</strong> No disponible</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -123,36 +146,55 @@ export default function Manual() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="neomorphic-card p-3 space-y-2">
                   <div className="flex items-center gap-2">
                     <BarChart3 className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Dashboard</span>
+                    <span className="font-medium">Dashboard Ejecutivo</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Panel ejecutivo con métricas clave, alertas críticas y resumen estratégico.
+                  <p className="text-sm text-slate-600">
+                    Panel principal con alertas críticas, métricas KPI, resumen ejecutivo y acciones rápidas con diseño neumórfico.
                   </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="neomorphic-card p-3 space-y-2">
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Convocatorias</span>
+                    <span className="font-medium">Gestión Convocatorias</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Gestión completa del portafolio de convocatorias con filtros avanzados.
+                  <p className="text-sm text-slate-600">
+                    CRUD completo, vista de tarjetas responsive, filtros avanzados, carga masiva Excel y exportación multiformat.
                   </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="neomorphic-card p-3 space-y-2">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Estadísticas</span>
+                    <span className="font-medium">Análisis Estadístico</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Análisis detallado con gráficos y métricas de rendimiento.
+                  <p className="text-sm text-slate-600">
+                    Gráficos interactivos, análisis por monedas, métricas de rendimiento y visualizaciones dinámicas.
                   </p>
                 </div>
+
+                <div className="neomorphic-card p-3 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Brain className="h-4 w-4 text-primary" />
+                    <span className="font-medium">Inteligencia Artificial</span>
+                  </div>
+                  <p className="text-sm text-slate-600">
+                    Informes ejecutivos automatizados, análisis correlacional, recomendaciones estratégicas y proyecciones.
+                  </p>
+                </div>
+              </div>
+
+              <div className="neomorphic-card p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+                <h4 className="font-medium mb-2 text-blue-900">🎨 Diseño Neumorphism</h4>
+                <p className="text-sm text-blue-800">
+                  La aplicación utiliza un diseño <strong>neumórfico</strong> que combina elementos elevados y hundidos 
+                  para crear una experiencia visual suave y moderna. Todos los componentes tienen efectos de sombra 
+                  interior y exterior que simulan profundidad física en la interfaz.
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -596,14 +638,23 @@ export default function Manual() {
                 <div>
                   <h4 className="font-medium mb-2 flex items-center gap-2">
                     <Download className="h-4 w-4 text-warning" />
-                    Carga Masiva de Datos
+                    Sistema de Carga Masiva Inteligente
                   </h4>
-                  <div className="bg-warning-light p-3 rounded-lg text-sm">
-                    <p className="mb-2"><strong>Funcionalidad disponible:</strong></p>
-                    <div>• Importación masiva desde archivos Excel</div>
-                    <div>• Validación automática de datos</div>
-                    <div>• Reporte de errores y conflictos</div>
-                    <div>• Proceso de revisión antes de confirmación</div>
+                  <div className="neomorphic-card p-4 bg-gradient-to-r from-orange-50 to-amber-50">
+                    <p className="mb-3 font-medium text-orange-900">Funcionalidades avanzadas de importación:</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-orange-800">
+                      <div>• <strong>Formato Excel:</strong> Importación automática de .xlsx</div>
+                      <div>• <strong>Validación inteligente:</strong> Detección de errores en tiempo real</div>
+                      <div>• <strong>Preview de datos:</strong> Vista previa antes de confirmar</div>
+                      <div>• <strong>Mapeo automático:</strong> Reconocimiento de columnas</div>
+                      <div>• <strong>Control duplicados:</strong> Detección automática de registros existentes</div>
+                      <div>• <strong>Rollback seguro:</strong> Posibilidad de revertir operaciones</div>
+                    </div>
+                    <div className="mt-3 p-2 bg-orange-100 rounded border-l-4 border-orange-400">
+                      <p className="text-sm text-orange-700">
+                        <strong>📝 Proceso:</strong> Seleccionar archivo → Vista previa → Validar datos → Confirmar importación → Verificar resultados
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -727,32 +778,76 @@ export default function Manual() {
                 <div className="space-y-4">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
                     <Search className="h-5 w-5 text-primary" />
-                    Búsqueda y Filtrado
+                    Sistema Avanzado de Filtrado Inteligente
                   </h3>
-                  <div className="space-y-2 text-sm">
-                    <div>• Búsqueda por texto en nombres y entidades</div>
-                    <div>• Filtros por estado de convocatoria</div>
-                    <div>• Filtros por estado interno USM</div>
-                    <div>• Filtros por sector y tipo</div>
-                    <div>• Filtros por rango de valores</div>
-                    <div>• Filtros por cumplimiento de requisitos</div>
-                    <div>• Filtros por fechas límite</div>
+                  <div className="neomorphic-card p-4 space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <h5 className="font-medium mb-2 text-blue-800">Filtros Básicos:</h5>
+                        <div className="space-y-1 text-slate-600">
+                          <div>• <strong>Búsqueda global:</strong> Nombres, entidades, sectores</div>
+                          <div>• <strong>Estados:</strong> Convocatoria e interno USM</div>
+                          <div>• <strong>Requisitos:</strong> Cumplimos/No/Pendiente</div>
+                        </div>
+                      </div>
+                      <div>
+                        <h5 className="font-medium mb-2 text-green-800">Filtros Avanzados:</h5>
+                        <div className="space-y-1 text-slate-600">
+                          <div>• <strong>Rango valores:</strong> Mínimo y máximo</div>
+                          <div>• <strong>Fechas límite:</strong> Desde/hasta con calendario</div>
+                          <div>• <strong>Entidades:</strong> Multi-selección de organizaciones</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="neomorphic-badge p-2 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200">
+                      <p className="text-sm text-purple-800">
+                        <strong>🚀 Función Urgencia:</strong> Filtra automáticamente convocatorias que vencen en los próximos 30 días para gestión prioritaria.
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
                     <Calendar className="h-5 w-5 text-success" />
-                    Gestión Temporal
+                    Sistema de Visualización Inteligente
                   </h3>
-                  <div className="space-y-2 text-sm">
-                    <div>• Alertas automáticas por vencimiento</div>
-                    <div>• Código de colores por urgencia</div>
-                    <div>• Cálculo automático de días restantes</div>
-                    <div>• Notificaciones de deadlines críticos</div>
-                    <div>• Histórico de fechas importantes</div>
-                  </div>
-                </div>
+                  <div className="neomorphic-card p-4 space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h5 className="font-medium mb-2 text-green-800">Vista de Tarjetas (Principal):</h5>
+                        <div className="space-y-1 text-sm text-slate-600">
+                          <div>• <strong>Diseño responsive:</strong> 1-3 columnas según pantalla</div>
+                          <div>• <strong>Información destacada:</strong> Valor, estado, fecha límite</div>
+                          <div>• <strong>Badges inteligentes:</strong> Estados visuales dinámicos</div>
+                          <div>• <strong>Click para detalle:</strong> Vista completa emergente</div>
+                        </div>
+                      </div>
+                       <div>
+                         <h5 className="font-medium mb-2 text-orange-800">Sistema de Alertas:</h5>
+                         <div className="space-y-1 text-sm text-slate-600">
+                           <div>• <strong>🔴 Crítico:</strong> Vence en ≤ 7 días</div>
+                           <div>• <strong>🟡 Urgente:</strong> Vence en ≤ 30 días</div>
+                           <div>• <strong>🟢 Normal:</strong> Vence en &gt; 30 días</div>
+                           <div>• <strong>⚫ Vencida:</strong> Fecha superada</div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+
+                 <div className="space-y-4">
+                   <h3 className="font-semibold text-lg flex items-center gap-2">
+                     <DollarSign className="h-5 w-5 text-warning" />
+                     Gestión Temporal Inteligente
+                   </h3>
+                   <div className="space-y-2 text-sm">
+                     <div>• Cálculo automático de días restantes</div>
+                     <div>• Notificaciones de deadlines críticos</div>
+                     <div>• Histórico de fechas importantes</div>
+                     <div>• Alertas automáticas por vencimiento</div>
+                   </div>
+                 </div>
 
                 <div className="space-y-4">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
