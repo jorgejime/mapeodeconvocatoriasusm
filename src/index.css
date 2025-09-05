@@ -224,4 +224,8 @@ All colors MUST be HSL.
       inset -4px -4px 8px hsl(var(--neomorphic-light)),
       0 0 0 2px hsl(var(--ring) / 0.3);
   }
+  
+  .bg-gradient-subtle {
+    background: var(--gradient-neomorphic);
+  }
 }
