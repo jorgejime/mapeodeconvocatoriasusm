@@ -29,23 +29,46 @@ export default function Dashboard() {
   const { isAdmin } = useUserRole(user);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
+    // Add timeout for initial load
+    const initializeWithTimeout = async () => {
+      try {
+        const userPromise = supabase.auth.getUser();
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('User fetch timeout')), 8000)
+        );
+        
+        const { data: { user } } = await Promise.race([userPromise, timeoutPromise]) as any;
+        setUser(user);
+      } catch (error) {
+        console.error("Error getting user:", error);
+        setUser(null);
+      }
+    };
+    
+    initializeWithTimeout();
     fetchConvocatorias();
   }, []);
 
   const fetchConvocatorias = async () => {
     try {
-      const { data, error } = await supabase
+      // Add timeout protection for database queries
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Database timeout')), 15000)
+      );
+      
+      const queryPromise = supabase
         .from("convocatorias")
         .select("*")
         .order("created_at", { ascending: false });
+
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise]) as any;
 
       if (error) throw error;
       setConvocatorias(data || []);
     } catch (error) {
       console.error("Error fetching convocatorias:", error);
+      // Set empty array on error to prevent hanging
+      setConvocatorias([]);
     } finally {
       setLoading(false);
     }

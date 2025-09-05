@@ -14,6 +14,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
 
   useEffect(() => {
     console.log("AuthLayout: Setting up auth listeners");
+    let hasInitialized = false;
     
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -21,17 +22,41 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
         console.log("AuthLayout: Auth state changed", { event, session });
         setSession(session);
         setUser(session?.user ?? null);
-        setLoading(false);
+        if (!hasInitialized) {
+          setLoading(false);
+          hasInitialized = true;
+        }
       }
     );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      console.log("AuthLayout: Got session", { session, error });
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    // THEN check for existing session with timeout protection
+    const checkSession = async () => {
+      try {
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Auth timeout')), 10000)
+        );
+        
+        const sessionPromise = supabase.auth.getSession();
+        
+        const { data: { session }, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
+        
+        console.log("AuthLayout: Got session", { session, error });
+        if (!hasInitialized) {
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+          hasInitialized = true;
+        }
+      } catch (error) {
+        console.error("AuthLayout: Session check failed", error);
+        if (!hasInitialized) {
+          setLoading(false);
+          hasInitialized = true;
+        }
+      }
+    };
+
+    checkSession();
 
     return () => subscription.unsubscribe();
   }, []);
