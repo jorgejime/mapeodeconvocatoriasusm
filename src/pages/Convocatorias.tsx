@@ -421,7 +421,7 @@ export default function Convocatorias() {
               >
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start gap-2">
-                    <CardTitle className="text-sm font-semibold line-clamp-2 leading-5">
+                    <CardTitle className="text-sm font-semibold line-clamp-2 leading-5 text-left">
                       {convocatoria.nombre_convocatoria}
                     </CardTitle>
                     {convocatoria.valor && (
