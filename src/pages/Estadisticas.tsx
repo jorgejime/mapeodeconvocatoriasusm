@@ -2,12 +2,9 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
 import { XCircle } from "lucide-react";
-import StatsCards from "@/components/stats/StatsCards";
-import CurrencyStats from "@/components/stats/CurrencyStats";
-import ChartsGrid from "@/components/stats/ChartsGrid";
-import SummaryCards from "@/components/stats/SummaryCards";
-import SmartReportsModule from "@/components/SmartReportsModule";
-import { Convocatoria, ConvocatoriaForAnalysis } from "@/types/convocatoria";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { Convocatoria } from "@/types/convocatoria";
 
 interface StatsData {
   totalConvocatorias: number;
@@ -210,34 +207,6 @@ export default function Estadisticas() {
     });
   };
 
-  const convertForAnalysis = (convocatorias: Convocatoria[]): ConvocatoriaForAnalysis[] => {
-    return convocatorias.filter(c => 
-      c.orden && 
-      c.tipo && 
-      c.sector_tema && 
-      c.fecha_limite_aplicacion && 
-      c.estado_convocatoria &&
-      c.estado_usm &&
-      c.valor !== null &&
-      c.tipo_moneda &&
-      c.cumplimos_requisitos !== null &&
-      c.que_nos_falta
-    ).map(c => ({
-      id: c.id,
-      nombre_convocatoria: c.nombre_convocatoria,
-      entidad: c.entidad,
-      orden: (c.orden === 'Nacional' || c.orden === 'Internacional') ? c.orden : 'Nacional',
-      tipo: c.tipo!,
-      sector_tema: c.sector_tema!,
-      cumplimos_requisitos: c.cumplimos_requisitos!,
-      que_nos_falta: c.que_nos_falta!,
-      fecha_limite_aplicacion: c.fecha_limite_aplicacion!,
-      estado_convocatoria: (c.estado_convocatoria === 'Abierta' || c.estado_convocatoria === 'Cerrada') ? c.estado_convocatoria : 'Cerrada',
-      estado_usm: c.estado_usm!,
-      valor: c.valor!,
-      tipo_moneda: c.tipo_moneda!
-    }));
-  };
 
   const getMonthNumber = (monthName: string): number => {
     const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -265,62 +234,166 @@ export default function Estadisticas() {
   }
 
   return (
-    <div className="space-y-8 p-4 md:p-6 animate-fade-in">
-      {/* Encabezado */}
-      <div className="space-y-2">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-          Estadísticas del Sistema
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Dashboard ejecutivo con análisis completo de convocatorias por moneda
-        </p>
+    <div className="min-h-screen bg-background p-8 space-y-12">
+      {/* Header - Minimal */}
+      <div className="space-y-4 mb-16">
+        <h1 className="text-5xl font-light tracking-tight">Estadísticas</h1>
+        <div className="w-16 h-0.5 bg-muted-foreground/20"></div>
       </div>
 
-      {/* Métricas principales */}
-      <StatsCards 
-        totalConvocatorias={stats.totalConvocatorias}
-        convocatoriasAbiertas={stats.convocatoriasAbiertas}
-        proximasVencer={stats.proximasVencer}
-        cumplimosRequisitos={stats.cumplimosRequisitos}
-      />
+      {/* Bento Grid Layout */}
+      <div className="grid grid-cols-12 gap-8 max-w-7xl">
+        
+        {/* Main Metrics - Large blocks */}
+        <Card className="col-span-12 md:col-span-6 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total</div>
+              <div className="text-6xl font-light">{stats.totalConvocatorias}</div>
+              <div className="text-muted-foreground">Convocatorias registradas</div>
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Estadísticas por Moneda */}
-      {stats.currencyStats.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold text-foreground">Análisis por Moneda</h2>
-          <CurrencyStats currencyStats={stats.currencyStats} />
-        </div>
-      )}
+        <Card className="col-span-12 md:col-span-6 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Elegibles</div>
+              <div className="text-6xl font-light text-primary">{stats.cumplimosRequisitos}</div>
+              <div className="text-muted-foreground">
+                {stats.totalConvocatorias > 0 ? Math.round((stats.cumplimosRequisitos / stats.totalConvocatorias) * 100) : 0}% del total
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Gráficos principales */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-semibold text-foreground">Análisis Gráfico</h2>
-        <ChartsGrid 
-          data={{
-            porEstado: stats.porEstado,
-            porSector: stats.porSector,
-            porMes: stats.porMes,
-            porEntidad: stats.porEntidad
-          }}
-        />
-      </div>
+        {/* Status Distribution - Medium block */}
+        <Card className="col-span-12 md:col-span-8 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-8">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Estado</div>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={stats.porEstado}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={90}
+                      paddingAngle={2}
+                      dataKey="value"
+                    >
+                      {stats.porEstado.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex gap-4 text-sm">
+                {stats.porEstado.map((item) => (
+                  <div key={item.name} className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                    <span className="text-muted-foreground">{item.name}: {item.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Resumen ejecutivo */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-semibold text-foreground">Resumen Ejecutivo</h2>
-        <SummaryCards 
-          totalConvocatorias={stats.totalConvocatorias}
-          cumplimosRequisitos={stats.cumplimosRequisitos}
-          convocatoriasAbiertas={stats.convocatoriasAbiertas}
-          sectoresUnicos={stats.sectoresUnicos}
-          entidadesUnicas={stats.entidadesUnicas}
-        />
-      </div>
+        {/* Quick Stats - Small blocks */}
+        <Card className="col-span-12 md:col-span-4 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Abiertas</div>
+              <div className="text-4xl font-light text-success">{stats.convocatoriasAbiertas}</div>
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Informes Estadísticos Inteligentes */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-semibold text-foreground">Análisis Inteligente</h2>
-        <SmartReportsModule convocatorias={convertForAnalysis(convocatorias)} />
+        <Card className="col-span-12 md:col-span-4 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Por vencer</div>
+              <div className="text-4xl font-light text-warning">{stats.proximasVencer}</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-12 md:col-span-4 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Sectores</div>
+              <div className="text-4xl font-light">{stats.sectoresUnicos}</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-12 md:col-span-4 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Entidades</div>
+              <div className="text-4xl font-light">{stats.entidadesUnicas}</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Top Sectors - Wide block */}
+        <Card className="col-span-12 md:col-span-8 border-0 shadow-sm">
+          <CardContent className="p-8">
+            <div className="space-y-8">
+              <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Top Sectores</div>
+              <div className="space-y-4">
+                {stats.porSector.slice(0, 5).map((sector, index) => (
+                  <div key={sector.name} className="flex items-center justify-between">
+                    <span className="text-sm">{sector.name}</span>
+                    <div className="flex items-center gap-3 min-w-20">
+                      <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-primary transition-all duration-500"
+                          style={{ width: `${(sector.value / Math.max(...stats.porSector.map(s => s.value))) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-medium min-w-8 text-right">{sector.value}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Currency Stats */}
+        {stats.currencyStats.length > 0 && (
+          <Card className="col-span-12 border-0 shadow-sm">
+            <CardContent className="p-8">
+              <div className="space-y-8">
+                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Distribución por Moneda</div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {stats.currencyStats.map((currency) => (
+                    <div key={currency.currency} className="space-y-4">
+                      <div className="text-lg font-medium">{currency.currency}</div>
+                      <div className="space-y-2">
+                        <div className="text-2xl font-light">
+                          {currency.currency === 'COP' 
+                            ? `$${(currency.total / 1000000).toFixed(1)}M`
+                            : currency.currency === 'USD'
+                            ? `$${(currency.total / 1000).toFixed(0)}K`
+                            : `€${(currency.total / 1000).toFixed(0)}K`
+                          }
+                        </div>
+                        <div className="text-sm text-muted-foreground">{currency.count} convocatorias</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
       </div>
     </div>
   );
