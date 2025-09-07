@@ -17,6 +17,7 @@ interface StatsData {
   porEntidad: Array<{ name: string; value: number }>;
   currencyStats: Array<{ currency: string; total: number; count: number; average: number }>;
   currencyStatsAbiertas: Array<{ currency: string; total: number; count: number; average: number }>;
+  montoTotalAbierto: { cop: number; usd: number; eur: number; otros: number };
   sectoresUnicos: number;
   entidadesUnicas: number;
 }
@@ -45,6 +46,7 @@ export default function Estadisticas() {
     porEntidad: [],
     currencyStats: [],
     currencyStatsAbiertas: [],
+    montoTotalAbierto: { cop: 0, usd: 0, eur: 0, otros: 0 },
     sectoresUnicos: 0,
     entidadesUnicas: 0
   });
@@ -162,9 +164,10 @@ export default function Estadisticas() {
       .sort((a, b) => b.value - a.value)
       .slice(0, 8);
 
-    // Estadísticas por moneda
+    // Estadísticas por moneda y monto total abierto
     const currencyStats: Record<string, { total: number; count: number; values: number[] }> = {};
     const currencyStatsAbiertas: Record<string, { total: number; count: number; values: number[] }> = {};
+    const montoTotalAbierto = { cop: 0, usd: 0, eur: 0, otros: 0 };
     
     convocatorias.forEach(c => {
       if (c.valor && c.tipo_moneda) {
@@ -186,6 +189,22 @@ export default function Estadisticas() {
           currencyStatsAbiertas[currency].total += c.valor;
           currencyStatsAbiertas[currency].count += 1;
           currencyStatsAbiertas[currency].values.push(c.valor);
+          
+          // Acumular en monto total abierto por moneda
+          switch (currency.toUpperCase()) {
+            case 'COP':
+              montoTotalAbierto.cop += c.valor;
+              break;
+            case 'USD':
+              montoTotalAbierto.usd += c.valor;
+              break;
+            case 'EUR':
+              montoTotalAbierto.eur += c.valor;
+              break;
+            default:
+              montoTotalAbierto.otros += c.valor;
+              break;
+          }
         }
       }
     });
@@ -226,6 +245,7 @@ export default function Estadisticas() {
       porEntidad,
       currencyStats: currencyStatsArray,
       currencyStatsAbiertas: currencyStatsAbiertasArray,
+      montoTotalAbierto,
       sectoresUnicos: porSector.length,
       entidadesUnicas: porEntidad.length
     });
@@ -322,6 +342,56 @@ export default function Estadisticas() {
                     <span className="text-muted-foreground">{item.name}: {item.value}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Monto Total Disponible - Destacado */}
+        <Card className="col-span-12 bg-gradient-to-r from-success/10 to-success/5 border-success/30 shadow-lg">
+          <CardContent className="p-8">
+            <div className="text-center space-y-6">
+              <div className="text-sm font-medium text-success uppercase tracking-wider">
+                💰 Monto Total Acumulado Disponible
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {stats.montoTotalAbierto.cop > 0 && (
+                  <div className="space-y-2">
+                    <div className="text-4xl font-light text-success">
+                      ${(stats.montoTotalAbierto.cop / 1000000).toFixed(1)}M
+                    </div>
+                    <div className="text-sm text-muted-foreground">COP</div>
+                  </div>
+                )}
+                {stats.montoTotalAbierto.usd > 0 && (
+                  <div className="space-y-2">
+                    <div className="text-4xl font-light text-success">
+                      ${(stats.montoTotalAbierto.usd / 1000).toFixed(0)}K
+                    </div>
+                    <div className="text-sm text-muted-foreground">USD</div>
+                  </div>
+                )}
+                {stats.montoTotalAbierto.eur > 0 && (
+                  <div className="space-y-2">
+                    <div className="text-4xl font-light text-success">
+                      €{(stats.montoTotalAbierto.eur / 1000).toFixed(0)}K
+                    </div>
+                    <div className="text-sm text-muted-foreground">EUR</div>
+                  </div>
+                )}
+                {stats.montoTotalAbierto.otros > 0 && (
+                  <div className="space-y-2">
+                    <div className="text-4xl font-light text-success">
+                      {stats.montoTotalAbierto.otros.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Otras monedas</div>
+                  </div>
+                )}
+              </div>
+              <div className="pt-4 border-t border-success/20">
+                <div className="text-xs text-muted-foreground">
+                  ✅ Solo convocatorias con estado "Abierta" • Actualizado en tiempo real
+                </div>
               </div>
             </div>
           </CardContent>
