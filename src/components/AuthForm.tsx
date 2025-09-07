@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import logoUsm from "@/assets/logo-usm.png";
 export const AuthForm = () => {
-  console.log("AuthForm: Rendering auth form");
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,11 +62,10 @@ export const AuthForm = () => {
           </form>
           
           <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-            <h4 className="font-medium text-sm mb-2">Usuarios del Sistema:</h4>
+            <h4 className="font-medium text-sm mb-2">Información de Acceso:</h4>
             <div className="text-xs text-muted-foreground space-y-1">
-              <p><strong>Administrador:</strong> admin@usm.edu.co</p>
-              <p><strong>Usuario:</strong> rectoria@usm.edu.co</p>
-              
+              <p>Utiliza tus credenciales institucionales para acceder al sistema.</p>
+              <p>Si no tienes credenciales, contacta al administrador del sistema.</p>
             </div>
           </div>
         </CardContent>

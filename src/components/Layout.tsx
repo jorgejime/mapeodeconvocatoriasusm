@@ -1,5 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { SecurityNotification } from "@/components/SecurityNotification";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,6 +29,7 @@ export const Layout = ({ children }: LayoutProps) => {
           </footer>
         </div>
       </div>
+      <SecurityNotification />
     </SidebarProvider>
   );
 };

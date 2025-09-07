@@ -13,13 +13,15 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("AuthLayout: Setting up auth listeners");
     let hasInitialized = false;
     
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log("AuthLayout: Auth state changed", { event, session });
+        // Reduced logging - only log events, not sensitive session data
+        if (process.env.NODE_ENV === 'development') {
+          console.log("AuthLayout: Auth event:", event);
+        }
         setSession(session);
         setUser(session?.user ?? null);
         if (!hasInitialized) {
@@ -40,7 +42,11 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
         
         const { data: { session }, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
         
-        console.log("AuthLayout: Got session", { session, error });
+        // Reduced logging - don't log session details
+        if (error && process.env.NODE_ENV === 'development') {
+          console.error("AuthLayout: Session check error:", error.message);
+        }
+        
         if (!hasInitialized) {
           setSession(session);
           setUser(session?.user ?? null);
@@ -48,7 +54,9 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
           hasInitialized = true;
         }
       } catch (error) {
-        console.error("AuthLayout: Session check failed", error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error("AuthLayout: Session check failed:", error.message);
+        }
         if (!hasInitialized) {
           setLoading(false);
           hasInitialized = true;
@@ -61,10 +69,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  console.log("AuthLayout: Rendering", { loading, user: !!user, session: !!session });
-
   if (loading) {
-    console.log("AuthLayout: Showing loading state");
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -73,10 +78,8 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
   }
 
   if (!user) {
-    console.log("AuthLayout: No user, showing AuthForm");
     return <AuthForm />;
   }
 
-  console.log("AuthLayout: User authenticated, showing children");
   return <>{children}</>;
 };

@@ -23,19 +23,32 @@ export const useUserRole = (user: User | null) => {
 
     const fetchProfile = async () => {
       try {
+        // Fetch profile with additional validation
         const { data, error } = await supabase
           .from("profiles")
           .select("*")
           .eq("email", user.email)
+          .eq("user_id", user.id) // Additional security check
           .single();
 
         if (error && error.code !== "PGRST116") {
-          console.error("Error fetching profile:", error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error("Error fetching profile:", error.message);
+          }
         } else {
-          setProfile(data);
+          // Validate that the profile data matches the authenticated user
+          if (data && data.email === user.email && data.user_id === user.id) {
+            setProfile(data);
+          } else if (data) {
+            // Security: Profile data doesn't match authenticated user
+            console.warn("Profile data validation failed - possible security issue");
+            setProfile(null);
+          }
         }
       } catch (error) {
-        console.error("Error fetching profile:", error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error("Error fetching profile:", error.message);
+        }
       } finally {
         setLoading(false);
       }

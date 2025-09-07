@@ -36,7 +36,6 @@ Deno.serve(async (req) => {
     // Get the authorization header
     const authHeader = req.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      console.log('Missing or invalid authorization header');
       return new Response(
         JSON.stringify({ error: 'Authorization required' }),
         { 
@@ -46,12 +45,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Verify the user token
+    // Verify the user token (with JWT verification enabled, this is handled automatically)
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     
     if (authError || !user) {
-      console.log('Authentication failed:', authError);
+      // Log error without exposing sensitive data
+      console.log('Authentication failed - invalid token provided');
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),
         { 
@@ -63,7 +63,8 @@ Deno.serve(async (req) => {
 
     // Verify admin permissions
     if (user.email !== 'admin@usm.edu.co') {
-      console.log('Unauthorized access attempt by:', user.email);
+      // Log security violation without exposing email
+      console.log('Unauthorized access attempt - non-admin user tried to access reset function');
       return new Response(
         JSON.stringify({ error: 'Unauthorized: Admin access required' }),
         { 
@@ -104,7 +105,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log('Starting database reset operation by admin:', user.email);
+    // Log operation start without exposing email
+    console.log('Starting database reset operation by authenticated admin user');
 
     // Begin the reset process
     let deletedCount = 0;
@@ -148,8 +150,8 @@ Deno.serve(async (req) => {
       errors.push(`Error al resetear secuencias: ${error.message}`);
     }
 
-    // Log the operation
-    console.log(`Database reset completed by ${user.email}. Records deleted: ${deletedCount}`);
+    // Log the operation without exposing email
+    console.log(`Database reset completed by admin user. Records deleted: ${deletedCount}`);
 
     if (errors.length > 0) {
       console.log('Reset completed with errors:', errors);

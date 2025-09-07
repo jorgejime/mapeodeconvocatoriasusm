@@ -141,6 +141,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      validate_user_access: {
+        Args: { target_email: string; target_user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

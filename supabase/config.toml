@@ -1,7 +1,7 @@
 project_id = "ljzbsuhdsqqsivesyzab"
 
 [functions.reset-database]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-smart-report]
-verify_jwt = false
+verify_jwt = true
