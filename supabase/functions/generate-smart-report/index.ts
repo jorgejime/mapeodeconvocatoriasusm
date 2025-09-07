@@ -793,6 +793,83 @@ function generarRecomendacionesHTML(analisis: AnalisisResultado): string {
     </div>`;
 }
 
+// Función para generar informe con IA
+async function generarInformeConIA(convocatorias: Convocatoria[], formato: string): Promise<string> {
+  const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+  
+  if (!openAIApiKey) {
+    throw new Error('OPENAI_API_KEY no configurada');
+  }
+
+  const analisis = generarAnalisisCompleto(convocatorias);
+  
+  const prompt = `Genera un INFORME ESTADÍSTICO EXACTO siguiendo este template para análisis de convocatorias USM:
+
+DATOS PARA ANÁLISIS:
+- Total convocatorias: ${convocatorias.length}
+- Tasa elegibilidad: ${analisis.tasaElegibilidadGeneral}%
+- Mejor sector: ${analisis.sectorMasExitoso.nombre} (${analisis.sectorMasExitoso.tasa}%)
+- Ventaja comparativa: ${analisis.ventajaComparativa.mejor} (${analisis.ventajaComparativa.descripcion})
+- Oportunidades urgentes: ${analisis.oportunidadesUrgentes.length}
+- Convocatorias vencidas: ${analisis.convocatoriasVencidas.length}
+
+DATOS DETALLADOS:
+${JSON.stringify(convocatorias.slice(0, 10), null, 2)}
+
+GENERA UN INFORME ESTADÍSTICO PROFESIONAL CON:
+1. Título principal y fecha actual
+2. Resumen ejecutivo con hallazgos clave usando emojis específicos
+3. Análisis estadístico descriptivo con tablas de distribución
+4. Hallazgos críticos y correlaciones con interpretaciones
+5. Recomendaciones estratégicas (inmediatas, mediano y largo plazo)
+6. Perfil óptimo de convocatoria
+7. Conclusiones y proyecciones
+
+El formato debe ser ${formato === 'html' ? 'HTML5 semántico con CSS styling' : 'Markdown profesional'}.
+
+IMPORTANTE: Utiliza los datos reales proporcionados, no inventes cifras.`;
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-5-nano-2025-08-07',
+        messages: [
+          {
+            role: 'system',
+            content: 'Eres un analista estadístico experto especializado en generar informes ejecutivos profesionales de convocatorias de financiamiento para instituciones académicas. Generas informes detallados, precisos y accionables.'
+          },
+          { role: 'user', content: prompt }
+        ],
+        max_completion_tokens: 16384,
+        temperature: 0.9
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Error OpenAI:', error);
+      throw new Error(`Error OpenAI: ${response.status} - ${error}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+
+  } catch (error) {
+    console.error('Error al generar informe con IA:', error);
+    // Fallback al informe local
+    if (formato === 'texto') {
+      return generarInformeTexto(convocatorias, analisis);
+    } else {
+      return generarInformeHTML(convocatorias, analisis);
+    }
+  }
+}
+
 // Servidor principal
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -810,12 +887,8 @@ serve(async (req) => {
 
     const analisis = generarAnalisisCompleto(convocatorias);
     
-    let informe;
-    if (formato === 'texto') {
-      informe = generarInformeTexto(convocatorias, analisis);
-    } else {
-      informe = generarInformeHTML(convocatorias, analisis);
-    }
+    // Generar informe con IA
+    const informe = await generarInformeConIA(convocatorias, formato);
 
     return new Response(JSON.stringify({
       success: true,
