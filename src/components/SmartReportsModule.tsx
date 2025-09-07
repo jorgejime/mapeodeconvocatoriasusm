@@ -56,6 +56,7 @@ interface AnalisisResultado {
 const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }) => {
   const [loading, setLoading] = useState(false);
   const [informe, setInforme] = useState<string>('');
+  const [formato, setFormato] = useState<'html' | 'texto'>('html');
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null);
   const [metadatos, setMetadatos] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<string>('resumen');
@@ -76,7 +77,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
       console.log('Enviando solicitud para generar informe inteligente...');
       
       const { data, error } = await supabase.functions.invoke('generate-smart-report', {
-        body: { convocatorias }
+        body: { convocatorias, formato }
       });
 
       if (error) {
@@ -107,22 +108,38 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
     }
   };
 
-  const descargarPDF = () => {
+  const descargarInforme = () => {
     if (!informe) return;
 
-    // Crear una ventana temporal para generar el PDF desde texto
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      toast({
-        title: "Error",
-        description: "No se pudo abrir la ventana de impresión. Verifique el bloqueador de ventanas emergentes.",
-        variant: "destructive"
-      });
-      return;
-    }
+    if (formato === 'html') {
+      // Crear un blob con el HTML y descargarlo
+      const blob = new Blob([informe], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `informe-estadistico-usm-${new Date().toISOString().split('T')[0]}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-    // Generar HTML formateado para impresión desde el texto plano
-    const htmlContent = `
+      toast({
+        title: "Informe descargado",
+        description: "El informe HTML ha sido descargado exitosamente",
+      });
+    } else {
+      // Crear PDF desde texto plano
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        toast({
+          title: "Error",
+          description: "No se pudo abrir la ventana de impresión. Verifique el bloqueador de ventanas emergentes.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const htmlContent = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -154,10 +171,6 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
             font-size: inherit;
         }
         
-        .page-break {
-            page-break-before: always;
-        }
-        
         @media print {
             body {
                 -webkit-print-color-adjust: exact;
@@ -171,24 +184,68 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
 </body>
 </html>`;
 
-    // Escribir el contenido en la nueva ventana
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
 
-    // Esperar a que se cargue el contenido y luego imprimir
-    printWindow.onload = () => {
-      printWindow.print();
-      
-      // Cerrar la ventana después de la impresión
-      printWindow.onafterprint = () => {
-        printWindow.close();
+      printWindow.onload = () => {
+        printWindow.print();
+        printWindow.onafterprint = () => {
+          printWindow.close();
+        };
       };
-    };
 
-    toast({
-      title: "Generando PDF",
-      description: "Se abrirá el diálogo de impresión para guardar como PDF",
-    });
+      toast({
+        title: "Generando PDF",
+        description: "Se abrirá el diálogo de impresión para guardar como PDF",
+      });
+    }
+  };
+
+  const verInformeCompleto = () => {
+    if (!informe) return;
+
+    if (formato === 'html') {
+      // Abrir el HTML en una nueva ventana
+      const newWindow = window.open('', '_blank');
+      if (newWindow) {
+        newWindow.document.write(informe);
+        newWindow.document.close();
+      }
+    } else {
+      // Mostrar texto en nueva ventana con mejor formato
+      const newWindow = window.open('', '_blank');
+      if (newWindow) {
+        newWindow.document.write(`
+          <html>
+            <head>
+              <title>Informe Completo - USM</title>
+              <style>
+                body { 
+                  font-family: 'Courier New', monospace; 
+                  padding: 20px; 
+                  background: #f5f5f5; 
+                  margin: 0; 
+                }
+                pre { 
+                  background: white; 
+                  padding: 20px; 
+                  border-radius: 8px; 
+                  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                  font-size: 12px;
+                  line-height: 1.4;
+                  white-space: pre-wrap;
+                  word-wrap: break-word;
+                }
+              </style>
+            </head>
+            <body>
+              <pre>${informe}</pre>
+            </body>
+          </html>
+        `);
+        newWindow.document.close();
+      }
+    }
   };
 
   const renderResumenEjecutivo = () => {
@@ -695,18 +752,27 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                   )}
                 </button>
                 {informe && (
-                  <button
-                    onClick={descargarPDF}
+                  <>
+                    <button
+                      onClick={descargarInforme}
                     className="neumorphic-button px-3 sm:px-4 py-2 text-xs sm:text-sm text-slate-700 font-medium flex items-center gap-2 justify-center sm:justify-start"
                   >
                     <Download className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span className="hidden sm:inline">Descargar PDF</span>
-                    <span className="sm:hidden">PDF</span>
+                    <span className="hidden sm:inline">{formato === 'html' ? 'Descargar HTML' : 'Descargar PDF'}</span>
+                    <span className="sm:hidden">{formato === 'html' ? 'HTML' : 'PDF'}</span>
                   </button>
-                )}
-              </div>
+                  <button
+                    onClick={verInformeCompleto}
+                    className="neumorphic-button px-3 sm:px-4 py-2 text-xs sm:text-sm text-slate-700 font-medium flex items-center gap-2 justify-center sm:justify-start"
+                  >
+                    <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Ver Completo</span>
+                    <span className="sm:hidden">Ver</span>
+                  </button>
+                </>
+              )}
             </div>
-        </div>
+          </div>
 
         <div className="p-6">
           {!informe ? (
@@ -822,7 +888,7 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-3">
                         <h3 className="executive-title text-base sm:text-lg text-slate-800">Informe Completo</h3>
                         <button
-                          onClick={descargarPDF}
+                          onClick={descargarInforme}
                           className="neumorphic-button px-3 sm:px-4 py-2 text-xs sm:text-sm text-slate-700 font-medium flex items-center gap-2 w-full sm:w-auto justify-center"
                         >
                           <Download className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -845,6 +911,8 @@ const SmartReportsModule: React.FC<SmartReportsModuleProps> = ({ convocatorias }
           )}
         </div>
       </div>
+    </div>
+  );
     </div>
   );
 };
