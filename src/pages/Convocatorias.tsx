@@ -344,70 +344,47 @@ export default function Convocatorias() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-6 animate-fade-in">
-      {/* Header Section - Improved responsive design */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-        <div className="space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Convocatorias</h1>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
-            {canManage ? "Gestiona todas las convocatorias del sistema" : "Consulta y filtra las convocatorias disponibles"}
+    <div className="max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h1 className="text-3xl font-light text-foreground mb-2">Convocatorias</h1>
+          <p className="text-muted-foreground">
+            {canManage ? "Gestión de convocatorias" : "Consulta de convocatorias"}
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          {canManage && (
-            <>
-              <Button onClick={() => setShowBulkUpload(true)} variant="outline" className="w-full sm:w-auto hover-scale">
-                <Upload className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Carga Masiva</span>
-                <span className="sm:hidden">Carga</span>
-              </Button>
-              <Button onClick={handleCreate} className="w-full sm:w-auto hover-scale">
-                <Plus className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Nueva Convocatoria</span>
-                <span className="sm:hidden">Nueva</span>
-              </Button>
-            </>
-          )}
-        </div>
+        {canManage && (
+          <div className="flex gap-3">
+            <Button onClick={() => setShowBulkUpload(true)} variant="outline">
+              <Upload className="h-4 w-4 mr-2" />
+              Carga Masiva
+            </Button>
+            <Button onClick={handleCreate}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nueva
+            </Button>
+          </div>
+        )}
       </div>
 
-      {/* Sistema de filtros avanzado */}
-      <Card className="shadow-sm border-border/50 animate-scale-in">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg md:text-xl flex items-center gap-2">
-            <Search className="h-5 w-5 text-primary" />
-            Sistema de Filtrado Avanzado
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ConvocatoriaAdvancedFilters
-            filters={advancedFilters}
-            onFiltersChange={setAdvancedFilters}
-            availableEntidades={getAvailableEntidades()}
-            onClearFilters={clearAllFilters}
-            activeFiltersCount={getActiveFiltersCount()}
-          />
-        </CardContent>
-      </Card>
+      {/* Filtros */}
+      <div className="border border-border/50 rounded-lg p-6 mb-8">
+        <ConvocatoriaAdvancedFilters
+          filters={advancedFilters}
+          onFiltersChange={setAdvancedFilters}
+          availableEntidades={getAvailableEntidades()}
+          onClearFilters={clearAllFilters}
+          activeFiltersCount={getActiveFiltersCount()}
+        />
+      </div>
 
-      {/* Results - Enhanced responsive table */}
-      <Card className="shadow-sm border-border/50 animate-scale-in">
-        <CardHeader className="flex flex-row items-center justify-between pb-4">
-          <CardTitle className="text-lg md:text-xl flex items-center gap-2">
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary text-sm font-medium">
-              {filteredConvocatorias.length}
-            </span>
-            Resultados
-          </CardTitle>
-          {filteredConvocatorias.length > 0 && (
-            <Badge variant="secondary" className="hidden sm:inline-flex">
-              {filteredConvocatorias.length} de {convocatorias.length}
-            </Badge>
-          )}
-        </CardHeader>
-        <CardContent className="p-4">
-          {/* Grid Card View - 3 Columns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      {/* Resultados */}
+      <div className="mb-6">
+        <p className="text-sm text-muted-foreground">
+          {filteredConvocatorias.length} de {convocatorias.length} convocatorias
+        </p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {filteredConvocatorias.map((convocatoria) => (
               <Card 
                 key={convocatoria.id} 
@@ -572,10 +549,9 @@ export default function Convocatorias() {
                 )}
               </Card>
             ))}
-          </div>
-
+          
           {filteredConvocatorias.length === 0 && (
-            <div className="text-center py-12 animate-fade-in">
+            <div className="col-span-full text-center py-12">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
                 <Search className="h-8 w-8 text-muted-foreground" />
               </div>
@@ -583,8 +559,7 @@ export default function Convocatorias() {
               <p className="text-muted-foreground">Intenta ajustar los filtros de búsqueda</p>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
 
       {/* Detail Dialog - Available for all users */}
       <ConvocatoriaDetailDialog

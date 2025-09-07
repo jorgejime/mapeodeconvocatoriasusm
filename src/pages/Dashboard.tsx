@@ -85,52 +85,35 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-3 sm:p-6">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="neomorphic-card p-4 sm:p-6">
-        <div className="space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent font-playfair">
-            Dashboard Ejecutivo
-          </h1>
-          <p className="text-muted-foreground text-sm sm:text-base font-inter">
-            {isAdmin 
-              ? "Vista estratégica para la gestión de convocatorias y toma de decisiones"
-              : "Panel de control con información clave de convocatorias"
-            }
-          </p>
-        </div>
+      <div className="mb-12">
+        <h1 className="text-3xl font-light text-foreground mb-2">
+          Dashboard
+        </h1>
+        <p className="text-muted-foreground">
+          Vista general del sistema
+        </p>
       </div>
 
       {/* Dashboard Content */}
-      <div className="space-y-6 sm:space-y-8">
-        {/* Critical Alerts - Full Width */}
-        <div className="neomorphic-card">
-          <CriticalAlerts 
-            convocatorias={convocatorias}
-            onNavigateToConvocatoria={() => navigate("/convocatorias")}
-          />
-        </div>
+      <div className="space-y-8">
+        <CriticalAlerts 
+          convocatorias={convocatorias}
+          onNavigateToConvocatoria={() => navigate("/convocatorias")}
+        />
 
-        {/* Quick Actions - Full Width */}
-        <div className="neomorphic-card">
-          <QuickActions
-            convocatorias={convocatorias}
-            onNavigateToConvocatorias={() => navigate("/convocatorias")}
-            onNavigateToEstadisticas={() => navigate("/estadisticas")}
-            onNavigateToConfiguracion={() => navigate("/configuracion")}
-            isAdmin={isAdmin}
-          />
-        </div>
+        <QuickActions
+          convocatorias={convocatorias}
+          onNavigateToConvocatorias={() => navigate("/convocatorias")}
+          onNavigateToEstadisticas={() => navigate("/estadisticas")}
+          onNavigateToConfiguracion={() => navigate("/configuracion")}
+          isAdmin={isAdmin}
+        />
 
-        {/* Executive Summary - Full Width */}
-        <div className="neomorphic-card">
-          <ExecutiveSummary convocatorias={convocatorias} />
-        </div>
+        <ExecutiveSummary convocatorias={convocatorias} />
 
-        {/* Performance Metrics - Full Width */}
-        <div className="neomorphic-card">
-          <PerformanceMetrics convocatorias={convocatorias} />
-        </div>
+        <PerformanceMetrics convocatorias={convocatorias} />
       </div>
     </div>
   );

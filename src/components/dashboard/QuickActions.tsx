@@ -120,87 +120,37 @@ export default function QuickActions({
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      {/* Acciones rápidas */}
-      <div className="p-4 sm:p-6">
-        <div className="mb-4 sm:mb-6">
-          <h3 className="text-lg sm:text-xl font-bold font-playfair mb-2">Acciones Rápidas</h3>
-          <p className="text-sm text-muted-foreground font-inter">
-            Tareas principales y navegación rápida
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-          {actions.map((action) => {
-            const Icon = action.icon;
-            return (
-              <button
-                key={action.title}
-                onClick={action.onClick}
-                disabled={action.disabled}
-                className="neomorphic-button neomorphic-hover h-auto p-2 sm:p-3 flex flex-col items-center space-y-1 sm:space-y-2 relative min-h-[80px] sm:min-h-[100px] disabled:opacity-50"
-              >
-                {action.badge && (
-                  <div className="neomorphic-small absolute -top-1 -right-1 text-xs h-5 w-5 flex items-center justify-center p-0 bg-danger text-danger-foreground">
-                    {action.badge}
-                  </div>
-                )}
-                <div className="neomorphic-small p-2 mb-1">
-                  <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div className="text-center space-y-0.5 px-1 flex-1 flex flex-col justify-center">
-                  <p className="text-xs sm:text-sm font-medium leading-tight font-inter">{action.title}</p>
-                  <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight line-clamp-2 hidden sm:block font-inter">
-                    {action.description}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+    <div className="p-6">
+      <div className="mb-8">
+        <h3 className="text-xl font-light mb-2">Acciones Rápidas</h3>
+        <p className="text-muted-foreground">
+          Tareas principales del sistema
+        </p>
       </div>
-
-      {/* Prioridades */}
-      <div className="p-4 sm:p-6">
-        <div className="mb-4 sm:mb-6">
-          <h3 className="text-lg sm:text-xl font-bold font-playfair mb-2">Prioridades del Día</h3>
-          <p className="text-sm text-muted-foreground font-inter">
-            Tareas que requieren atención prioritaria
-          </p>
-        </div>
         
-        <div className="space-y-2 sm:space-y-3">
-          {priorities.map((priority) => (
-            <div
-              key={priority.title}
-              className={`neomorphic-small neomorphic-hover p-2 sm:p-3 ${getColorClasses(priority.color)}`}
+      <div className="grid grid-cols-4 gap-4">
+        {actions.map((action) => {
+          const Icon = action.icon;
+          return (
+            <button
+              key={action.title}
+              onClick={action.onClick}
+              disabled={action.disabled}
+              className="border border-border/50 rounded-lg p-4 text-center hover:bg-muted/30 transition-colors disabled:opacity-50 relative"
             >
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1 sm:gap-2 mb-1">
-                    <h4 className="font-medium text-sm sm:text-base truncate font-inter">{priority.title}</h4>
-                    <div className="neomorphic-small px-2 py-1">
-                      <span className="text-xs font-bold">{priority.count}</span>
-                    </div>
-                  </div>
-                  <p className="text-xs sm:text-sm opacity-80 line-clamp-2 font-inter">{priority.description}</p>
+              {action.badge && (
+                <div className="absolute -top-1 -right-1 text-xs h-5 w-5 flex items-center justify-center bg-destructive text-destructive-foreground rounded-full">
+                  {action.badge}
                 </div>
-                <button
-                  onClick={onNavigateToConvocatorias}
-                  className="neomorphic-small neomorphic-hover shrink-0 text-xs sm:text-sm px-2 sm:px-3 py-1 font-inter"
-                >
-                  {priority.action}
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {priorities.every(p => p.count === 0) && (
-          <div className="neomorphic-small text-center py-4 sm:py-6 text-muted-foreground">
-            <p className="text-xs sm:text-sm font-inter">¡Excelente! No hay tareas urgentes pendientes.</p>
-          </div>
-        )}
+              )}
+              <Icon className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
+              <p className="text-sm font-medium">{action.title}</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {action.description}
+              </p>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

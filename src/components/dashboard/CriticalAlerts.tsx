@@ -97,33 +97,25 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
   };
 
   return (
-    <div className="p-4 sm:p-6">
-      <div className="mb-4 sm:mb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="neomorphic-small p-2">
-            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-danger" />
-          </div>
-          <h3 className="text-lg sm:text-xl font-bold font-playfair">Alertas Críticas</h3>
-        </div>
-        <p className="text-sm text-muted-foreground font-inter">
-          Situaciones que requieren atención inmediata
+    <div className="p-6">
+      <div className="mb-8">
+        <h3 className="text-xl font-light mb-2">Alertas Críticas</h3>
+        <p className="text-muted-foreground">
+          Situaciones que requieren atención
         </p>
       </div>
       
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+      <div className="grid grid-cols-4 gap-6 mb-8">
         {alerts.map((alert) => {
           const Icon = alert.icon;
           return (
-            <div key={alert.type} className="neomorphic-small neomorphic-hover p-3 sm:p-4 text-center space-y-2">
-              <div className={`neomorphic-small inline-flex items-center justify-center w-8 h-8 sm:w-12 sm:h-12 ${getColorClasses(alert.color)}`}>
-                <Icon className="h-3 w-3 sm:h-6 sm:w-6" />
-              </div>
-              <div className={`text-lg sm:text-2xl font-bold font-playfair ${getColorClasses(alert.color, true)}`}>
+            <div key={alert.type} className="text-center space-y-3">
+              <div className="text-2xl font-light text-foreground">
                 {alert.count}
               </div>
               <div className="space-y-1">
-                <p className="text-xs sm:text-sm font-medium font-inter">{alert.title}</p>
-                <p className="text-[10px] sm:text-xs text-muted-foreground font-inter">{alert.description}</p>
+                <p className="text-sm font-medium">{alert.title}</p>
+                <p className="text-xs text-muted-foreground">{alert.description}</p>
               </div>
             </div>
           );

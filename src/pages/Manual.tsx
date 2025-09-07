@@ -31,243 +31,175 @@ import {
 
 export default function Manual() {
   return (
-    <div className="space-y-6 p-6 max-w-7xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent flex items-center gap-2 font-playfair">
-          <BookOpen className="h-8 w-8 text-primary" />
+      <div className="mb-12">
+        <h1 className="text-3xl font-light text-foreground mb-2 flex items-center gap-3">
+          <BookOpen className="h-8 w-8 text-muted-foreground" />
           Manual de Usuario
         </h1>
-        <p className="text-muted-foreground font-inter">
-          Guía completa para el uso del Sistema de Gestión de Convocatorias de la Universidad Santa María
+        <p className="text-muted-foreground mb-6">
+          Guía del Sistema de Convocatorias USM
         </p>
-        <div className="neomorphic-card p-4 bg-gradient-subtle">
-          <p className="text-sm text-slate-600">
-            <strong>📋 Versión del Sistema:</strong> 2.0 | <strong>🎨 Diseño:</strong> Neumorphism UI | <strong>⚡ Tecnología:</strong> Inteligencia Artificial Integrada
+        <div className="bg-muted/30 border border-border/50 rounded-lg p-4">
+          <p className="text-sm text-muted-foreground">
+            <strong>Versión:</strong> 3.0 | <strong>Diseño:</strong> Minimalista | <strong>Funciones:</strong> Filtros avanzados y estadísticas
           </p>
         </div>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Vista General</TabsTrigger>
-          <TabsTrigger value="rectoria">Para Rectoría</TabsTrigger>
-          <TabsTrigger value="admin">Para Administradores</TabsTrigger>
-          <TabsTrigger value="features">Funcionalidades</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="overview">General</TabsTrigger>
+          <TabsTrigger value="rectoria">Rectoría</TabsTrigger>
+          <TabsTrigger value="admin">Administración</TabsTrigger>
         </TabsList>
 
         {/* Vista General */}
-        <TabsContent value="overview" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Introducción al Sistema</CardTitle>
-              <CardDescription>
-                Comprenda el propósito y beneficios del sistema de gestión de convocatorias
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-lg">¿Qué es el Sistema?</h3>
-                  <p className="text-muted-foreground">
-                    El Sistema de Gestión de Convocatorias USM es una plataforma integral diseñada para 
-                    centralizar, gestionar y analizar todas las oportunidades de financiamiento y 
-                    convocatorias disponibles para la universidad.
-                  </p>
-                </div>
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-lg">Beneficios Clave</h3>
-                  <ul className="text-muted-foreground space-y-1">
-                    <li>• Centralización de información</li>
-                    <li>• Seguimiento automatizado de deadlines</li>
-                    <li>• Análisis de oportunidades</li>
-                    <li>• Reportes ejecutivos detallados</li>
-                    <li>• Gestión eficiente de recursos</li>
-                  </ul>
-                </div>
-              </div>
+        <TabsContent value="overview" className="space-y-8">
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-light mb-4">Sistema de Convocatorias</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Plataforma minimalista para gestionar oportunidades de financiamiento universitario. 
+                Diseño centrado en la información esencial con filtros avanzados y estadísticas visuales.
+              </p>
+            </div>
 
-              <Separator />
-
-              <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Roles de Usuario del Sistema</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="neomorphic-card p-4 border-success/20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Users className="h-5 w-5 text-success" />
-                      <h4 className="font-medium text-success">Rectoría / Centro de Información</h4>
-                    </div>
-                    <div className="text-sm text-slate-600 space-y-1">
-                      <div>• <strong>Dashboard:</strong> Vista completa ejecutiva</div>
-                      <div>• <strong>Convocatorias:</strong> Solo visualización</div>
-                      <div>• <strong>Estadísticas:</strong> Acceso completo</div>
-                      <div>• <strong>Informes IA:</strong> Generación y descarga</div>
-                      <div>• <strong>Exportación:</strong> PDF y Excel permitido</div>
-                    </div>
+            <div className="space-y-6">
+              <h3 className="text-lg font-medium">Roles de Usuario</h3>
+              <div className="grid gap-6">
+                <div className="border border-border/50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <h4 className="font-medium">Rectoría</h4>
                   </div>
-
-                  <div className="neomorphic-card p-4 border-primary/20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Shield className="h-5 w-5 text-primary" />
-                      <h4 className="font-medium text-primary">Administrador</h4>
-                    </div>
-                    <div className="text-sm text-slate-600 space-y-1">
-                      <div>• <strong>Gestión total:</strong> CRUD de convocatorias</div>
-                      <div>• <strong>Carga masiva:</strong> Importación Excel</div>
-                      <div>• <strong>Configuración:</strong> Sistema y usuarios</div>
-                      <div>• <strong>Base de datos:</strong> Reset y backup</div>
-                      <div>• <strong>Acceso completo:</strong> Todas las secciones</div>
-                    </div>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <div>Dashboard completo</div>
+                    <div>Visualización de convocatorias</div>
+                    <div>Estadísticas con gráficos</div>
+                    <div>Exportación de datos</div>
                   </div>
+                </div>
 
-                  <div className="neomorphic-card p-4 border-orange-200 bg-orange-50/50">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Eye className="h-5 w-5 text-orange-600" />
-                      <h4 className="font-medium text-orange-600">Usuario Estándar</h4>
-                    </div>
-                    <div className="text-sm text-slate-600 space-y-1">
-                      <div>• <strong>Dashboard:</strong> Vista limitada</div>
-                      <div>• <strong>Convocatorias:</strong> Solo lectura</div>
-                      <div>• <strong>Estadísticas:</strong> Acceso denegado</div>
-                      <div>• <strong>Configuración:</strong> Sin acceso</div>
-                      <div>• <strong>Exportación:</strong> No disponible</div>
-                    </div>
+                <div className="border border-border/50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Shield className="h-4 w-4 text-muted-foreground" />
+                    <h4 className="font-medium">Administrador</h4>
+                  </div>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <div>Gestión completa de convocatorias</div>
+                    <div>Carga masiva desde Excel</div>
+                    <div>Configuración del sistema</div>
+                    <div>Administración de usuarios</div>
+                  </div>
+                </div>
+
+                <div className="border border-border/50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                    <h4 className="font-medium">Usuario Estándar</h4>
+                  </div>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <div>Solo lectura de convocatorias</div>
+                    <div>Acceso limitado al dashboard</div>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Navegación Principal</CardTitle>
-              <CardDescription>
-                Familiarícese con las secciones principales del sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="neomorphic-card p-3 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <BarChart3 className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Dashboard Ejecutivo</span>
-                  </div>
-                  <p className="text-sm text-slate-600">
-                    Panel principal con alertas críticas, métricas KPI, resumen ejecutivo y acciones rápidas con diseño neumórfico.
-                  </p>
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium">Secciones Principales</h3>
+            <div className="grid gap-4">
+              <div className="border border-border/50 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">Dashboard</span>
                 </div>
-
-                <div className="neomorphic-card p-3 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Gestión Convocatorias</span>
-                  </div>
-                  <p className="text-sm text-slate-600">
-                    CRUD completo, vista de tarjetas responsive, filtros avanzados, carga masiva Excel y exportación multiformat.
-                  </p>
-                </div>
-
-                <div className="neomorphic-card p-3 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Análisis Estadístico</span>
-                  </div>
-                  <p className="text-sm text-slate-600">
-                    Gráficos interactivos, análisis por monedas, métricas de rendimiento y visualizaciones dinámicas.
-                  </p>
-                </div>
-
-                <div className="neomorphic-card p-3 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Brain className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Inteligencia Artificial</span>
-                  </div>
-                  <p className="text-sm text-slate-600">
-                    Informes ejecutivos automatizados, análisis correlacional, recomendaciones estratégicas y proyecciones.
-                  </p>
-                </div>
-              </div>
-
-              <div className="neomorphic-card p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-                <h4 className="font-medium mb-2 text-blue-900">🎨 Diseño Neumorphism</h4>
-                <p className="text-sm text-blue-800">
-                  La aplicación utiliza un diseño <strong>neumórfico</strong> que combina elementos elevados y hundidos 
-                  para crear una experiencia visual suave y moderna. Todos los componentes tienen efectos de sombra 
-                  interior y exterior que simulan profundidad física en la interfaz.
+                <p className="text-sm text-muted-foreground">
+                  Panel de control con alertas críticas y métricas esenciales.
                 </p>
               </div>
-            </CardContent>
-          </Card>
+
+              <div className="border border-border/50 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">Convocatorias</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Gestión de convocatorias con filtros avanzados y vista en tarjetas.
+                </p>
+              </div>
+
+              <div className="border border-border/50 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">Estadísticas</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Análisis visual con layout tipo Bento. Métricas por moneda y estado.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-muted/30 border border-border/50 rounded-lg p-4">
+              <h4 className="font-medium mb-2">Diseño Minimalista</h4>
+              <p className="text-sm text-muted-foreground">
+                Interfaz limpia con espacios amplios, enfoque en información esencial y elementos visuales reducidos.
+              </p>
+            </div>
+          </div>
         </TabsContent>
 
         {/* Manual para Rectoría */}
-        <TabsContent value="rectoria" className="space-y-6">
-          <Alert>
-            <Users className="h-4 w-4" />
-            <AlertDescription>
-              Esta sección está diseñada específicamente para usuarios de Rectoría con acceso de visualización y análisis.
-            </AlertDescription>
-          </Alert>
+        <TabsContent value="rectoria" className="space-y-8">
+          <div className="bg-muted/30 border border-border/50 rounded-lg p-4">
+            <p className="text-sm text-muted-foreground">
+              Guía para usuarios con acceso de visualización y análisis de datos.
+            </p>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Dashboard Ejecutivo - Vista Rectoría</CardTitle>
-              <CardDescription>
-                Su centro de comando para monitoreo estratégico
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-medium mb-2 flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-danger" />
-                    Alertas Críticas
-                  </h4>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Monitoree situaciones que requieren atención inmediata:
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div>• Convocatorias que vencen en 30 días</div>
-                    <div>• Oportunidades de alto valor (&gt;$100M)</div>
-                    <div>• Procesos estancados en revisión</div>
-                    <div>• Oportunidades perdidas</div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-medium mb-2 flex items-center gap-2">
-                    <Target className="h-4 w-4 text-success" />
-                    Resumen Ejecutivo
-                  </h4>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    KPIs estratégicos para toma de decisiones:
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div>• Total de convocatorias gestionadas</div>
-                    <div>• Tasa de elegibilidad institucional</div>
-                    <div>• Valor total de oportunidades</div>
-                    <div>• Tasa de conversión a presentaciones</div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-medium mb-2 flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-primary" />
-                    Métricas de Rendimiento
-                  </h4>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Análisis financiero y de eficiencia:
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div>• Valor total disponible vs. elegible</div>
-                    <div>• ROI potencial de oportunidades</div>
-                    <div>• Distribución por monedas</div>
-                    <div>• Insights automáticos de mejora</div>
-                  </div>
+          <div className="space-y-6">
+            <h2 className="text-2xl font-light">Dashboard</h2>
+            <div className="space-y-4">
+              <div className="border border-border/50 rounded-lg p-4">
+                <h4 className="font-medium mb-2 flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+                  Alertas Críticas
+                </h4>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>Convocatorias que vencen pronto</div>
+                  <div>Oportunidades de alto valor</div>
+                  <div>Procesos pendientes</div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+
+              <div className="border border-border/50 rounded-lg p-4">
+                <h4 className="font-medium mb-2 flex items-center gap-2">
+                  <Target className="h-4 w-4 text-muted-foreground" />
+                  Resumen Ejecutivo
+                </h4>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>Total de convocatorias</div>
+                  <div>Tasa de elegibilidad</div>
+                  <div>Valor total disponible</div>
+                </div>
+              </div>
+
+              <div className="border border-border/50 rounded-lg p-4">
+                <h4 className="font-medium mb-2 flex items-center gap-2">
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                  Métricas por Moneda
+                </h4>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>Distribución COP, USD, EUR</div>
+                  <div>Solo convocatorias abiertas</div>
+                  <div>Totales acumulados</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <Card>
             <CardHeader>
