@@ -16,6 +16,7 @@ interface StatsData {
   porMes: Array<{ name: string; convocatorias: number }>;
   porEntidad: Array<{ name: string; value: number }>;
   currencyStats: Array<{ currency: string; total: number; count: number; average: number }>;
+  currencyStatsAbiertas: Array<{ currency: string; total: number; count: number; average: number }>;
   sectoresUnicos: number;
   entidadesUnicas: number;
 }
@@ -43,6 +44,7 @@ export default function Estadisticas() {
     porMes: [],
     porEntidad: [],
     currencyStats: [],
+    currencyStatsAbiertas: [],
     sectoresUnicos: 0,
     entidadesUnicas: 0
   });
@@ -162,19 +164,40 @@ export default function Estadisticas() {
 
     // Estadísticas por moneda
     const currencyStats: Record<string, { total: number; count: number; values: number[] }> = {};
+    const currencyStatsAbiertas: Record<string, { total: number; count: number; values: number[] }> = {};
+    
     convocatorias.forEach(c => {
       if (c.valor && c.tipo_moneda) {
         const currency = c.tipo_moneda;
+        
+        // Todas las convocatorias
         if (!currencyStats[currency]) {
           currencyStats[currency] = { total: 0, count: 0, values: [] };
         }
         currencyStats[currency].total += c.valor;
         currencyStats[currency].count += 1;
         currencyStats[currency].values.push(c.valor);
+        
+        // Solo convocatorias abiertas
+        if (c.estado_convocatoria === "Abierta") {
+          if (!currencyStatsAbiertas[currency]) {
+            currencyStatsAbiertas[currency] = { total: 0, count: 0, values: [] };
+          }
+          currencyStatsAbiertas[currency].total += c.valor;
+          currencyStatsAbiertas[currency].count += 1;
+          currencyStatsAbiertas[currency].values.push(c.valor);
+        }
       }
     });
 
     const currencyStatsArray = Object.entries(currencyStats).map(([currency, data]) => ({
+      currency,
+      total: data.total,
+      count: data.count,
+      average: data.total / data.count
+    })).sort((a, b) => b.count - a.count);
+
+    const currencyStatsAbiertasArray = Object.entries(currencyStatsAbiertas).map(([currency, data]) => ({
       currency,
       total: data.total,
       count: data.count,
@@ -202,6 +225,7 @@ export default function Estadisticas() {
       porMes,
       porEntidad,
       currencyStats: currencyStatsArray,
+      currencyStatsAbiertas: currencyStatsAbiertasArray,
       sectoresUnicos: porSector.length,
       entidadesUnicas: porEntidad.length
     });
@@ -388,6 +412,55 @@ export default function Estadisticas() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Open Convocatorias Amount by Currency */}
+        {stats.currencyStatsAbiertas.length > 0 && (
+          <Card className="col-span-12 border-0 shadow-sm bg-success/5 border-success/20">
+            <CardContent className="p-8">
+              <div className="space-y-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-success"></div>
+                  <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                    Montos Disponibles - Solo Convocatorias Abiertas
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {stats.currencyStatsAbiertas.map((currency) => (
+                    <div key={currency.currency} className="space-y-4">
+                      <div className="text-lg font-medium text-success">{currency.currency}</div>
+                      <div className="space-y-3">
+                        <div className="text-3xl font-light text-success">
+                          {currency.currency === 'COP' 
+                            ? `$${(currency.total / 1000000).toFixed(1)}M`
+                            : currency.currency === 'USD'
+                            ? `$${(currency.total / 1000).toFixed(0)}K`
+                            : `€${(currency.total / 1000).toFixed(0)}K`
+                          }
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-sm text-success/80">{currency.count} convocatorias abiertas</div>
+                          <div className="text-xs text-muted-foreground">
+                            Promedio: {currency.currency === 'COP' 
+                              ? `$${(currency.average / 1000000).toFixed(1)}M`
+                              : currency.currency === 'USD'
+                              ? `$${(currency.average / 1000).toFixed(0)}K`
+                              : `€${(currency.average / 1000).toFixed(0)}K`
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-4 border-t border-success/20">
+                  <div className="text-xs text-muted-foreground">
+                    ✓ Solo incluye convocatorias con estado "Abierta" y monto definido
+                  </div>
                 </div>
               </div>
             </CardContent>
