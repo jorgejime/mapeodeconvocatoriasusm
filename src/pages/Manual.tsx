@@ -169,9 +169,10 @@ export default function Manual() {
                   Alertas Críticas
                 </h4>
                 <div className="text-sm text-muted-foreground space-y-1">
-                  <div>Convocatorias que vencen pronto</div>
-                  <div>Oportunidades de alto valor</div>
-                  <div>Procesos pendientes</div>
+                  <div>Convocatorias próximas a vencer (30 días)</div>
+                  <div>Oportunidades de alto valor disponibles</div>
+                  <div>Estados críticos que requieren atención</div>
+                  <div>Alertas de cumplimiento de requisitos</div>
                 </div>
               </div>
 
@@ -181,21 +182,23 @@ export default function Manual() {
                   Resumen Ejecutivo
                 </h4>
                 <div className="text-sm text-muted-foreground space-y-1">
-                  <div>Total de convocatorias</div>
-                  <div>Tasa de elegibilidad</div>
-                  <div>Valor total disponible</div>
+                  <div>Total de convocatorias registradas</div>
+                  <div>Convocatorias elegibles (cumplimos requisitos)</div>
+                  <div>Porcentaje de elegibilidad general</div>
+                  <div>Estado de aplicaciones USM</div>
                 </div>
               </div>
 
               <div className="border border-border/50 rounded-lg p-4">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
                   <DollarSign className="h-4 w-4 text-muted-foreground" />
-                  Métricas por Moneda
+                  Métricas de Rendimiento
                 </h4>
                 <div className="text-sm text-muted-foreground space-y-1">
-                  <div>Distribución COP, USD, EUR</div>
-                  <div>Solo convocatorias abiertas</div>
-                  <div>Totales acumulados</div>
+                  <div>Convocatorias abiertas disponibles</div>
+                  <div>Convocatorias próximas a vencer</div>
+                  <div>Sectores únicos identificados</div>
+                  <div>Entidades convocantes registradas</div>
                 </div>
               </div>
             </div>
@@ -266,24 +269,29 @@ export default function Manual() {
 
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium mb-2">Visualizaciones Disponibles</h4>
+                  <h4 className="font-medium mb-2">Visualizaciones Disponibles (Layout Bento)</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                    <div>• Distribución por sectores</div>
-                    <div>• Tendencias mensuales</div>
-                    <div>• Top entidades convocantes</div>
-                    <div>• Análisis por monedas</div>
-                    <div>• Métricas de cumplimiento</div>
-                    <div>• Tasas de conversión</div>
+                    <div>• Total de convocatorias</div>
+                    <div>• Convocatorias elegibles</div>
+                    <div>• Estado de convocatorias (gráfico de torta)</div>
+                    <div>• Top sectores (barras horizontales)</div>
+                    <div>• Distribución por moneda</div>
+                    <div>• Monto total disponible por moneda (solo abiertas)</div>
+                    <div>• Convocatorias abiertas</div>
+                    <div>• Próximas a vencer</div>
+                    <div>• Sectores únicos</div>
+                    <div>• Entidades únicas</div>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Exportación de Datos</h4>
+                  <h4 className="font-medium mb-2">Herramientas Adicionales</h4>
                   <div className="bg-primary/5 p-3 rounded-lg text-sm">
-                    <p className="mb-2"><strong>Formatos disponibles:</strong></p>
+                    <p className="mb-2"><strong>Funciones disponibles:</strong></p>
                     <div className="space-y-1">
-                      <div>• <strong>PDF:</strong> Reportes ejecutivos con gráficos</div>
-                      <div>• <strong>Excel:</strong> Datos detallados para análisis adicional</div>
+                      <div>• <strong>Módulo de Informes Inteligentes:</strong> Análisis automático con IA ubicado al final de la página</div>
+                      <div>• <strong>Visualización Bento:</strong> Layout moderno con métricas organizadas en bloques</div>
+                      <div>• <strong>Datos en tiempo real:</strong> Actualización automática de todas las métricas</div>
                     </div>
                   </div>
                 </div>
@@ -570,21 +578,21 @@ export default function Manual() {
                 <div>
                   <h4 className="font-medium mb-2 flex items-center gap-2">
                     <Download className="h-4 w-4 text-warning" />
-                    Sistema de Carga Masiva Inteligente
+                    Sistema de Carga Masiva desde Excel
                   </h4>
                   <div className="border border-orange-200 bg-orange-50 p-4 rounded-lg">
-                    <p className="mb-3 font-medium text-orange-900">Funcionalidades avanzadas de importación:</p>
+                    <p className="mb-3 font-medium text-orange-900">Importación masiva de convocatorias:</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-orange-800">
-                      <div>• <strong>Formato Excel:</strong> Importación automática de .xlsx</div>
-                      <div>• <strong>Validación inteligente:</strong> Detección de errores en tiempo real</div>
-                      <div>• <strong>Preview de datos:</strong> Vista previa antes de confirmar</div>
-                      <div>• <strong>Mapeo automático:</strong> Reconocimiento de columnas</div>
-                      <div>• <strong>Control duplicados:</strong> Detección automática de registros existentes</div>
-                      <div>• <strong>Rollback seguro:</strong> Posibilidad de revertir operaciones</div>
+                      <div>• <strong>Botón "Carga Masiva":</strong> En la página de convocatorias</div>
+                      <div>• <strong>Formato Excel:</strong> Importación de archivos .xlsx</div>
+                      <div>• <strong>Validación automática:</strong> El sistema verifica el formato</div>
+                      <div>• <strong>Mapeo de columnas:</strong> Coincidencia con campos de BD</div>
+                      <div>• <strong>Carga inmediata:</strong> Inserción directa en la base de datos</div>
+                      <div>• <strong>Feedback visual:</strong> Confirmación de registros cargados</div>
                     </div>
                     <div className="mt-3 p-2 bg-orange-100 rounded border-l-4 border-orange-400">
                       <p className="text-sm text-orange-700">
-                        <strong>📝 Proceso:</strong> Seleccionar archivo → Vista previa → Validar datos → Confirmar importación → Verificar resultados
+                        <strong>📝 Proceso:</strong> Clic en "Carga Masiva" → Seleccionar archivo Excel → Confirmar carga → Verificar convocatorias nuevas
                       </p>
                     </div>
                   </div>
@@ -595,9 +603,9 @@ export default function Manual() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Funciones Administrativas Avanzadas</CardTitle>
+              <CardTitle>Sección de Configuración</CardTitle>
               <CardDescription>
-                Herramientas especializadas para administradores
+                Panel completo de administración disponible en el menú "Configuración"
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -605,42 +613,45 @@ export default function Manual() {
                 <div>
                   <h4 className="font-medium mb-2 flex items-center gap-2">
                     <Settings className="h-4 w-4 text-primary" />
-                    Configuración del Sistema
+                    Configuraciones Generales
                   </h4>
                   <div className="text-sm space-y-2">
-                    <p>Acceso a configuraciones avanzadas del sistema:</p>
-                    <div>• Gestión de usuarios y permisos</div>
-                    <div>• Configuración de alertas automáticas</div>
-                    <div>• Parámetros de exportación</div>
-                    <div>• Backup y restauración de datos</div>
+                    <p>Panel de configuración del sistema:</p>
+                    <div>• Nombre del Sistema y descripción</div>
+                    <div>• Tamaño máximo de archivos</div>
+                    <div>• Permitir/prohibir registro de usuarios</div>
+                    <div>• Modo mantenimiento</div>
+                    <div>• Notificaciones del sistema por email</div>
                   </div>
                 </div>
 
                 <div>
                   <h4 className="font-medium mb-2 flex items-center gap-2">
-                    <BarChart3 className="h-4 w-4 text-success" />
-                    Análisis Administrativo
+                    <Users className="h-4 w-4 text-success" />
+                    Gestión de Usuarios
                   </h4>
                   <div className="text-sm space-y-2">
-                    <p>Herramientas exclusivas para administradores:</p>
-                    <div>• Métricas de uso del sistema</div>
-                    <div>• Auditoría de cambios</div>
-                    <div>• Reportes de rendimiento</div>
-                    <div>• Análisis de tendencias históricas</div>
+                    <p>Administración completa de usuarios:</p>
+                    <div>• Tabla con todos los usuarios registrados</div>
+                    <div>• Editar perfiles de usuario</div>
+                    <div>• Eliminar usuarios (excepto admin)</div>
+                    <div>• Gestión de roles y permisos</div>
+                    <div>• Crear nuevos usuarios (funcionalidad en desarrollo)</div>
                   </div>
                 </div>
 
                 <div>
                   <h4 className="font-medium mb-2 flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-danger" />
-                    Gestión de Emergencias
+                    <Settings className="h-4 w-4 text-warning" />
+                    Backup y Mantenimiento
                   </h4>
-                  <div className="bg-danger-light p-3 rounded-lg text-sm">
-                    <p className="mb-2"><strong>Funciones críticas:</strong></p>
+                  <div className="bg-warning/10 p-3 rounded-lg text-sm">
+                    <p className="mb-2"><strong>Herramientas de base de datos:</strong></p>
+                    <div>• Exportar Backup completo (formato JSON)</div>
+                    <div>• Estadísticas de BD (total convocatorias)</div>
                     <div>• Reset completo de base de datos</div>
-                    <div>• Restauración desde backup</div>
-                    <div>• Resolución de conflictos de datos</div>
-                    <div>• Soporte técnico avanzado</div>
+                    <div>• Fecha del último backup realizado</div>
+                    <div>• Importar datos (funcionalidad futura)</div>
                   </div>
                 </div>
               </div>
