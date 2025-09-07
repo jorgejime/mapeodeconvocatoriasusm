@@ -572,7 +572,7 @@ export default function Manual() {
                     <Download className="h-4 w-4 text-warning" />
                     Sistema de Carga Masiva Inteligente
                   </h4>
-                  <div className="neomorphic-card p-4 bg-gradient-to-r from-orange-50 to-amber-50">
+                  <div className="border border-orange-200 bg-orange-50 p-4 rounded-lg">
                     <p className="mb-3 font-medium text-orange-900">Funcionalidades avanzadas de importación:</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-orange-800">
                       <div>• <strong>Formato Excel:</strong> Importación automática de .xlsx</div>
@@ -712,7 +712,7 @@ export default function Manual() {
                     <Search className="h-5 w-5 text-primary" />
                     Sistema Avanzado de Filtrado Inteligente
                   </h3>
-                  <div className="neomorphic-card p-4 space-y-3">
+                  <div className="border border-border bg-card p-4 space-y-3 rounded-lg">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div>
                         <h5 className="font-medium mb-2 text-blue-800">Filtros Básicos:</h5>
@@ -731,7 +731,7 @@ export default function Manual() {
                         </div>
                       </div>
                     </div>
-                    <div className="neomorphic-badge p-2 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200">
+                    <div className="p-2 bg-purple-50 border border-purple-200 rounded">
                       <p className="text-sm text-purple-800">
                         <strong>🚀 Función Urgencia:</strong> Filtra automáticamente convocatorias que vencen en los próximos 30 días para gestión prioritaria.
                       </p>
@@ -744,7 +744,7 @@ export default function Manual() {
                     <Calendar className="h-5 w-5 text-success" />
                     Sistema de Visualización Inteligente
                   </h3>
-                  <div className="neomorphic-card p-4 space-y-3">
+                  <div className="border border-border bg-card p-4 space-y-3 rounded-lg">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <h5 className="font-medium mb-2 text-green-800">Vista de Tarjetas (Principal):</h5>

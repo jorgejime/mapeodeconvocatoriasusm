@@ -2,20 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Neumorphism Design System - Soft Embossed Surfaces
-Professional corporate colors with neumorphism effects
+/* Minimalist Design System
+Clean, simple design with lots of whitespace and essential elements only.
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    /* Neumorphism base colors */
-    --neomorphic-bg: 220 14% 96%;
-    --neomorphic-surface: 220 14% 96%;
-    --neomorphic-light: 0 0% 100%;
-    --neomorphic-dark: 220 14% 83%;
-    --neomorphic-shadow-light: 220 14% 83%;
-    --neomorphic-shadow-dark: 220 20% 88%;
+    /* Minimalist base colors */
     
     --background: 220 14% 96%;
     --foreground: 222.2 84% 4.9%;
@@ -47,10 +41,8 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Neumorphism specific gradients */
+    /* Minimalist gradients */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-neomorphic: linear-gradient(145deg, hsl(220 14% 98%), hsl(220 14% 94%));
-    --gradient-neomorphic-inset: linear-gradient(145deg, hsl(220 14% 92%), hsl(220 14% 96%));
     
     /* Traffic light indicators */
     --success: 142 76% 36%;
@@ -76,12 +68,6 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --neomorphic-bg: 222.2 84% 4.9%;
-    --neomorphic-surface: 222.2 84% 4.9%;
-    --neomorphic-light: 217.2 32.6% 20%;
-    --neomorphic-dark: 222.2 84% 2%;
-    --neomorphic-shadow-light: 217.2 32.6% 20%;
-    --neomorphic-shadow-dark: 222.2 84% 2%;
     
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -111,10 +97,8 @@ All colors MUST be HSL.
     --input: 217.2 32.6% 17.5%;
     --ring: 217 91% 60%;
 
-    /* Neumorphism gradients for dark mode */
+    /* Minimalist gradients for dark mode */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-neomorphic: linear-gradient(145deg, hsl(217.2 32.6% 20%), hsl(222.2 84% 4.9%));
-    --gradient-neomorphic-inset: linear-gradient(145deg, hsl(222.2 84% 2%), hsl(217.2 32.6% 17.5%));
     
     /* Traffic light indicators for dark mode */
     --success: 142 76% 50%;
@@ -151,81 +135,17 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Neumorphism Base Components */
-  .neomorphic {
-    background: hsl(var(--neomorphic-surface));
-    border-radius: 16px;
-    box-shadow: 
-      8px 8px 16px hsl(var(--neomorphic-shadow-dark)),
-      -8px -8px 16px hsl(var(--neomorphic-light));
-    border: 1px solid hsl(var(--border) / 0.1);
-    transition: all 0.3s ease;
+  /* Minimalist Components */
+  .minimal-card {
+    @apply bg-card border border-border rounded-lg;
   }
-  
-  .neomorphic-hover:hover {
-    box-shadow: 
-      4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
-      -4px -4px 8px hsl(var(--neomorphic-light));
-    transform: translateY(-1px);
+
+  .minimal-button {
+    @apply bg-background border border-border hover:bg-accent hover:text-accent-foreground;
+    transition: all 0.2s ease;
   }
-  
-  .neomorphic-pressed,
-  .neomorphic-inset {
-    background: var(--gradient-neomorphic-inset);
-    box-shadow: 
-      inset 4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
-      inset -4px -4px 8px hsl(var(--neomorphic-light));
-  }
-  
-  .neomorphic-small {
-    border-radius: 12px;
-    box-shadow: 
-      4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
-      -4px -4px 8px hsl(var(--neomorphic-light));
-  }
-  
-  .neomorphic-large {
-    border-radius: 24px;
-    box-shadow: 
-      12px 12px 24px hsl(var(--neomorphic-shadow-dark)),
-      -12px -12px 24px hsl(var(--neomorphic-light));
-  }
-  
-  .neomorphic-button {
-    @apply neomorphic neomorphic-hover;
-    padding: 12px 24px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    user-select: none;
-  }
-  
-  .neomorphic-button:active {
-    @apply neomorphic-pressed;
-    transform: translateY(0);
-  }
-  
-  .neomorphic-card {
-    @apply neomorphic;
-    background: var(--gradient-neomorphic);
-  }
-  
-  .neomorphic-input {
-    @apply neomorphic-inset;
-    padding: 12px 16px;
-    background: hsl(var(--background));
-    border: none;
-    outline: none;
-  }
-  
-  .neomorphic-input:focus {
-    box-shadow: 
-      inset 4px 4px 8px hsl(var(--neomorphic-shadow-dark)),
-      inset -4px -4px 8px hsl(var(--neomorphic-light)),
-      0 0 0 2px hsl(var(--ring) / 0.3);
-  }
-  
-  .bg-gradient-subtle {
-    background: var(--gradient-neomorphic);
+
+  .minimal-input {
+    @apply bg-background border border-border focus:ring-2 focus:ring-ring focus:ring-offset-2;
   }
 }

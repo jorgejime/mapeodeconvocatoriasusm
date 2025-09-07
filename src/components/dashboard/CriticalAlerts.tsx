@@ -126,7 +126,7 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
         <div className="space-y-3 mb-4">
           <div className="flex items-center justify-between">
             <h4 className="font-medium text-danger font-inter">Vencimientos Urgentes</h4>
-            <div className="neomorphic-small px-2 py-1">
+            <div className="bg-muted px-2 py-1 rounded">
               <span className="text-xs font-bold text-danger">{urgentDeadlines.length}</span>
             </div>
           </div>
@@ -134,13 +134,13 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
             {urgentDeadlines.slice(0, 3).map((conv) => {
               const daysLeft = Math.ceil((new Date(conv.fecha_limite_aplicacion!).getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
               return (
-                <div key={conv.id} className="neomorphic-small neomorphic-hover flex items-center justify-between p-2 sm:p-3 bg-danger-light">
+                <div key={conv.id} className="border border-red-200 bg-red-50 rounded-lg flex items-center justify-between p-2 sm:p-3">
                   <div className="flex-1 min-w-0">
                     <p className="text-xs sm:text-sm font-medium truncate font-inter">{conv.nombre_convocatoria}</p>
                     <p className="text-[10px] sm:text-xs text-muted-foreground font-inter">{conv.entidad}</p>
                   </div>
                   <div className="text-right">
-                    <div className="neomorphic-small px-2 py-1">
+                    <div className="bg-muted px-2 py-1 rounded">
                       <span className="text-xs font-bold text-danger">
                         {daysLeft === 0 ? "Hoy" : `${daysLeft}d`}
                       </span>
@@ -156,7 +156,7 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
       <div className="pt-3 sm:pt-4 border-t border-border/20">
         <button 
           onClick={onNavigateToConvocatoria} 
-          className="neomorphic-button w-full text-sm font-inter text-foreground"
+          className="border border-border hover:bg-accent w-full text-sm font-inter text-foreground rounded px-4 py-2"
         >
           Ver Todas las Convocatorias
         </button>

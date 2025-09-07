@@ -77,7 +77,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="neomorphic-card p-8">
+        <div className="border border-border bg-card p-8 rounded-lg">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
         </div>
       </div>
