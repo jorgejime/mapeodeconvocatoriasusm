@@ -6,6 +6,7 @@ import CriticalAlerts from "@/components/dashboard/CriticalAlerts";
 import PerformanceMetrics from "@/components/dashboard/PerformanceMetrics";
 import QuickActions from "@/components/dashboard/QuickActions";
 import ExecutiveSummary from "@/components/dashboard/ExecutiveSummary";
+import StatusCards from "@/components/dashboard/StatusCards";
 
 interface Convocatoria {
   id: number;
@@ -98,6 +99,8 @@ export default function Dashboard() {
 
       {/* Dashboard Content */}
       <div className="space-y-8">
+        <StatusCards convocatorias={convocatorias} />
+        
         <CriticalAlerts 
           convocatorias={convocatorias}
           onNavigateToConvocatoria={() => navigate("/convocatorias")}
