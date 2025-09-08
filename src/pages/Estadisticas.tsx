@@ -437,22 +437,7 @@ export default function Estadisticas() {
 
         {/* Currency Stats */}
         {stats.currencyStats.length > 0 && <Card className="col-span-12 border-0 shadow-sm">
-            <CardContent className="p-8">
-              <div className="space-y-8">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Distribución por Moneda</div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {stats.currencyStats.map(currency => <div key={currency.currency} className="space-y-4">
-                      <div className="text-lg font-medium">{currency.currency}</div>
-                      <div className="space-y-2">
-                        <div className="text-2xl font-light">
-                          {currency.currency === 'COP' ? `$${(currency.total / 1000000).toFixed(1)}M` : currency.currency === 'USD' ? `$${(currency.total / 1000).toFixed(0)}K` : `€${(currency.total / 1000).toFixed(0)}K`}
-                        </div>
-                        <div className="text-sm text-muted-foreground">{currency.count} convocatorias</div>
-                      </div>
-                    </div>)}
-                </div>
-              </div>
-            </CardContent>
+            
           </Card>}
 
         {/* Open Convocatorias Amount by Currency */}
