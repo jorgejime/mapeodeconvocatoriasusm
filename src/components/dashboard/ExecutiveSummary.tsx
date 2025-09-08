@@ -93,8 +93,13 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
         </p>
       </div>
       
-      <div className="grid grid-cols-4 gap-8 mb-8">
-        <div className="text-center">
+      <div className="grid grid-cols-4 gap-6 mb-8">
+        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
+          <div className="flex items-center justify-center mb-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Target className="h-6 w-6 text-primary" />
+            </div>
+          </div>
           <div className="text-2xl font-light text-foreground mb-1">{totalConvocatorias}</div>
           <div className="text-sm text-muted-foreground">Total</div>
           {recentConvocatorias > 0 && (
@@ -102,7 +107,12 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
           )}
         </div>
         
-        <div className="text-center">
+        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
+          <div className="flex items-center justify-center mb-3">
+            <div className="w-12 h-12 rounded-full bg-success/20 flex items-center justify-center">
+              <Award className="h-6 w-6 text-success" />
+            </div>
+          </div>
           <div className="text-2xl font-light text-foreground mb-1">{eligibleConvocatorias}</div>
           <div className="text-sm text-muted-foreground">Elegibles</div>
           <div className="text-xs text-muted-foreground mt-1">
@@ -110,7 +120,12 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
           </div>
         </div>
         
-        <div className="text-center">
+        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
+          <div className="flex items-center justify-center mb-3">
+            <div className="w-12 h-12 rounded-full bg-warning/20 flex items-center justify-center">
+              <Calendar className="h-6 w-6 text-warning" />
+            </div>
+          </div>
           <div className="text-2xl font-light text-foreground mb-1">{activeConvocatorias}</div>
           <div className="text-sm text-muted-foreground">Activas</div>
           <div className="text-xs text-muted-foreground mt-1">
@@ -118,28 +133,47 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
           </div>
         </div>
         
-        <div className="text-center">
+        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
+          <div className="flex items-center justify-center mb-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              {getTrendIcon(submissionRate)}
+            </div>
+          </div>
           <div className="text-2xl font-light text-foreground mb-1">{submittedConvocatorias}</div>
           <div className="text-sm text-muted-foreground">Presentadas</div>
-          <div className="text-xs text-muted-foreground mt-1">
+          <div className={`text-xs mt-1 ${getRateColor(submissionRate)}`}>
             {submissionRate.toFixed(0)}%
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
-        <div className="border border-border/50 rounded-lg p-4">
-          <div className="text-sm text-muted-foreground mb-1">Valor Elegible</div>
-          <div className="text-xl font-light">{formatCurrency(totalEligibleValue)}</div>
-          <div className="text-xs text-muted-foreground mt-1">
+      <div className="grid grid-cols-2 gap-6">
+        <div className="bg-card border border-border/50 rounded-lg p-4">
+          <div className="flex items-center mb-3">
+            <div className="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center mr-3">
+              <TrendingUp className="h-5 w-5 text-success" />
+            </div>
+            <div>
+              <div className="text-sm text-muted-foreground">Valor Elegible</div>
+              <div className="text-xl font-light">{formatCurrency(totalEligibleValue)}</div>
+            </div>
+          </div>
+          <div className="text-xs text-muted-foreground">
             En {eligibleConvocatorias} convocatorias elegibles
           </div>
         </div>
 
-        <div className="border border-border/50 rounded-lg p-4">
-          <div className="text-sm text-muted-foreground mb-1">Próximos Vencimientos</div>
-          <div className="text-xl font-light">{expiringSoon}</div>
-          <div className="text-xs text-muted-foreground mt-1">
+        <div className="bg-card border border-border/50 rounded-lg p-4">
+          <div className="flex items-center mb-3">
+            <div className="w-10 h-10 rounded-full bg-danger/20 flex items-center justify-center mr-3">
+              <Calendar className="h-5 w-5 text-danger" />
+            </div>
+            <div>
+              <div className="text-sm text-muted-foreground">Próximos Vencimientos</div>
+              <div className="text-xl font-light">{expiringSoon}</div>
+            </div>
+          </div>
+          <div className="text-xs text-muted-foreground">
             En los próximos 30 días
           </div>
         </div>
