@@ -132,6 +132,7 @@ export default function Convocatorias() {
   };
 
   const applyAdvancedFilters = () => {
+    console.log("Applying filters:", advancedFilters);
     let filtered = convocatorias;
 
     // Filtro por búsqueda de texto
@@ -148,9 +149,30 @@ export default function Convocatorias() {
 
     // Filtro por estado de convocatoria
     if (advancedFilters.estadoConvocatoria.length > 0) {
-      filtered = filtered.filter((c) => 
-        advancedFilters.estadoConvocatoria.includes(c.estado_convocatoria || "")
-      );
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      filtered = filtered.filter((c) => {
+        // Handle "Próxima" as a calculated state based on future dates
+        if (advancedFilters.estadoConvocatoria.includes("Próxima")) {
+          if (c.fecha_limite_aplicacion) {
+            const deadline = new Date(c.fecha_limite_aplicacion);
+            deadline.setHours(0, 0, 0, 0);
+            if (deadline > today) {
+              return true;
+            }
+          }
+        }
+        
+        // Check for exact matches with database values
+        const otherStates = advancedFilters.estadoConvocatoria.filter(s => s !== "Próxima");
+        if (otherStates.length > 0) {
+          return otherStates.includes(c.estado_convocatoria || "");
+        }
+        
+        // If only "Próxima" was selected, we already checked above
+        return advancedFilters.estadoConvocatoria.includes("Próxima");
+      });
     }
 
     // Filtro por estado USM
@@ -182,11 +204,16 @@ export default function Convocatorias() {
       });
     }
 
-    // Filtro por entidades
+    // Filtro por entidades (case-insensitive and trimmed)
     if (advancedFilters.entidades.length > 0) {
-      filtered = filtered.filter((c) => 
-        advancedFilters.entidades.includes(c.entidad)
-      );
+      console.log("Filtering by entities:", advancedFilters.entidades);
+      filtered = filtered.filter((c) => {
+        const entidadNormalizada = c.entidad.trim().toLowerCase();
+        return advancedFilters.entidades.some(e => 
+          e.trim().toLowerCase() === entidadNormalizada
+        );
+      });
+      console.log("Filtered by entities, result count:", filtered.length);
     }
 
     // Filtro por fechas límite
@@ -195,8 +222,17 @@ export default function Convocatorias() {
         if (!c.fecha_limite_aplicacion) return false;
         const date = new Date(c.fecha_limite_aplicacion);
         
-        if (advancedFilters.fechaLimiteDesde && date < advancedFilters.fechaLimiteDesde) return false;
-        if (advancedFilters.fechaLimiteHasta && date > advancedFilters.fechaLimiteHasta) return false;
+        if (advancedFilters.fechaLimiteDesde) {
+          const fromDate = new Date(advancedFilters.fechaLimiteDesde);
+          fromDate.setHours(0, 0, 0, 0);
+          if (date < fromDate) return false;
+        }
+        
+        if (advancedFilters.fechaLimiteHasta) {
+          const toDate = new Date(advancedFilters.fechaLimiteHasta);
+          toDate.setHours(23, 59, 59, 999);
+          if (date > toDate) return false;
+        }
         
         return true;
       });
@@ -214,14 +250,16 @@ export default function Convocatorias() {
       });
     }
 
+    console.log("Final filtered results:", filtered.length);
     setFilteredConvocatorias(filtered);
   };
 
   // Obtener entidades únicas disponibles
   const getAvailableEntidades = (): string[] => {
-    const entidades = Array.from(new Set(convocatorias.map(c => c.entidad)))
+    const entidades = Array.from(new Set(convocatorias.map(c => c.entidad.trim())))
       .filter(entidad => entidad && entidad.trim() !== "")
       .sort();
+    console.log("Available entities:", entidades);
     return entidades;
   };
 
@@ -245,7 +283,8 @@ export default function Convocatorias() {
 
   // Limpiar todos los filtros
   const clearAllFilters = () => {
-    setAdvancedFilters({
+    console.log("Clearing all filters");
+    const newFilters = {
       busqueda: "",
       estadoConvocatoria: [],
       estadoUSM: [],
@@ -256,7 +295,9 @@ export default function Convocatorias() {
       fechaLimiteDesde: null,
       fechaLimiteHasta: null,
       urgencia: "",
-    });
+    };
+    setAdvancedFilters(newFilters);
+    console.log("Filters cleared, new state:", newFilters);
   };
 
   const handleCreate = () => {
