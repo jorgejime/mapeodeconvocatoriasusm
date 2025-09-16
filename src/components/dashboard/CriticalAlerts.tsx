@@ -111,27 +111,27 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl font-medium text-foreground mb-2">Alertas Críticas</h2>
-        <p className="text-muted-foreground">
+        <h2 className="text-lg sm:text-xl font-medium text-foreground mb-2">Alertas Críticas</h2>
+        <p className="text-sm sm:text-base text-muted-foreground">
           Situaciones que requieren atención inmediata
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         {alerts.map((alert) => {
           const Icon = alert.icon;
           return (
             <Card key={alert.type} className="relative overflow-hidden">
-              <CardContent className="p-6 flex items-center justify-between">
+              <CardContent className="p-4 sm:p-6 flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">{alert.title}</p>
-                  <p className="text-3xl font-bold text-foreground">{alert.count}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground">{alert.count}</p>
                   <p className="text-xs text-muted-foreground mt-1">{alert.description}</p>
                 </div>
-                <div className={`w-12 h-12 rounded-full ${getIconBackground(alert.color)} flex items-center justify-center`}>
-                  <Icon className="w-6 h-6 text-white" />
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${getIconBackground(alert.color)} flex items-center justify-center`}>
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
               </CardContent>
             </Card>
@@ -141,24 +141,24 @@ export default function CriticalAlerts({ convocatorias, onNavigateToConvocatoria
 
       {urgentDeadlines.length > 0 && (
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium text-foreground">Vencimientos Urgentes</h3>
+              <h3 className="text-sm sm:text-base font-medium text-foreground">Vencimientos Urgentes</h3>
               <div className="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
                 {urgentDeadlines.length}
               </div>
             </div>
-            <div className="space-y-3 max-h-48 overflow-y-auto">
+            <div className="space-y-2 sm:space-y-3 max-h-48 overflow-y-auto">
               {urgentDeadlines.slice(0, 5).map((conv) => {
                 const daysLeft = Math.ceil((new Date(conv.fecha_limite_aplicacion!).getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
                 return (
-                  <div key={conv.id} className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div key={conv.id} className="flex items-center justify-between p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{conv.nombre_convocatoria}</p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">{conv.nombre_convocatoria}</p>
                       <p className="text-xs text-muted-foreground">{conv.entidad}</p>
                     </div>
-                    <div className="ml-4 flex-shrink-0">
-                      <div className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">
+                    <div className="ml-2 sm:ml-4 flex-shrink-0">
+                      <div className="bg-red-100 text-red-700 px-2 sm:px-3 py-1 rounded-full text-xs font-bold">
                         {daysLeft === 0 ? "Hoy" : `${daysLeft}d`}
                       </div>
                     </div>

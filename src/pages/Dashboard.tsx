@@ -86,19 +86,19 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <div className="mb-12">
-        <h1 className="text-3xl font-light text-foreground mb-2">
+      <div className="mb-6 sm:mb-8 lg:mb-12">
+        <h1 className="text-2xl sm:text-3xl font-light text-foreground mb-2">
           Dashboard
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           Vista general del sistema
         </p>
       </div>
 
       {/* Dashboard Content */}
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         <StatusCards convocatorias={convocatorias} />
         
         <CriticalAlerts 

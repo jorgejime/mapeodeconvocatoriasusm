@@ -85,77 +85,77 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
   };
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <h3 className="text-xl font-light mb-2">Resumen Ejecutivo</h3>
-        <p className="text-muted-foreground">
+    <div className="p-4 sm:p-6">
+      <div className="mb-6 sm:mb-8">
+        <h3 className="text-lg sm:text-xl font-light mb-2">Resumen Ejecutivo</h3>
+        <p className="text-sm sm:text-base text-muted-foreground">
           Métricas clave del sistema
         </p>
       </div>
       
-      <div className="grid grid-cols-4 gap-6 mb-8">
-        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
-          <div className="flex items-center justify-center mb-3">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Target className="h-6 w-6 text-primary" />
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="bg-card border border-border/50 rounded-lg p-3 sm:p-4 text-center">
+          <div className="flex items-center justify-center mb-2 sm:mb-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Target className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
             </div>
           </div>
-          <div className="text-2xl font-light text-foreground mb-1">{totalConvocatorias}</div>
-          <div className="text-sm text-muted-foreground">Total</div>
+          <div className="text-xl sm:text-2xl font-light text-foreground mb-1">{totalConvocatorias}</div>
+          <div className="text-xs sm:text-sm text-muted-foreground">Total</div>
           {recentConvocatorias > 0 && (
             <div className="text-xs text-muted-foreground mt-1">+{recentConvocatorias} este mes</div>
           )}
         </div>
         
-        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
-          <div className="flex items-center justify-center mb-3">
-            <div className="w-12 h-12 rounded-full bg-success/20 flex items-center justify-center">
-              <Award className="h-6 w-6 text-success" />
+        <div className="bg-card border border-border/50 rounded-lg p-3 sm:p-4 text-center">
+          <div className="flex items-center justify-center mb-2 sm:mb-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-success/20 flex items-center justify-center">
+              <Award className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
             </div>
           </div>
-          <div className="text-2xl font-light text-foreground mb-1">{eligibleConvocatorias}</div>
-          <div className="text-sm text-muted-foreground">Elegibles</div>
+          <div className="text-xl sm:text-2xl font-light text-foreground mb-1">{eligibleConvocatorias}</div>
+          <div className="text-xs sm:text-sm text-muted-foreground">Elegibles</div>
           <div className="text-xs text-muted-foreground mt-1">
             {eligibilityRate.toFixed(0)}%
           </div>
         </div>
         
-        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
-          <div className="flex items-center justify-center mb-3">
-            <div className="w-12 h-12 rounded-full bg-warning/20 flex items-center justify-center">
-              <Calendar className="h-6 w-6 text-warning" />
+        <div className="bg-card border border-border/50 rounded-lg p-3 sm:p-4 text-center">
+          <div className="flex items-center justify-center mb-2 sm:mb-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-warning/20 flex items-center justify-center">
+              <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-warning" />
             </div>
           </div>
-          <div className="text-2xl font-light text-foreground mb-1">{activeConvocatorias}</div>
-          <div className="text-sm text-muted-foreground">Activas</div>
+          <div className="text-xl sm:text-2xl font-light text-foreground mb-1">{activeConvocatorias}</div>
+          <div className="text-xs sm:text-sm text-muted-foreground">Activas</div>
           <div className="text-xs text-muted-foreground mt-1">
             {activeRate.toFixed(0)}%
           </div>
         </div>
         
-        <div className="bg-card border border-border/50 rounded-lg p-4 text-center">
-          <div className="flex items-center justify-center mb-3">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+        <div className="bg-card border border-border/50 rounded-lg p-3 sm:p-4 text-center">
+          <div className="flex items-center justify-center mb-2 sm:mb-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10 flex items-center justify-center">
               {getTrendIcon(submissionRate)}
             </div>
           </div>
-          <div className="text-2xl font-light text-foreground mb-1">{submittedConvocatorias}</div>
-          <div className="text-sm text-muted-foreground">Presentadas</div>
+          <div className="text-xl sm:text-2xl font-light text-foreground mb-1">{submittedConvocatorias}</div>
+          <div className="text-xs sm:text-sm text-muted-foreground">Presentadas</div>
           <div className={`text-xs mt-1 ${getRateColor(submissionRate)}`}>
             {submissionRate.toFixed(0)}%
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="bg-card border border-border/50 rounded-lg p-4">
-          <div className="flex items-center mb-3">
-            <div className="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center mr-3">
-              <TrendingUp className="h-5 w-5 text-success" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-card border border-border/50 rounded-lg p-3 sm:p-4">
+          <div className="flex items-center mb-2 sm:mb-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-success/20 flex items-center justify-center mr-3">
+              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-success" />
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">Valor Elegible</div>
-              <div className="text-xl font-light">{formatCurrency(totalEligibleValue)}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Valor Elegible</div>
+              <div className="text-lg sm:text-xl font-light">{formatCurrency(totalEligibleValue)}</div>
             </div>
           </div>
           <div className="text-xs text-muted-foreground">
@@ -163,14 +163,14 @@ export default function ExecutiveSummary({ convocatorias }: ExecutiveSummaryProp
           </div>
         </div>
 
-        <div className="bg-card border border-border/50 rounded-lg p-4">
-          <div className="flex items-center mb-3">
-            <div className="w-10 h-10 rounded-full bg-danger/20 flex items-center justify-center mr-3">
-              <Calendar className="h-5 w-5 text-danger" />
+        <div className="bg-card border border-border/50 rounded-lg p-3 sm:p-4">
+          <div className="flex items-center mb-2 sm:mb-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-danger/20 flex items-center justify-center mr-3">
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-danger" />
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">Próximos Vencimientos</div>
-              <div className="text-xl font-light">{expiringSoon}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Próximos Vencimientos</div>
+              <div className="text-lg sm:text-xl font-light">{expiringSoon}</div>
             </div>
           </div>
           <div className="text-xs text-muted-foreground">
