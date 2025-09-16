@@ -150,20 +150,26 @@ export default function Convocatorias() {
 
     // Filtro por estado de convocatoria
     if (advancedFilters.estadoConvocatoria.length > 0) {
-      const fechaReferencia = advancedFilters.fechaProxima || new Date();
-      fechaReferencia.setHours(0, 0, 0, 0);
+      const fechaBase = advancedFilters.fechaProxima || new Date();
+      const fechaReferencia = new Date(fechaBase.getFullYear(), fechaBase.getMonth(), fechaBase.getDate());
+      
+      console.log("Filtro Próxima - Fecha de referencia:", fechaReferencia);
       
       filtered = filtered.filter((c) => {
         // Handle "Próxima" as a calculated state based on user-selected date or today
         if (advancedFilters.estadoConvocatoria.includes("Próxima")) {
           if (c.fecha_limite_aplicacion) {
             const deadline = new Date(c.fecha_limite_aplicacion);
-            deadline.setHours(0, 0, 0, 0);
+            const deadlineOnly = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate());
+            
+            console.log(`Comparando convocatoria ${c.id}: ${c.fecha_limite_aplicacion} (${deadlineOnly}) >= ${fechaReferencia} = ${deadlineOnly >= fechaReferencia}`);
+            
             // Incluir el mismo día (>=)
-            if (deadline >= fechaReferencia) {
+            if (deadlineOnly >= fechaReferencia) {
               return true;
             }
           }
+          return false; // Si no tiene fecha límite o es anterior, no incluir
         }
         
         // Check for exact matches with database values
@@ -173,7 +179,7 @@ export default function Convocatorias() {
         }
         
         // If only "Próxima" was selected, we already checked above
-        return advancedFilters.estadoConvocatoria.includes("Próxima");
+        return false;
       });
     }
 
