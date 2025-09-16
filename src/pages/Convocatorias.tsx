@@ -156,7 +156,10 @@ export default function Convocatorias() {
       console.log("Filtro Próxima - Fecha de referencia:", fechaReferencia);
       
       filtered = filtered.filter((c) => {
-        // Handle "Próxima" as a calculated state based on user-selected date or today
+        let matchesProxima = false;
+        let matchesOtherStates = false;
+        
+        // Check if "Próxima" filter matches
         if (advancedFilters.estadoConvocatoria.includes("Próxima")) {
           if (c.fecha_limite_aplicacion) {
             const deadline = new Date(c.fecha_limite_aplicacion);
@@ -164,22 +167,19 @@ export default function Convocatorias() {
             
             console.log(`Comparando convocatoria ${c.id}: ${c.fecha_limite_aplicacion} (${deadlineOnly}) >= ${fechaReferencia} = ${deadlineOnly >= fechaReferencia}`);
             
-            // Incluir el mismo día (>=)
-            if (deadlineOnly >= fechaReferencia) {
-              return true;
-            }
+            // Solo incluir si la fecha límite es mayor o igual a la fecha de referencia
+            matchesProxima = deadlineOnly >= fechaReferencia;
           }
-          return false; // Si no tiene fecha límite o es anterior, no incluir
         }
         
-        // Check for exact matches with database values
+        // Check for exact matches with other database values (excluding "Próxima")
         const otherStates = advancedFilters.estadoConvocatoria.filter(s => s !== "Próxima");
         if (otherStates.length > 0) {
-          return otherStates.includes(c.estado_convocatoria || "");
+          matchesOtherStates = otherStates.includes(c.estado_convocatoria || "");
         }
         
-        // If only "Próxima" was selected, we already checked above
-        return false;
+        // Return true if matches any selected filter (OR logic)
+        return matchesProxima || matchesOtherStates;
       });
     }
 
