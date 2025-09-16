@@ -175,21 +175,21 @@ export function ConvocatoriaAdvancedFilters({
       </div>
 
       {/* Filtros rápidos */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium">Filtros rápidos</Label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="space-y-3 sm:space-y-4">
+        <Label className="text-sm sm:text-base font-medium">Filtros rápidos</Label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
           {FILTROS_RAPIDOS.map((quickFilter) => (
             <Button
               key={quickFilter.id}
               variant="outline"
               size="sm"
               onClick={() => applyQuickFilter(quickFilter)}
-              className="justify-start h-auto p-3 text-left min-h-[60px] hover:bg-muted transition-colors"
+              className="justify-start h-auto p-2 sm:p-3 text-left min-h-[50px] sm:min-h-[60px] hover:bg-muted transition-colors"
             >
-              <quickFilter.icon className="h-4 w-4 mr-2 flex-shrink-0" />
+              <quickFilter.icon className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-xs truncate">{quickFilter.label}</div>
-                <div className="text-xs text-muted-foreground line-clamp-2">{quickFilter.description}</div>
+                <div className="font-medium text-xs sm:text-sm truncate leading-tight">{quickFilter.label}</div>
+                <div className="text-xs text-muted-foreground line-clamp-2 leading-tight mt-0.5 sm:mt-1">{quickFilter.description}</div>
               </div>
             </Button>
           ))}
@@ -223,55 +223,55 @@ export function ConvocatoriaAdvancedFilters({
       {/* Filtros activos */}
       {activeFiltersCount > 0 && (
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Filtros aplicados</Label>
-          <div className="flex flex-wrap gap-2 max-w-full">
+          <Label className="text-sm sm:text-base font-medium">Filtros aplicados</Label>
+          <div className="flex flex-wrap gap-1 sm:gap-2 max-w-full">
             {filters.busqueda && (
-              <Badge variant="secondary" className="gap-1 max-w-[200px]">
+              <Badge variant="secondary" className="gap-1 max-w-[150px] sm:max-w-[200px] text-xs sm:text-sm h-6 sm:h-7 px-1 sm:px-2">
                 <span className="truncate">Búsqueda: "{filters.busqueda}"</span>
                 <X 
-                  className="h-3 w-3 cursor-pointer flex-shrink-0" 
+                  className="h-2 w-2 sm:h-3 sm:w-3 cursor-pointer flex-shrink-0" 
                   onClick={() => removeFilter('busqueda')}
                 />
               </Badge>
             )}
             
             {filters.estadoConvocatoria.map(estado => (
-              <Badge key={estado} variant="secondary" className="gap-1">
+              <Badge key={estado} variant="secondary" className="gap-1 text-xs sm:text-sm h-6 sm:h-7 px-1 sm:px-2">
                 <span className="truncate">Estado: {estado}</span>
                 <X 
-                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  className="h-2 w-2 sm:h-3 sm:w-3 cursor-pointer flex-shrink-0"
                   onClick={() => removeFilter('estadoConvocatoria', estado)}
                 />
               </Badge>
             ))}
             
             {filters.estadoUSM.map(estado => (
-              <Badge key={estado} variant="secondary" className="gap-1">
+              <Badge key={estado} variant="secondary" className="gap-1 text-xs sm:text-sm h-6 sm:h-7 px-1 sm:px-2">
                 <span className="truncate">USM: {estado}</span>
                 <X 
-                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  className="h-2 w-2 sm:h-3 sm:w-3 cursor-pointer flex-shrink-0"
                   onClick={() => removeFilter('estadoUSM', estado)} 
                 />
               </Badge>
             ))}
             
             {filters.cumpleRequisitos && filters.cumpleRequisitos !== "todos" && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-xs sm:text-sm h-6 sm:h-7 px-1 sm:px-2">
                 <span className="truncate">
                   Requisitos: {filters.cumpleRequisitos === 'si' ? 'Cumple' : filters.cumpleRequisitos === 'no' ? 'No cumple' : 'Pendiente'}
                 </span>
                 <X 
-                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  className="h-2 w-2 sm:h-3 sm:w-3 cursor-pointer flex-shrink-0"
                   onClick={() => removeFilter('cumpleRequisitos')}
                 />
               </Badge>
             )}
             
             {filters.valorMinimo && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-xs sm:text-sm h-6 sm:h-7 px-1 sm:px-2">
                 <span className="truncate">Valor mín: ${parseInt(filters.valorMinimo).toLocaleString()}</span>
                 <X 
-                  className="h-3 w-3 cursor-pointer flex-shrink-0"
+                  className="h-2 w-2 sm:h-3 sm:w-3 cursor-pointer flex-shrink-0"
                   onClick={() => removeFilter('valorMinimo')}
                 />
               </Badge>
@@ -397,25 +397,27 @@ export function ConvocatoriaAdvancedFilters({
             <Separator />
 
             {/* Rango de valor */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Rango de valor (COP)</Label>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Valor mínimo</Label>
+            <div className="space-y-2 sm:space-y-3">
+              <Label className="text-sm sm:text-base font-medium">Rango de valor (COP)</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                <div className="space-y-1 sm:space-y-2">
+                  <Label className="text-xs sm:text-sm text-muted-foreground">Valor mínimo</Label>
                   <Input
                     type="number"
                     placeholder="0"
                     value={filters.valorMinimo}
                     onChange={(e) => updateFilter('valorMinimo', e.target.value)}
+                    className="h-9 sm:h-10 text-xs sm:text-sm"
                   />
                 </div>
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Valor máximo</Label>
+                <div className="space-y-1 sm:space-y-2">
+                  <Label className="text-xs sm:text-sm text-muted-foreground">Valor máximo</Label>
                   <Input
                     type="number"
                     placeholder="Sin límite"
                     value={filters.valorMaximo}
                     onChange={(e) => updateFilter('valorMaximo', e.target.value)}
+                    className="h-9 sm:h-10 text-xs sm:text-sm"
                   />
                 </div>
               </div>
@@ -424,33 +426,33 @@ export function ConvocatoriaAdvancedFilters({
             <Separator />
 
             {/* Entidades */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Entidades</Label>
-              <div className="max-h-40 overflow-y-auto border rounded-lg p-3 space-y-2 bg-background">
+            <div className="space-y-2 sm:space-y-3">
+              <Label className="text-sm sm:text-base font-medium">Entidades</Label>
+              <div className="max-h-32 sm:max-h-40 overflow-y-auto border rounded-lg p-2 sm:p-3 space-y-1 sm:space-y-2 bg-background">
                 {availableEntidades.map(entidad => (
-                  <label key={entidad} className="flex items-center space-x-3 cursor-pointer hover:bg-muted/50 p-2 rounded-md transition-colors">
+                  <label key={entidad} className="flex items-center space-x-2 sm:space-x-3 cursor-pointer hover:bg-muted/50 p-1 sm:p-2 rounded-md transition-colors">
                     <input
                       type="checkbox"
                       checked={filters.entidades.includes(entidad)}
                       onChange={() => toggleArrayFilter('entidades', entidad)}
-                      className="rounded border-gray-300 flex-shrink-0"
+                      className="rounded border-gray-300 flex-shrink-0 h-3 w-3 sm:h-4 sm:w-4"
                     />
-                    <span className="text-sm truncate flex-1">{entidad}</span>
+                    <span className="text-xs sm:text-sm truncate flex-1 leading-tight">{entidad}</span>
                   </label>
                 ))}
                 {availableEntidades.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-4">
+                  <p className="text-xs sm:text-sm text-muted-foreground text-center py-2 sm:py-4">
                     No hay entidades disponibles
                   </p>
                 )}
               </div>
               {filters.entidades.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="flex flex-wrap gap-1 sm:gap-2 mt-2 sm:mt-3">
                   {filters.entidades.map(entidad => (
-                    <Badge key={entidad} variant="outline" className="gap-1 max-w-[200px]">
+                    <Badge key={entidad} variant="outline" className="gap-1 max-w-[200px] text-xs sm:text-sm h-6 sm:h-7 px-1 sm:px-2">
                       <span className="truncate">{entidad}</span>
                       <X 
-                        className="h-3 w-3 cursor-pointer flex-shrink-0"
+                        className="h-2 w-2 sm:h-3 sm:w-3 cursor-pointer flex-shrink-0"
                         onClick={() => removeFilter('entidades', entidad)}
                       />
                     </Badge>
@@ -462,26 +464,28 @@ export function ConvocatoriaAdvancedFilters({
             <Separator />
 
             {/* Rango de fechas límite */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Fecha límite de aplicación</Label>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Desde</Label>
+            <div className="space-y-2 sm:space-y-3">
+              <Label className="text-sm sm:text-base font-medium">Fecha límite de aplicación</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                <div className="space-y-1 sm:space-y-2">
+                  <Label className="text-xs sm:text-sm text-muted-foreground">Desde</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal",
+                          "w-full justify-start text-left font-normal h-9 sm:h-10 text-xs sm:text-sm px-2 sm:px-3",
                           !filters.fechaLimiteDesde && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {filters.fechaLimiteDesde ? (
-                          format(filters.fechaLimiteDesde, "PPP", { locale: es })
-                        ) : (
-                          <span>Seleccionar fecha</span>
-                        )}
+                        <CalendarIcon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                        <span className="truncate">
+                          {filters.fechaLimiteDesde ? (
+                            format(filters.fechaLimiteDesde, window.innerWidth < 640 ? "dd/MM/yyyy" : "PPP", { locale: es })
+                          ) : (
+                            <span>Seleccionar fecha</span>
+                          )}
+                        </span>
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -490,29 +494,31 @@ export function ConvocatoriaAdvancedFilters({
                         selected={filters.fechaLimiteDesde}
                         onSelect={(date) => updateFilter('fechaLimiteDesde', date)}
                         initialFocus
-                        className="p-3 pointer-events-auto"
+                        className="p-2 sm:p-3 pointer-events-auto"
                       />
                     </PopoverContent>
                   </Popover>
                 </div>
                 
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Hasta</Label>
+                <div className="space-y-1 sm:space-y-2">
+                  <Label className="text-xs sm:text-sm text-muted-foreground">Hasta</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal",
+                          "w-full justify-start text-left font-normal h-9 sm:h-10 text-xs sm:text-sm px-2 sm:px-3",
                           !filters.fechaLimiteHasta && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {filters.fechaLimiteHasta ? (
-                          format(filters.fechaLimiteHasta, "PPP", { locale: es })
-                        ) : (
-                          <span>Seleccionar fecha</span>
-                        )}
+                        <CalendarIcon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                        <span className="truncate">
+                          {filters.fechaLimiteHasta ? (
+                            format(filters.fechaLimiteHasta, window.innerWidth < 640 ? "dd/MM/yyyy" : "PPP", { locale: es })
+                          ) : (
+                            <span>Seleccionar fecha</span>
+                          )}
+                        </span>
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -521,7 +527,7 @@ export function ConvocatoriaAdvancedFilters({
                         selected={filters.fechaLimiteHasta}
                         onSelect={(date) => updateFilter('fechaLimiteHasta', date)}
                         initialFocus
-                        className="p-3 pointer-events-auto"
+                        className="p-2 sm:p-3 pointer-events-auto"
                       />
                     </PopoverContent>
                   </Popover>
