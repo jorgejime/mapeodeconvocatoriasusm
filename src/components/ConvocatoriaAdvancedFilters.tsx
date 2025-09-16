@@ -87,17 +87,33 @@ export function ConvocatoriaAdvancedFilters({
 
   // Obtener estados USM dinámicamente de las convocatorias
   const getAvailableEstadosUSM = () => {
+    console.log("Total convocatorias recibidas:", convocatorias?.length || 0);
+    console.log("Convocatorias sample:", convocatorias?.slice(0, 3));
+    
+    if (!convocatorias || convocatorias.length === 0) {
+      console.log("No hay convocatorias disponibles");
+      return [];
+    }
+    
+    const estadosRaw = convocatorias.map(c => c.estado_usm);
+    console.log("Estados raw:", estadosRaw);
+    
     const estadosUnicos = Array.from(new Set(
       convocatorias
         .map(c => c.estado_usm)
         .filter(estado => estado && estado.trim() !== "")
     )).sort();
     
-    return estadosUnicos.map(estado => ({
+    console.log("Estados únicos encontrados:", estadosUnicos);
+    
+    const estadosFormateados = estadosUnicos.map(estado => ({
       value: estado!,
       label: estado!,
       color: getEstadoUSMColor(estado!)
     }));
+    
+    console.log("Estados formateados:", estadosFormateados);
+    return estadosFormateados;
   };
 
   const getEstadoUSMColor = (estado: string) => {
