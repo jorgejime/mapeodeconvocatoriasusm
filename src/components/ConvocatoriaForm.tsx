@@ -411,7 +411,6 @@ export const ConvocatoriaForm = ({ convocatoria, mode, onSuccess, onCancel }: Co
                 <SelectContent>
                   <SelectItem value="Abierta">Abierta</SelectItem>
                   <SelectItem value="Cerrada">Cerrada</SelectItem>
-                  <SelectItem value="Próxima">Próxima</SelectItem>
                 </SelectContent>
               </Select>
             </div>
