@@ -29,11 +29,7 @@ export interface FilterState {
 interface ConvocatoriaAdvancedFiltersProps {
   filters: FilterState;
   onFiltersChange: (filters: FilterState) => void;
-  availableEntidades: string[];
-  convocatorias: Array<{
-    estado_usm: string | null;
-    estado_convocatoria: string | null;
-  }>;
+  availableEntidades: string[];  
   onClearFilters: () => void;
   activeFiltersCount: number;
 }
@@ -79,42 +75,31 @@ export function ConvocatoriaAdvancedFilters({
   filters,
   onFiltersChange,
   availableEntidades,
-  convocatorias,
   onClearFilters,
   activeFiltersCount,
 }: ConvocatoriaAdvancedFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Obtener estados USM dinámicamente de las convocatorias
+  // Estados USM válidos según la base de datos
+  const ESTADOS_USM_VALIDOS = [
+    'En revisión',
+    'En preparación', 
+    'Presentada',
+    'En subsanación',
+    'Archivada',
+    'Adjudicada',
+    'Rechazada'
+  ];
+
+  // Obtener todos los estados USM válidos
   const getAvailableEstadosUSM = () => {
-    console.log("Total convocatorias recibidas:", convocatorias?.length || 0);
-    console.log("Convocatorias sample:", convocatorias?.slice(0, 3));
+    console.log("Estados USM válidos configurados:", ESTADOS_USM_VALIDOS);
     
-    if (!convocatorias || convocatorias.length === 0) {
-      console.log("No hay convocatorias disponibles");
-      return [];
-    }
-    
-    const estadosRaw = convocatorias.map(c => c.estado_usm);
-    console.log("Estados raw:", estadosRaw);
-    
-    const estadosUnicos = Array.from(new Set(
-      convocatorias
-        .map(c => c.estado_usm)
-        .filter(estado => estado && estado.trim() !== "")
-    )).sort();
-    
-    console.log("Estados únicos encontrados:", estadosUnicos);
-    console.log("Estos son TODOS los estados USM que existen en tu base de datos:", estadosUnicos);
-    
-    const estadosFormateados = estadosUnicos.map(estado => ({
-      value: estado!,
-      label: estado!,
-      color: getEstadoUSMColor(estado!)
+    return ESTADOS_USM_VALIDOS.map(estado => ({
+      value: estado,
+      label: estado,
+      color: getEstadoUSMColor(estado)
     }));
-    
-    console.log("Estados formateados:", estadosFormateados);
-    return estadosFormateados;
   };
 
   const getEstadoUSMColor = (estado: string) => {
@@ -123,16 +108,16 @@ export function ConvocatoriaAdvancedFilters({
         return "bg-blue-100 text-blue-800";
       case "en preparación":
         return "bg-yellow-100 text-yellow-800";
-      case "presentadas":
+      case "presentada":
         return "bg-purple-100 text-purple-800";
-      case "archivadas":
-        return "bg-gray-100 text-gray-800";
-      case "aprobadas":
-        return "bg-green-100 text-green-800";
-      case "rechazadas":
-        return "bg-red-100 text-red-800";
-      case "en evaluación":
+      case "en subsanación":
         return "bg-orange-100 text-orange-800";
+      case "archivada":
+        return "bg-gray-100 text-gray-800";
+      case "adjudicada":
+        return "bg-green-100 text-green-800";
+      case "rechazada":
+        return "bg-red-100 text-red-800";
       default:
         return "bg-muted text-muted-foreground";
     }

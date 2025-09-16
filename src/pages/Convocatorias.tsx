@@ -414,7 +414,6 @@ export default function Convocatorias() {
           filters={advancedFilters}
           onFiltersChange={setAdvancedFilters}
           availableEntidades={getAvailableEntidades()}
-          convocatorias={convocatorias}
           onClearFilters={clearAllFilters}
           activeFiltersCount={getActiveFiltersCount()}
         />
