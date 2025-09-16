@@ -105,6 +105,7 @@ export function ConvocatoriaAdvancedFilters({
     )).sort();
     
     console.log("Estados únicos encontrados:", estadosUnicos);
+    console.log("Estos son TODOS los estados USM que existen en tu base de datos:", estadosUnicos);
     
     const estadosFormateados = estadosUnicos.map(estado => ({
       value: estado!,
