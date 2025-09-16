@@ -30,6 +30,10 @@ interface ConvocatoriaAdvancedFiltersProps {
   filters: FilterState;
   onFiltersChange: (filters: FilterState) => void;
   availableEntidades: string[];
+  convocatorias: Array<{
+    estado_usm: string | null;
+    estado_convocatoria: string | null;
+  }>;
   onClearFilters: () => void;
   activeFiltersCount: number;
 }
@@ -75,10 +79,47 @@ export function ConvocatoriaAdvancedFilters({
   filters,
   onFiltersChange,
   availableEntidades,
+  convocatorias,
   onClearFilters,
   activeFiltersCount,
 }: ConvocatoriaAdvancedFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Obtener estados USM dinámicamente de las convocatorias
+  const getAvailableEstadosUSM = () => {
+    const estadosUnicos = Array.from(new Set(
+      convocatorias
+        .map(c => c.estado_usm)
+        .filter(estado => estado && estado.trim() !== "")
+    )).sort();
+    
+    return estadosUnicos.map(estado => ({
+      value: estado!,
+      label: estado!,
+      color: getEstadoUSMColor(estado!)
+    }));
+  };
+
+  const getEstadoUSMColor = (estado: string) => {
+    switch (estado.toLowerCase()) {
+      case "en revisión":
+        return "bg-blue-100 text-blue-800";
+      case "en preparación":
+        return "bg-yellow-100 text-yellow-800";
+      case "presentadas":
+        return "bg-purple-100 text-purple-800";
+      case "archivadas":
+        return "bg-gray-100 text-gray-800";
+      case "aprobadas":
+        return "bg-green-100 text-green-800";
+      case "rechazadas":
+        return "bg-red-100 text-red-800";
+      case "en evaluación":
+        return "bg-orange-100 text-orange-800";
+      default:
+        return "bg-muted text-muted-foreground";
+    }
+  };
 
   const updateFilter = (key: keyof FilterState, value: any) => {
     onFiltersChange({ ...filters, [key]: value });
@@ -267,7 +308,7 @@ export function ConvocatoriaAdvancedFilters({
               <div className="space-y-3">
                 <Label className="text-sm font-medium">Estado interno USM</Label>
                 <div className="space-y-2">
-                  {ESTADOS_USM.map(estado => (
+                  {getAvailableEstadosUSM().map(estado => (
                     <label key={estado.value} className="flex items-center space-x-2 cursor-pointer">
                       <input
                         type="checkbox"
@@ -280,6 +321,11 @@ export function ConvocatoriaAdvancedFilters({
                       </span>
                     </label>
                   ))}
+                  {getAvailableEstadosUSM().length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      No hay estados USM disponibles
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
