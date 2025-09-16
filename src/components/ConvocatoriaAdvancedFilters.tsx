@@ -24,6 +24,7 @@ export interface FilterState {
   fechaLimiteDesde: Date | null;
   fechaLimiteHasta: Date | null;
   urgencia: string;
+  fechaProxima: Date | null; // Nueva fecha para filtro "Próxima"
 }
 
 interface ConvocatoriaAdvancedFiltersProps {
@@ -305,6 +306,48 @@ export function ConvocatoriaAdvancedFilters({
                     </label>
                   ))}
                 </div>
+                
+                {/* Campo de fecha para filtro "Próxima" */}
+                {filters.estadoConvocatoria.includes("Próxima") && (
+                  <div className="mt-3 p-3 bg-muted/30 rounded-lg">
+                    <Label className="text-xs font-medium text-muted-foreground mb-2 block">
+                      Fecha de referencia para "Próxima"
+                    </Label>
+                    <div className="space-y-1">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !filters.fechaProxima && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-3 w-3" />
+                            {filters.fechaProxima ? (
+                              format(filters.fechaProxima, "PPP", { locale: es })
+                            ) : (
+                              <span>Hoy ({format(new Date(), "PPP", { locale: es })})</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <CalendarComponent
+                            mode="single"
+                            selected={filters.fechaProxima || new Date()}
+                            onSelect={(date) => updateFilter('fechaProxima', date)}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <p className="text-xs text-muted-foreground">
+                        Mostrará convocatorias con fecha límite igual o posterior a la fecha seleccionada
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-3">

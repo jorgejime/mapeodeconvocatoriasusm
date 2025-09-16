@@ -66,6 +66,7 @@ export default function Convocatorias() {
     fechaLimiteDesde: null,
     fechaLimiteHasta: null,
     urgencia: "",
+    fechaProxima: null,
   });
   const [selectedConvocatoria, setSelectedConvocatoria] = useState<Convocatoria | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -149,16 +150,17 @@ export default function Convocatorias() {
 
     // Filtro por estado de convocatoria
     if (advancedFilters.estadoConvocatoria.length > 0) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const fechaReferencia = advancedFilters.fechaProxima || new Date();
+      fechaReferencia.setHours(0, 0, 0, 0);
       
       filtered = filtered.filter((c) => {
-        // Handle "Próxima" as a calculated state based on future dates
+        // Handle "Próxima" as a calculated state based on user-selected date or today
         if (advancedFilters.estadoConvocatoria.includes("Próxima")) {
           if (c.fecha_limite_aplicacion) {
             const deadline = new Date(c.fecha_limite_aplicacion);
             deadline.setHours(0, 0, 0, 0);
-            if (deadline > today) {
+            // Incluir el mismo día (>=)
+            if (deadline >= fechaReferencia) {
               return true;
             }
           }
@@ -277,6 +279,7 @@ export default function Convocatorias() {
     if (advancedFilters.fechaLimiteDesde) count++;
     if (advancedFilters.fechaLimiteHasta) count++;
     if (advancedFilters.urgencia) count++;
+    if (advancedFilters.fechaProxima) count++;
     
     return count;
   };
@@ -295,6 +298,7 @@ export default function Convocatorias() {
       fechaLimiteDesde: null,
       fechaLimiteHasta: null,
       urgencia: "",
+      fechaProxima: null,
     };
     setAdvancedFilters(newFilters);
     console.log("Filters cleared, new state:", newFilters);
