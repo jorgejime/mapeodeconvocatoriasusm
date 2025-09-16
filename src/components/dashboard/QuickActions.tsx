@@ -128,7 +128,7 @@ export default function QuickActions({
         </p>
       </div>
         
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {actions.map((action) => {
           const Icon = action.icon;
           return (
@@ -136,16 +136,16 @@ export default function QuickActions({
               key={action.title}
               onClick={action.onClick}
               disabled={action.disabled}
-              className="border border-border/50 rounded-lg p-4 text-center hover:bg-muted/30 transition-colors disabled:opacity-50 relative"
+              className="border border-border/50 rounded-lg p-3 sm:p-4 text-center hover:bg-muted/30 transition-colors disabled:opacity-50 relative min-h-[100px] sm:min-h-[110px] flex flex-col justify-center"
             >
               {action.badge && (
-                <div className="absolute -top-1 -right-1 text-xs h-5 w-5 flex items-center justify-center bg-destructive text-destructive-foreground rounded-full">
+                <div className="absolute -top-1 -right-1 text-xs h-5 w-5 flex items-center justify-center bg-destructive text-destructive-foreground rounded-full font-medium">
                   {action.badge}
                 </div>
               )}
-              <Icon className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
-              <p className="text-sm font-medium">{action.title}</p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <Icon className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 text-muted-foreground flex-shrink-0" />
+              <p className="text-sm sm:text-base font-medium line-clamp-2 leading-tight">{action.title}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2 leading-tight">
                 {action.description}
               </p>
             </button>
